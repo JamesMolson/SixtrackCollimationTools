@@ -60,8 +60,8 @@ private:
   vector<double> Atmp_vec; // Temporary vector for various internal uses
 
 public:
-  OneMetre::OneMetre();
-  OneMetre::~OneMetre();
+  OneMetre();
+  ~OneMetre();
   void DefineAperture(double p, double a1, double a2, double a3, double a4);
   void DefineAperture(double p, Aperture Ap);
   void DefineAperture(double p, vector<double> A4);

@@ -43,8 +43,8 @@ private:
   double DxA, DyA;
 
 public:
-  OneMetreAlign::OneMetreAlign();
-  OneMetreAlign::~OneMetreAlign();
+  OneMetreAlign();
+  ~OneMetreAlign();
   // If alignment is not defined, put it to zero!
   void DefineAperture(double p, double a1, double a2, double a3, double a4);
   void DefineAperture(double p, Aperture Ap);

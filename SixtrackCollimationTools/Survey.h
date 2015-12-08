@@ -38,22 +38,22 @@ class Survey {
   vector<double> COx, COy;
 
   public: 
-  Survey::Survey();
-  Survey::~Survey();
+  Survey();
+  ~Survey();
   //
-  void Survey::LoadLHC(string in);
-  void Survey::LoadLHC_Crossing(string in);
-  void Survey::LoadLHC_Crossing_XP(string in);
-  double Survey::GetSurvey(double pos);
-  double Survey::GetCrossX(double pos);
-  double Survey::GetCrossY(double pos);
-  double Survey::GetCrossXP(double pos);
-  double Survey::GetCrossYP(double pos);
-  void Survey::Clear();
+  void LoadLHC(string in);
+  void LoadLHC_Crossing(string in);
+  void LoadLHC_Crossing_XP(string in);
+  double GetSurvey(double pos);
+  double GetCrossX(double pos);
+  double GetCrossY(double pos);
+  double GetCrossXP(double pos);
+  double GetCrossYP(double pos);
+  void Clear();
   //
-  void Survey::LoadCO(string in);
-  double Survey::GetCOx(double pos);
-  double Survey::GetCOy(double pos);
+  void LoadCO(string in);
+  double GetCOx(double pos);
+  double GetCOy(double pos);
 };
 
 #endif

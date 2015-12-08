@@ -88,11 +88,11 @@ private:
   int CorrectDefinition;
 
 public:
-  Aperture::Aperture();
-  Aperture::~Aperture();
+  Aperture();
+  ~Aperture();
   //
-  void Aperture::PutApert(double a1, double a2, double a3, double a4);
-  void Aperture::PutApert(vector<double> ThisAp);
+  void PutApert(double a1, double a2, double a3, double a4);
+  void PutApert(vector<double> ThisAp);
   double GetApert(int n);
   vector<double> GetApert();
   //
