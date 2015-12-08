@@ -1,6 +1,6 @@
 CPP=g++
 
-#CCFLAGS= -Wall
+CCFLAGS= -Wall -Wextra -pedantic
 
 SRC = Aperture.o OneMetre.o ReadTwiss.o AssignOneMetre.o Survey.o OneMetreAlign.o 
 
