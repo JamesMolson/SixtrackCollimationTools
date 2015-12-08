@@ -106,7 +106,7 @@ public:
 
 	/**
 	* Get aperture at a given position.
-	* @parm[in] p The position to get the Aperture.
+	* @param[in] p The position to get the Aperture.
 	* @return An Aperture at the requested position.
 	*/
 	Aperture GetAperture(double p);
