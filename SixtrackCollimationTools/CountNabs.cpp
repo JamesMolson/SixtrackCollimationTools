@@ -52,7 +52,7 @@ int main (int argc, char* argv[])
 	int s1;
 	string halo, EN, optics;
 
-	s1 = (int) atof(argv[1]);
+	s1 = static_cast<int>(atof(argv[1]));
 	halo = argv[2];
 	EN = argv[3];
 	optics = argv[4];
