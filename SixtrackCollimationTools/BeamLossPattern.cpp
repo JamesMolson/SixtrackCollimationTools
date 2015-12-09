@@ -63,7 +63,7 @@ int main (int argc, char* argv[])
 	{
 		cout << "Some input is missing!" << endl;
 		cout << "The command line should look like:" << endl;
-		cout << "-> main_Ralph_2004-09-12 inj input.dat output.txt ApertureFile.txt <-" << endl;
+		cout << "-> " << argv[0] << " inj input.dat output.txt ApertureFile.txt <-" << endl;
 		exit(0);
 	}
 
