@@ -28,7 +28,7 @@
 
 #include "Survey.h"
 
-Survey::Survey()
+Survey::Survey() : S(), Xsurvey(), Xcrossing(), Ycrossing(), XPcrossing(), YPcrossing(), COx(), COy()
 {
 	// Nothing to be done for the initializetion ...
 }
