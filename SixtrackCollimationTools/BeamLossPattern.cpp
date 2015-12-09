@@ -55,7 +55,7 @@
 #include "AssignOneMetre.h"
 #include "Survey.h"
 
-double CheckPos(double pp); // See CheckPos.cpp
+double CheckPos(double pp, double); // See CheckPos.cpp
 
 int main (int argc, char* argv[])
 {
@@ -337,7 +337,7 @@ int main (int argc, char* argv[])
 					while ( new_s_t < s_t && !(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
 					{
 						//cout<<setw(12)<<new_s_t<<setw(12)<<new_x_t<<setw(12)<<new_y_t<<endl;
-						new_s_t = CheckPos( new_s_t + Dl);
+						new_s_t = CheckPos( new_s_t + Dl, AcceleratorLength);
 						new_x_t = x_t - (s_t-new_s_t) * OldXP[n_t];
 						new_y_t = y_t - (s_t-new_s_t) * OldYP[n_t];
 
@@ -518,10 +518,8 @@ int main (int argc, char* argv[])
 	return 0;
 }
 
-double CheckPos (double pp)
+double CheckPos (double pp, double AcceleratorLength)
 {
-	double AcceleratorLength = 26658.8832;
-
 	if ( pp < 0.0 )
 	{
 		pp = AcceleratorLength + pp;
