@@ -1,6 +1,6 @@
 #include "OneMetre.h"
 
-OneMetre::OneMetre()
+OneMetre::OneMetre() : Pos(), Apert(), Pos_ex(), Apert_ex(), Atmp(), Atmp_vec()
 { 
 }
 
