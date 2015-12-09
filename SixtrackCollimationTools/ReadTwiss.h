@@ -19,19 +19,19 @@
 
 using namespace std;
 
-void ReadTwiss(string in, vector<string> *K, vector<string> *N, 
+double ReadTwiss(string in, vector<string> *K, vector<string> *N, 
 		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 		vector<string> *Pan, vector<double> *P, vector<double> *L, 
 		vector<double> *A1, vector<double> *A2, vector<double> *A3, 
 		vector<double> *A4);
 
-void ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N, 
+double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N, 
 			vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 			vector<string> *Pan, vector<double> *P, vector<double> *L, 
 			vector<double> *A1, vector<double> *A2, vector<double> *A3, 
 			vector<double> *A4);
 
-void ReadTwissK(string in, vector<string> *K, vector<string> *N, 
+double ReadTwissK(string in, vector<string> *K, vector<string> *N, 
 		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 		vector<string> *Pan, vector<double> *P, vector<double> *L, 
 		vector<double> *KL, vector<double> *A1, vector<double> *A2, 
@@ -39,13 +39,13 @@ void ReadTwissK(string in, vector<string> *K, vector<string> *N,
 
 // Read also the aperture offset.
 // Also used to read the x and y offsets due to the crossing scheme!
-void ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
+double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
 		 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
 		 vector<double> *P, vector<double> *L, vector<double> *A1, 
 		 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
 		 vector<double> *DX, vector<double> *DY);
 
-void ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
+double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
 			 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
 			 vector<double> *P, vector<double> *L, vector<double> *A1, 
 			 vector<double> *A2, vector<double> *A3, vector<double> *A4, 

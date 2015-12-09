@@ -1,6 +1,6 @@
 #include "ReadTwiss.h"
 
-void ReadTwiss(string in, vector<string> *K, vector<string> *N, 
+double ReadTwiss(string in, vector<string> *K, vector<string> *N, 
 		 vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 		 vector<string> *Pan, vector<double> *P, vector<double> *L, 
 		 vector<double> *A1, vector<double> *A2, vector<double> *A3, 
@@ -16,7 +16,8 @@ void ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	A2->clear();
 	A3->clear();
 	A4->clear();
-	
+
+	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256];
 
 	char chr_tmp[256];
@@ -26,6 +27,21 @@ void ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
+
+	//First try and pull out the accelerator length variable
+	while (InputFile.getline(chr_tmp,256))
+	{
+		str_tmp = chr_tmp;
+
+		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		{
+			InputFile.getline(chr_tmp,256);
+			break;
+		}
+	}
+	//Ugly, but gets the job done
+	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -88,9 +104,11 @@ void ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	cout << "Reading from \"" << in << "\"" << endl;
 	cout << "Total number of read elements: " << K->size() << endl;
 	cout << endl;
+
+	return AcceleratorLength;
 }
 
-void ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N, 
+double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N, 
 			 vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 			 vector<string> *Pan, vector<double> *P, vector<double> *L, 
 			 vector<double> *A1, vector<double> *A2, vector<double> *A3, 
@@ -106,7 +124,8 @@ void ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	A2->clear();
 	A3->clear();
 	A4->clear();
-	
+
+	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256];
 
 	char chr_tmp[256];
@@ -116,6 +135,21 @@ void ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
+
+	//First try and pull out the accelerator length variable
+	while (InputFile.getline(chr_tmp,256))
+	{
+		str_tmp = chr_tmp;
+
+		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		{
+			InputFile.getline(chr_tmp,256);
+			break;
+		}
+	}
+	//Ugly, but gets the job done
+	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -184,10 +218,11 @@ void ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	cout << "Total number of read elements: " << K->size() << endl;
 	cout << endl;
 
+	return AcceleratorLength;
 }
 
 
-void ReadTwissK(string in, vector<string> *K, vector<string> *N, 
+double ReadTwissK(string in, vector<string> *K, vector<string> *N, 
 		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 		vector<string> *Pan, vector<double> *P, vector<double> *L, 
 		vector<double> *KL, vector<double> *A1, vector<double> *A2, 
@@ -204,6 +239,7 @@ void ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	A3->clear();
 	A4->clear();
 
+	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tKL[256], tA1[256], tA2[256], tA3[256], tA4[256];
 
 	char chr_tmp[256];
@@ -213,6 +249,21 @@ void ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
+
+	//First try and pull out the accelerator length variable
+	while (InputFile.getline(chr_tmp,256))
+	{
+		str_tmp = chr_tmp;
+
+		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		{
+			InputFile.getline(chr_tmp,256);
+			break;
+		}
+	}
+	//Ugly, but gets the job done
+	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -277,9 +328,10 @@ void ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	cout << "Total number of read elements: " << K->size() << endl;
 	cout << endl;
 
+	return AcceleratorLength;
 }
 
-void ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
+double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
 		 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
 		 vector<double> *P, vector<double> *L, vector<double> *A1, 
 		 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
@@ -297,6 +349,7 @@ void ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string>
 	DX->clear();
 	DY->clear();
 
+	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256], tDX[256], tDY[256];
 
 	char chr_tmp[256];
@@ -306,6 +359,21 @@ void ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string>
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
+
+	//First try and pull out the accelerator length variable
+	while (InputFile.getline(chr_tmp,256))
+	{
+		str_tmp = chr_tmp;
+
+		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		{
+			InputFile.getline(chr_tmp,256);
+			break;
+		}
+	}
+	//Ugly, but gets the job done
+	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -371,9 +439,11 @@ void ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string>
 	cout << "Reading from \"" << in << "\"" << endl;
 	cout << "Total number of read elements: " << K->size() << endl;
 	cout << endl;
+
+	return AcceleratorLength;
 }
 
-void ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
+double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
 			 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
 			 vector<double> *P, vector<double> *L, vector<double> *A1, 
 			 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
@@ -391,6 +461,7 @@ void ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector
 	DX->clear();
 	DY->clear();
 
+	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256], tDX[256], tDY[256];
 
 	char chr_tmp[256];
@@ -400,6 +471,21 @@ void ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
+
+	//First try and pull out the accelerator length variable
+	while (InputFile.getline(chr_tmp,256))
+	{
+		str_tmp = chr_tmp;
+
+		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		{
+			InputFile.getline(chr_tmp,256);
+			break;
+		}
+	}
+	//Ugly, but gets the job done
+	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -468,4 +554,7 @@ void ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector
 	cout << "Reading from \"" << in << "\"" << endl;
 	cout << "Total number of read elements: " << K->size() << endl;
 	cout << endl;
+
+	return AcceleratorLength;
 }
+

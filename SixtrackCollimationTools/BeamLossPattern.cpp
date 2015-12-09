@@ -178,7 +178,11 @@ int main (int argc, char* argv[])
 	vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
 
 	// Read twiss file with apertures (no drifts!)
-	ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4);
+	double AcceleratorLength = ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4);
+
+	size_t OldPrecision = cout.precision(16);
+	cout << "Found accelerator length from MAD headers: " << AcceleratorLength << endl;
+	cout.precision(OldPrecision);
 
 	//Splits up the machine aperture into 1m blocks
 	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4);
