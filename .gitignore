@@ -1,0 +1,6 @@
+SixtrackCollimationTools/*.o
+SixtrackCollimationTools/BeamLossPattern
+SixtrackCollimationTools/CleanInelastic
+SixtrackCollimationTools/CountAbs
+SixtrackCollimationTools/GetAperture
+
