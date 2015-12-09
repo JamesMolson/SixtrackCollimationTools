@@ -68,7 +68,6 @@ int main (int argc, char* argv[])
 	}
 
 	double Dl = 0.100; // Precision to identify longitudinal loss positions
-	//double LHCLength = 26658.8832;
 
 	int _S_ = 1;			 // Flag for using survey
 	int _X_ = 0;			 // Flag for using crossing
@@ -83,9 +82,7 @@ int main (int argc, char* argv[])
 	char c_str[256];
 	double s_t, x_t, xp_t, y_t, yp_t, en_t;
 	int n_t, n_tu, n_h;
-//	int count = 0;
-	//int k_i,
-	//k_i_max; //Corresponds to the distance to the previous trajectory definition...
+
 	double new_s_t, new_x_t, new_y_t;
 	double smallD;
 	double Xorb, Yorb;			// Total orbit offset
@@ -93,7 +90,7 @@ int main (int argc, char* argv[])
 
 	/*
 	double DxXing = 0.0,		// Step in trajectory due to kick only
-		DyXing = 0.0;			// Initialize them to zero here!
+	DyXing = 0.0;				// Initialize them to zero here!
 	*/
 
 	//	double s_t_save, x_t_save, y_t_save; // SR, 14-04-2005
@@ -123,12 +120,24 @@ int main (int argc, char* argv[])
 		OldXsur.push_back(0.0);
 	}
 
-	// Initialize input file from command line
+	/**
+	* Initialize input file from command line
+	*/
+	//The beam "energy"
 	string EN = argv[1];
-	string File = argv[2];
-	string Twiss = argv[4];
-	string output = "LP_", output2 = "LPI_";
 
+	//The input tracks file
+	string File = argv[2];
+
+	//The aperture file
+	string Twiss = argv[4];
+
+	string output = "LossPattern_";
+	string output2 = "LossPatternInterpolated_";
+
+	/**
+	* Add the chosen output file name suffix to the output file prefixes.
+	*/
 	output += argv[3];
 	output2 += argv[3];
 
@@ -151,31 +160,30 @@ int main (int argc, char* argv[])
 	}
 
 	cout << "Summary of input parameters:" << endl;
-	cout << setw(50)<<"Beam energy: " << EN << endl;
-	cout << setw(50)<<"Twiss file: " << Twiss << endl;
-	cout << setw(50)<<"Input file: " << File << endl;
-	cout << setw(50)<<"Output files -> " << endl;
-	cout << setw(50)<<"Loss patterns with 1m resolution: " << output << endl;
-	cout << setw(50)<<"Interpolated loss patterns with 0.10 m resol.: " << output2 << endl;
+	cout << "Beam energy: " << EN << endl;
+	cout << "Twiss file: " << Twiss << endl;
+	cout << "Input file: " << File << endl;
+	cout << "Output files -> " << endl;
+	cout << "Loss patterns with 1m resolution: " << output << endl;
+	cout << "Interpolated loss patterns with 0.10 m resol.: " << output2 << endl;
 
 	//////////////////////////////
 	// Setup the aperture model //
 	//////////////////////////////
 
-	// Load the LHC sequence with apertures
-	vector<OneMetre> LHC;
+	// Load the Accelerator sequence with apertures
+	vector<OneMetre> Accelerator;
 	vector<string> Keyword, Name, Parent;
 	vector<string> KeywordNoQuotes, NameNoQuotes, ParentNoQuotes;
 	vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
 
 	// Read twiss file with apertures (no drifts!)
-	ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, 
-					&NameNoQuotes, &ParentNoQuotes, &Position, &Length, 
-					&Apert1, &Apert2, &Apert3, &Apert4);
+	ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4);
 
-	AssignOneMetre(&LHC, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4);
+	//Splits up the machine aperture into 1m blocks
+	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4);
 
-	cout << "Length of the read sequence: " << LHC.size() << " metres." << endl << endl;
+	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
 
 	// Clean-up here the variable no longer needed:
 	Keyword.clear();
@@ -193,10 +201,10 @@ int main (int argc, char* argv[])
 
 
 	// Read Survey data for the orbit position (Survey + Crossing + derivatives)
-	Survey LHC_sur;
+	Survey Accelerator_sur;
 	string IN_sur = "SurveyWithCrossing_XP_" + EN + ".dat";
 	cout << "Reading: " << IN_sur << endl << endl;
-	LHC_sur.LoadLHC_Crossing_XP( IN_sur );
+	Accelerator_sur.LoadAccelerator_Crossing_XP( IN_sur );
 
 	/////////////////////////////////////////////////
 	// Find the positions where particles are lost //
@@ -251,20 +259,20 @@ int main (int argc, char* argv[])
 
 			if ( _S_ )
 			{
-				Xsur = LHC_sur.GetSurvey( s_t );
+				Xsur = Accelerator_sur.GetSurvey( s_t );
 				Ysur = 0.0;
 			}
 
 			if ( _X_ )
 			{
-				Xx = LHC_sur.GetCrossX( s_t );
-				Yx = LHC_sur.GetCrossY( s_t );
+				Xx = Accelerator_sur.GetCrossX( s_t );
+				Yx = Accelerator_sur.GetCrossY( s_t );
 			}
 
 			Xorb = Xsur + Xx;
 			Yorb = Ysur + Yx;
 
-			if ( (LHC[(int)s_t].GetAperture(s_t-floor(s_t))).IsLost(x_t + Xorb, y_t + Yorb) )
+			if ( (Accelerator[(int)s_t].GetAperture(s_t-floor(s_t))).IsLost(x_t + Xorb, y_t + Yorb) )
 			{
 				// Store coordinates of lost particles 
 				// (no interpolation - location of sixtrack lens)
@@ -310,19 +318,19 @@ int main (int argc, char* argv[])
 
 					if ( _S_ )
 					{
-						new_x_t = new_x_t + LHC_sur.GetSurvey( new_s_t ); // Add survey
+						new_x_t = new_x_t + Accelerator_sur.GetSurvey( new_s_t ); // Add survey
 					}
 
 					if ( _X_ )
 					{
-						new_x_t = new_x_t + LHC_sur.GetCrossX( new_s_t ); // Add Xing
-						new_y_t = new_y_t + LHC_sur.GetCrossY( new_s_t );
+						new_x_t = new_x_t + Accelerator_sur.GetCrossX( new_s_t ); // Add Xing
+						new_y_t = new_y_t + Accelerator_sur.GetCrossY( new_s_t );
 					}
 
 					//cout<<setw(12)<<new_s_t<<setw(15)<<new_x_t<<setw(15)<<new_y_t<<endl;
-					//cout<<(LHC[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t)<<endl;
+					//cout<<(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t)<<endl;
 					// This requires changes for the case with old/new point before/after end of the ring
-					while ( new_s_t < s_t && !(LHC[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
+					while ( new_s_t < s_t && !(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
 					{
 						//cout<<setw(12)<<new_s_t<<setw(12)<<new_x_t<<setw(12)<<new_y_t<<endl;
 						new_s_t = CheckPos( new_s_t + Dl);
@@ -331,13 +339,13 @@ int main (int argc, char* argv[])
 
 						if ( _S_ )
 						{
-							new_x_t = new_x_t + LHC_sur.GetSurvey( new_s_t );
+							new_x_t = new_x_t + Accelerator_sur.GetSurvey( new_s_t );
 						}
 
 						if ( _X_ )
 						{
-							new_x_t = new_x_t + LHC_sur.GetCrossX( new_s_t );
-							new_y_t = new_y_t + LHC_sur.GetCrossY( new_s_t );
+							new_x_t = new_x_t + Accelerator_sur.GetCrossX( new_s_t );
+							new_y_t = new_y_t + Accelerator_sur.GetCrossY( new_s_t );
 						}
 					}
 
@@ -360,7 +368,7 @@ int main (int argc, char* argv[])
 
 		if ( _S_ )
 		{
-			OldXsur[n_t] = LHC_sur.GetSurvey( s_t );
+			OldXsur[n_t] = Accelerator_sur.GetSurvey( s_t );
 		}
 
 	}//End of while loop
@@ -466,6 +474,7 @@ int main (int argc, char* argv[])
 				<< setw(10) << n_h << endl;
 			}
 		}
+
 		in.close();
 		out_part.close();
 		LostTurn.clear();
@@ -480,7 +489,7 @@ int main (int argc, char* argv[])
 	FirstTurn.clear();
 	LastTurn.clear();
 
-	LHC.clear();
+	Accelerator.clear();
 
 	Slost.clear(); 
 	Xlost.clear(); 
@@ -507,16 +516,16 @@ int main (int argc, char* argv[])
 
 double CheckPos (double pp)
 {
-	double LHCLength = 26658.8832;
+	double AcceleratorLength = 26658.8832;
 
 	if ( pp < 0.0 )
 	{
-		pp = LHCLength + pp;
+		pp = AcceleratorLength + pp;
 	}
 
-	if ( pp > LHCLength )
+	if ( pp > AcceleratorLength )
 	{
-		pp = pp - LHCLength;
+		pp = pp - AcceleratorLength;
 	}
 
 	return pp;

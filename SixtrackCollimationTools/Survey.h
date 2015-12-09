@@ -36,9 +36,9 @@ public:
 	Survey();
 	~Survey();
 
-	void LoadLHC(string in);
-	void LoadLHC_Crossing(string in);
-	void LoadLHC_Crossing_XP(string in);
+	void LoadAccelerator(string in);
+	void LoadAccelerator_Crossing(string in);
+	void LoadAccelerator_Crossing_XP(string in);
 	double GetSurvey(double pos);
 	double GetCrossX(double pos);
 	double GetCrossY(double pos);

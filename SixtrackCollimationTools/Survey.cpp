@@ -45,7 +45,7 @@ Survey::~Survey()
 	COy.clear(); 
 }
 
-void Survey::LoadLHC(string in)
+void Survey::LoadAccelerator(string in)
 {
 	S.clear();
 	Xsurvey.clear();
@@ -90,7 +90,7 @@ double Survey::GetSurvey(double pos)
 {
 	if ( S.size() < 1 )
 	{
-		cout << "Error: LHC survey has not been initialized" << endl;
+		cout << "Error: Accelerator survey has not been initialized" << endl;
 		exit(0);
 	}
 
@@ -99,7 +99,7 @@ double Survey::GetSurvey(double pos)
 	return Xsurvey[n];
 }
 
-void Survey::LoadLHC_Crossing(string in)
+void Survey::LoadAccelerator_Crossing(string in)
 {
 	S.clear();
 	Xsurvey.clear();
@@ -138,7 +138,7 @@ void Survey::LoadLHC_Crossing(string in)
 	//	cout<<in<<endl;
 }
 
-void Survey::LoadLHC_Crossing_XP(string in)
+void Survey::LoadAccelerator_Crossing_XP(string in)
 {
 	S.clear();
 	Xsurvey.clear();
@@ -186,7 +186,7 @@ double Survey::GetCrossX(double pos)
 {
 	if ( Xcrossing.size() < 1 )
 	{
-		cout << "Error: LHC positions due to crossing schemes have not been initialized" << endl;
+		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
 		exit(0);
 	}
 
@@ -200,7 +200,7 @@ double Survey::GetCrossY(double pos)
 {
 	if ( Ycrossing.size() < 1 )
 	{
-		cout << "Error: LHC positions due to crossing schemes have not been initialized" << endl;
+		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
 		exit(0);
 	}
 
@@ -213,7 +213,7 @@ double Survey::GetCrossXP(double pos)
 {
 	if ( XPcrossing.size() < 1 )
 	{
-		cout << "Error: LHC positions due to crossing schemes have not been initialized" << endl;
+		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
 		exit(0);
 	}
 	// I assume that pos is given in metre, with spacing of 10 cm!
@@ -226,7 +226,7 @@ double Survey::GetCrossYP(double pos)
 {
 	if ( YPcrossing.size() < 1 )
 	{
-		cout << "Error: LHC positions due to crossing schemes have not been initialized" << endl;
+		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
 		exit(0);
 	}
 
