@@ -20,16 +20,16 @@
 using namespace std;
 
 void ReadTwiss(string in, vector<string> *K, vector<string> *N, 
-	       vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
-	       vector<string> *Pan, vector<double> *P, vector<double> *L, 
-	       vector<double> *A1, vector<double> *A2, vector<double> *A3, 
-	       vector<double> *A4);
+		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
+		vector<string> *Pan, vector<double> *P, vector<double> *L, 
+		vector<double> *A1, vector<double> *A2, vector<double> *A3, 
+		vector<double> *A4);
 
 void ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N, 
-		       vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
-		       vector<string> *Pan, vector<double> *P, vector<double> *L, 
-		       vector<double> *A1, vector<double> *A2, vector<double> *A3, 
-		       vector<double> *A4);
+			vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
+			vector<string> *Pan, vector<double> *P, vector<double> *L, 
+			vector<double> *A1, vector<double> *A2, vector<double> *A3, 
+			vector<double> *A4);
 
 void ReadTwissK(string in, vector<string> *K, vector<string> *N, 
 		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
