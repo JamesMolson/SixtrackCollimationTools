@@ -1,5 +1,5 @@
 /**
- * Write the LHC aperture along the ring for various 
+ * Write the Accelerator aperture along the ring for various 
  * azimuthal angles.
  */
 
@@ -8,7 +8,7 @@
 #include "OneMetre.h"
 #include "AssignOneMetre.h"
 
-double CheckPos(double pp); // See CheckPos.cpp
+double CheckPos(double pp, double AcceleratorLength); // See CheckPos.cpp
 
 int main (int argc, char* argv[])
 {
@@ -20,15 +20,12 @@ int main (int argc, char* argv[])
 		return 0;
 	}
 
-//	double Dl = 0.100; // Precision to identify longitudinal loss positions
-//	double LHCLength = 26658.8832;
-
 	//////////////////////////////
 	// Setup the aperture model //
 	//////////////////////////////
 
-	// Load the LHC sequence with apertures
-	vector<OneMetre> LHC;
+	// Load the Accelerator sequence with apertures
+	vector<OneMetre> Accelerator;
 	vector<string> Keyword, Name, Parent;
 	vector<string> KeywordNoQuotes, NameNoQuotes, ParentNoQuotes;
 	vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
@@ -38,14 +35,15 @@ int main (int argc, char* argv[])
 
 	cout << "Reading aperture file " << argv[1] << endl;
 
-	ReadTwissNoDrifts(argv[1], &Keyword, &Name, &Parent, &KeywordNoQuotes, 
-		&NameNoQuotes, &ParentNoQuotes, &Position, &Length, 
-		&Apert1, &Apert2, &Apert3, &Apert4);
+	double AcceleratorLength = ReadTwissNoDrifts(argv[1], &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4);
 
-	AssignOneMetre(&LHC, Keyword, Name, Parent, Position, Length, 
-		 Apert1, Apert2, Apert3, Apert4);
+	size_t OldPrecision = cout.precision(16);
+	cout << "Found accelerator length from MAD headers: " << AcceleratorLength << endl;
+	cout.precision(OldPrecision);
 
-	cout << "Length of the read sequence: " << LHC.size() << " metres." << endl << endl;
+	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, AcceleratorLength);
+
+	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
 
 	// Clean-up here the variable no longer needed:
 	Keyword.clear();
@@ -62,45 +60,43 @@ int main (int argc, char* argv[])
 	Apert4.clear();
 
 	// Write Aperture vs s every 10 cm
-	ofstream out_lhc("LHCAperture.dat");
-	out_lhc<<"%1=s [km]; 2=Ax [m]; 3=Ay [m]; 4=A45deg [m]"<<endl;
+	ofstream out_Accelerator("AcceleratorAperture.dat");
+	out_Accelerator<<"%1=s [km]; 2=Ax [m]; 3=Ay [m]; 4=A45deg [m]"<<endl;
 
 	Aperture Atmp;
 	double s;
 
-	for (size_t i = 0; i < LHC.size(); i++)
+	for (size_t i = 0; i < Accelerator.size(); i++)
 	{
 		for (size_t j = 0; j < 10; j++)
 		{
 			s = static_cast<double>(i) + static_cast<double>(j) / 10;
-			Atmp = LHC[static_cast<size_t>(s)].GetAperture(static_cast<double>(j)/10);
-			out_lhc.precision(7);
-			out_lhc << setw(12) << s;
-			out_lhc.precision(6);
-			out_lhc <<setw(14) << Atmp.GiveAperture( 0.0 );
-			out_lhc <<setw(14) << Atmp.GiveAperture( 90.0 );
-			out_lhc <<setw(14) << Atmp.GiveAperture( 45.0 );
-			out_lhc << endl;
+			Atmp = Accelerator[static_cast<size_t>(s)].GetAperture(static_cast<double>(j)/10);
+			out_Accelerator.precision(7);
+			out_Accelerator << setw(12) << s;
+			out_Accelerator.precision(6);
+			out_Accelerator <<setw(14) << Atmp.GiveAperture( 0.0 );
+			out_Accelerator <<setw(14) << Atmp.GiveAperture( 90.0 );
+			out_Accelerator <<setw(14) << Atmp.GiveAperture( 45.0 );
+			out_Accelerator << endl;
 			Atmp.empty();
 		}
 	}
-	out_lhc.close();
+	out_Accelerator.close();
 
 	return 0;
 }
 
-double CheckPos (double pp)
+double CheckPos (double pp, double AcceleratorLength)
 {
-	double LHCLength = 26658.8832;
-
 	if ( pp < 0.0 )
 	{
-		pp = LHCLength + pp;
+		pp = AcceleratorLength + pp;
 	}
 
-	if ( pp > LHCLength )
+	if ( pp > AcceleratorLength )
 	{
-		pp = pp - LHCLength;
+		pp = pp - AcceleratorLength;
 	}
 
 	return pp;

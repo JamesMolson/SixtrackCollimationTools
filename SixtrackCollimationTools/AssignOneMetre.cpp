@@ -30,8 +30,9 @@
 void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<string> N, 
 				vector<string> Pa, vector<double> P, vector<double> L, 
 				vector<double> A1, vector<double> A2, vector<double> A3, 
-				vector<double> A4)
+				vector<double> A4, double AccLength)
 {
+	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
 
 	double a1, a2, a3, a4;
 	double a1_e, a2_e, a3_e, a4_e; // tmp apertures at the end of the metre
@@ -238,7 +239,7 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 	// Not worth to write the code for the general case!
 	Metre_tmp.DefineAperture(P_end, a1_end, a2_end, a3_end, a4_end);
 
-	if (floor(P_end) == 26658.0)
+	if (floor(P_end) == floor(AccLength))
 	{
 		Metre_tmp.DefineAperture(0.8832, a1_end, a2_end, a3_end, a4_end);
 	}
@@ -253,9 +254,9 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 	//	cout<<TheSequence->size()<<endl;
 
 	// End of the sequence
-	if (TheSequence->size() < 26659)
+	if (TheSequence->size() < AcceleratorLengthMetre)
 	{
-		for (size_t k = 1; k <= 26659 - TheSequence->size(); k++)
+		for (size_t k = 1; k <= AcceleratorLengthMetre - TheSequence->size(); k++)
 		{ 
 			Metre_tmp.DefineAperture(0.0, a1_end, a2_end, a3_end, a4_end);
 			Metre_tmp.DefineAperture(0.99999, a1_end, a2_end, a3_end, a4_end);
@@ -267,7 +268,7 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 		Metre_tmp.empty();
 		Metre_tmp.DefineAperture(0.0, a1_end, a2_end, a3_end, a4_end);
 
-		if (floor(P_end) == 26658.0)
+		if (floor(P_end) == floor(AccLength))
 		{
 			Metre_tmp.DefineAperture(P_end, a1_end, a2_end, a3_end, a4_end);
 		}
@@ -285,8 +286,10 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<string> N, 
 			 vector<string> Pa, vector<double> P, vector<double> L, 
 			 vector<double> A1, vector<double> A2, vector<double> A3, 
-			 vector<double> A4, vector<double> xA, vector<double> yA)
+			 vector<double> A4, vector<double> xA, vector<double> yA, double AccLength)
 {
+	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
+
 	double a1, a2, a3, a4, x, y,
 		a1_e, a2_e, a3_e, a4_e, x_e, y_e,// tmp apertures at the end of the metre
 		P_end, a1_end, a2_end, a3_end, a4_end, x_end, y_end;
@@ -505,7 +508,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	// Not worth to write the code for the general case!
 	Metre_tmp.DefineApertureAlign(P_end, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
 
-	if (floor(P_end) == 26658.0)
+	if (floor(P_end) == floor(AccLength))
 	{
 		Metre_tmp.DefineApertureAlign(0.8832, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
 	}
@@ -520,9 +523,9 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	cout << TheSequence->size() << endl;
 
 	// End of the sequence
-	if ( TheSequence->size() < 26659)
+	if ( TheSequence->size() < AcceleratorLengthMetre)
 	{
-		for (size_t k = 1; k <= 26659 - TheSequence->size(); k++)
+		for (size_t k = 1; k <= AcceleratorLengthMetre - TheSequence->size(); k++)
 		{ 
 			Metre_tmp.DefineApertureAlign(0.0, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
 			Metre_tmp.DefineApertureAlign(0.99999, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
@@ -534,7 +537,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 		Metre_tmp.empty();
 		Metre_tmp.DefineApertureAlign(0.0, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
 
-		if (floor(P_end) == 26658.0)
+		if (floor(P_end) == floor(AccLength))
 		{
 			Metre_tmp.DefineApertureAlign(P_end, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
 		}
@@ -549,7 +552,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	cout << "the sequence has been created!" << endl << endl;
 }
 
-void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string output)
+void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string output, double AccLength)
 {
 	// check that s2 < sequence.size()
 
@@ -563,7 +566,7 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string o
 		s1 = s1 - 1.0;
 	}
 
-	if ( s2 < 26657.0 )
+	if ( s2 < (floor(AccLength) - 1.0) )
 	{
 		s2 = s2 + 1.0;
 	}
@@ -628,7 +631,7 @@ void PlotAll(vector<OneMetre> TheSequence, string output)
 	out.close();
 }
 
-void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double Ds, string output)
+void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double Ds, string output, double AccLength)
 {
 	if ( Ds > 1.0 )
 	{
@@ -646,7 +649,7 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double D
 		s1 = s1 - 1.0;
 	}
 
-	if ( s2 < 26657.0 )
+	if ( s2 < (floor(AccLength) - 1.0))
 	{
 		s2 = s2 + 1.0;
 	}

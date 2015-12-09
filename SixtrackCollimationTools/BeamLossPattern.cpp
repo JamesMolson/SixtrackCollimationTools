@@ -185,7 +185,7 @@ int main (int argc, char* argv[])
 	cout.precision(OldPrecision);
 
 	//Splits up the machine aperture into 1m blocks
-	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4);
+	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, AcceleratorLength);
 
 	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
 
