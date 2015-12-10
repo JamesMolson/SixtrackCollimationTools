@@ -63,16 +63,25 @@ int main (int argc, char* argv[])
 	{
 		cout << "Some input is missing!" << endl;
 		cout << "The command line should look like:" << endl;
-		cout << "-> " << argv[0] << " inj input.dat output.txt ApertureFile.txt <-" << endl;
+		cout << "-> " << argv[0] << " inj tracks2.dat output.txt ApertureFile.txt <-" << endl;
 		exit(0);
 	}
 
+	/**
+	* Configuration flags
+	*/
+
+	//Spatial resolution of interpolated beam losses
 	double Dl = 0.100; // Precision to identify longitudinal loss positions
 
-	int _S_ = 1;			 // Flag for using survey
-	int _X_ = 0;			 // Flag for using crossing
+	//Apply Survey correction as read in survey file (ON by default)
+	int _S_ = 1; // Flag for using survey
 
-	int _SaveLost_ = 0; // Save the trajectories of losdt particles (last turn)
+	//Apply correction from crossing/separation as read from survey fil
+	int _X_ = 0; // Flag for using crossing
+
+	//Save the last turn of the trajectory of each lost particle
+	int _SaveLost_ = 0; // Save the trajectories of lost particles (last turn)
 
 	// add flag for survey only (Guillaume runs)
 
@@ -104,6 +113,7 @@ int main (int argc, char* argv[])
 	vector<int> Nlost2, Tlost2,Hlost2;
 
 	// Initialize flags
+	//Maximum value of particle number
 	size_t Np = 30000; //	int Np = 500000;
 	vector<int> Flag, FirstTurn;
 
