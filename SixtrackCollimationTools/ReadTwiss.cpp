@@ -4,7 +4,7 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 		 vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 		 vector<string> *Pan, vector<double> *P, vector<double> *L, 
 		 vector<double> *A1, vector<double> *A2, vector<double> *A3, 
-		 vector<double> *A4)
+		 vector<double> *A4, vector<ApertureClass_t> *ApertureType)
 
 {
 	K->clear();
@@ -16,9 +16,11 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	A2->clear();
 	A3->clear();
 	A4->clear();
+	ApertureType->clear();
 
 	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256];
+	char ApType[256];
 
 	char chr_tmp[256];
 	string str_tmp;
@@ -56,7 +58,7 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 
 	while (InputFile.getline(chr_tmp,256))
 	{
-		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4);
+		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,ApType);
 
 		K->push_back(tK);
 		N->push_back(tN);
@@ -67,6 +69,7 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 		A2->push_back(atof(tA2));
 		A3->push_back(atof(tA3));
 		A4->push_back(atof(tA4));
+		ApertureType->push_back(GetApertureType(ApType));
 
 		// Element names without quotes
 		ost.str("");
@@ -112,7 +115,7 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 			 vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 			 vector<string> *Pan, vector<double> *P, vector<double> *L, 
 			 vector<double> *A1, vector<double> *A2, vector<double> *A3, 
-			 vector<double> *A4)
+			 vector<double> *A4, vector<ApertureClass_t> *ApertureType)
 
 {
 	K->clear();
@@ -124,9 +127,11 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	A2->clear();
 	A3->clear();
 	A4->clear();
+	ApertureType->clear();
 
 	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256];
+	char ApType[256];
 
 	char chr_tmp[256];
 	string str_tmp;
@@ -164,7 +169,7 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 
 	while (InputFile.getline(chr_tmp,256))
 	{
-		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4);
+		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,ApType);
 
 		str_tmp = tK;
 
@@ -179,6 +184,7 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 			A2->push_back(atof(tA2));
 			A3->push_back(atof(tA3));
 			A4->push_back(atof(tA4));
+			ApertureType->push_back(GetApertureType(ApType));
 		}
  
 		// Element names without quotes
@@ -226,7 +232,7 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
 		vector<string> *Pan, vector<double> *P, vector<double> *L, 
 		vector<double> *KL, vector<double> *A1, vector<double> *A2, 
-		vector<double> *A3, vector<double> *A4)
+		vector<double> *A3, vector<double> *A4, vector<ApertureClass_t> *ApertureType)
 {
 	K->clear();
 	N->clear();
@@ -238,9 +244,11 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	A2->clear();
 	A3->clear();
 	A4->clear();
+	ApertureType->clear();
 
 	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tKL[256], tA1[256], tA2[256], tA3[256], tA4[256];
+	char ApType[256];
 
 	char chr_tmp[256];
 	string str_tmp;
@@ -278,7 +286,7 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 
 	while (InputFile.getline(chr_tmp,256))
 	{
-		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tKL,tA1,tA2,tA3,tA4);
+		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tKL,tA1,tA2,tA3,tA4,ApType);
 
 		K->push_back(tK);
 		N->push_back(tN);
@@ -290,6 +298,7 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 		A2->push_back(atof(tA2));
 		A3->push_back(atof(tA3));
 		A4->push_back(atof(tA4));
+		ApertureType->push_back(GetApertureType(ApType));
  
 		// Element names without quotes
 		ost.str("");
@@ -335,7 +344,7 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 		 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
 		 vector<double> *P, vector<double> *L, vector<double> *A1, 
 		 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
-		 vector<double> *DX, vector<double> *DY)
+		 vector<double> *DX, vector<double> *DY, vector<ApertureClass_t> *ApertureType)
 {
 	K->clear();
 	N->clear();
@@ -348,9 +357,11 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 	A4->clear();
 	DX->clear();
 	DY->clear();
+	ApertureType->clear();
 
 	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256], tDX[256], tDY[256];
+	char ApType[256];
 
 	char chr_tmp[256];
 	string str_tmp;
@@ -388,7 +399,7 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 
 	while (InputFile.getline(chr_tmp,256))
 	{
-		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,tDX,tDY);
+		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,tDX,tDY,ApType);
 
 		str_tmp = tK;
 		K->push_back(tK);
@@ -402,6 +413,7 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 		A4->push_back(atof(tA4));
 		DX->push_back(atof(tDX));
 		DY->push_back(atof(tDY));
+		ApertureType->push_back(GetApertureType(ApType));
 
 		// Element names without quotes
 		ost.str("");
@@ -447,7 +459,7 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 			 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
 			 vector<double> *P, vector<double> *L, vector<double> *A1, 
 			 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
-			 vector<double> *DX, vector<double> *DY)
+			 vector<double> *DX, vector<double> *DY, vector<ApertureClass_t> *ApertureType)
 {
 	K->clear();
 	N->clear();
@@ -460,9 +472,11 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 	A4->clear();
 	DX->clear();
 	DY->clear();
+	ApertureType->clear();
 
 	double AcceleratorLength = 0;
 	char tK[256], tN[256], tT[256], tP[256], tL[256], tA1[256], tA2[256], tA3[256], tA4[256], tDX[256], tDY[256];
+	char ApType[256];
 
 	char chr_tmp[256];
 	string str_tmp;
@@ -500,7 +514,7 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 
 	while (InputFile.getline(chr_tmp,256))
 	{
-		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,tDX,tDY);
+		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,tDX,tDY,ApType);
 
 		str_tmp = tK;
 
@@ -517,6 +531,7 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 			A4->push_back(atof(tA4));
 			DX->push_back(atof(tDX));
 			DY->push_back(atof(tDY));
+			ApertureType->push_back(GetApertureType(ApType));
 		}
 
 		// Element names without quotes
@@ -558,3 +573,43 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 	return AcceleratorLength;
 }
 
+ApertureClass_t GetApertureType(char* ApType)
+{
+	string ApTemp = ApType;
+	if(ApTemp == "\"CIRCLE\"")
+	{
+		return CIRCLE;
+	}
+	else if(ApTemp == "\"RECTANGLE\"")
+	{
+		return RECTANGLE;
+	}
+	else if(ApTemp == "\"ELLIPSE\"")
+	{
+		return ELLIPSE;
+	}
+	else if(ApTemp == "\"RECTCIRCLE\"")
+	{
+		return RECTCIRCLE;
+	}
+	else if(ApTemp == "\"LHCSCREEN\"")
+	{
+		return LHCSCREEN;
+	}
+	else if(ApTemp == "\"RECTELLIPSE\"")
+	{
+		return RECTELLIPSE;
+	}
+	else if(ApTemp == "\"RACETRACK\"")
+	{
+		return RACETRACK;
+	}
+	else if(ApTemp == "\"OCTAGON\"")
+	{
+		return OCTAGON;
+	}
+	else
+	{
+		return UNKNOWN;
+	}
+}

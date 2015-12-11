@@ -16,7 +16,7 @@ int main (int argc, char* argv[])
 	{
 		cout << "ERROR in the input definition!" << endl;
 		cout << "Command line should look like:" << endl;
-		cout << "-> GetAperture ApertureFile.dat <-" << endl;
+		cout << "-> " << argv[0] << " ApertureFile.dat <-" << endl;
 		return 0;
 	}
 
@@ -29,19 +29,20 @@ int main (int argc, char* argv[])
 	vector<string> Keyword, Name, Parent;
 	vector<string> KeywordNoQuotes, NameNoQuotes, ParentNoQuotes;
 	vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
+	vector<ApertureClass_t> ApertureType;
 
 	// Read twiss file with apertures (no drifts!)
 	//	ReadTwissNoDrifts("allaper_inj_20041008.b1", &Keyword, &Name, &Parent, &KeywordNoQuotes, 
 
 	cout << "Reading aperture file " << argv[1] << endl;
 
-	double AcceleratorLength = ReadTwissNoDrifts(argv[1], &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4);
+	double AcceleratorLength = ReadTwissNoDrifts(argv[1], &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4, &ApertureType);
 
 	size_t OldPrecision = cout.precision(16);
 	cout << "Found accelerator length from MAD headers: " << AcceleratorLength << endl;
 	cout.precision(OldPrecision);
 
-	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, AcceleratorLength);
+	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 
 	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
 
@@ -58,6 +59,7 @@ int main (int argc, char* argv[])
 	Apert2.clear();
 	Apert3.clear();
 	Apert4.clear();
+	ApertureType.clear();
 
 	// Write Aperture vs s every 10 cm
 	ofstream out_Accelerator("AcceleratorAperture.dat");

@@ -8,7 +8,7 @@ OneMetre::~OneMetre()
 {
 }
 
-void OneMetre::DefineAperture(double p, double a1, double a2, double a3, double a4)
+void OneMetre::DefineAperture(double p, double a1, double a2, double a3, double a4, ApertureClass_t ApertureType)
 {
 	if ( p == 1.0 )
 	{
@@ -22,9 +22,6 @@ void OneMetre::DefineAperture(double p, double a1, double a2, double a3, double 
 		cout << "ERROR: New position is smaller than previously defined aperture locations!" << endl;
 		cout << "       New position must be larger than the last one previously defined." << endl;
 		cout << "       Old position: " << Pos[ Pos.size()-1 ] << " - new position: " << p << " -> " << p-floor(p) << endl;
-		//		cout.precision(15);
-		//		cout<<Pos[ Pos.size()-1 ]<<endl;
-		//		cout<<p-floor(p)<<endl;
 		exit(0);
 	}
 
@@ -32,7 +29,7 @@ void OneMetre::DefineAperture(double p, double a1, double a2, double a3, double 
 	Pos.push_back( p-floor(p) );
 
 	Atmp.empty();
-	Atmp.PutApert(a1, a2, a3, a4);
+	Atmp.PutApert(a1, a2, a3, a4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
 	//	cout<<"Aperture definition inserted at the position "<<p<<" -> "<<p-floor(p)<<"."<<endl;
@@ -60,7 +57,7 @@ void OneMetre::DefineAperture(double p, Aperture Ap)
 	//	cout<<"Total number of aperture definitions: "<<Pos.size()<<"."<<endl;
 }
 
-void OneMetre::DefineAperture(double p, vector<double> A4)
+void OneMetre::DefineAperture(double p, vector<double> A4, ApertureClass_t ApertureType)
 {
 	if ( p == 1.0 )
 	{
@@ -79,7 +76,7 @@ void OneMetre::DefineAperture(double p, vector<double> A4)
 	Pos.push_back( p-floor(p) );
 
 	Atmp.empty();
-	Atmp.PutApert(A4);
+	Atmp.PutApert(A4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
 	//	cout<<"Aperture definition inserted at the position "<<p<<" -> "<<p-floor(p)<<"."<<endl;
@@ -112,8 +109,8 @@ Aperture OneMetre::GetAperture(double p)
 		cout << "       Aperture asked at the position: " << p << endl;
 		exit(0);
 	}
-	else if ( Pos.size() == 1 )
-	{ // one aperture only -> same aperture in all the metre!
+	else if ( Pos.size() == 1 ) // one aperture only -> same aperture in all the metre!
+	{
 		Atmp = Apert[0];
 		done = 1;
 	}
@@ -123,17 +120,19 @@ Aperture OneMetre::GetAperture(double p)
 		// Clean-up!
 		Atmp.empty();
 		Atmp_vec.clear();
-		
+
 		// Add 'flat' aperture definitions if the point at '0.0' and '0.99' are not given
 		// Only if this has not been done yet (i.e., only if Pos_ex.size()==0 )
 		if ( Pos_ex.size() == 0 )
 		{
+			//First deal with the start of the metre
 			if ( Pos.size() > 0 && Pos[0] > 0.001 )
 			{
 				cout << "Warning: aperture definition added at the beginning of the metre!" << endl;
 				Pos_ex.push_back(0.0);
 				Apert_ex.push_back(Apert[0]);
 
+				//Push position and apertures to the types used for interpolation
 				for (size_t q = 0; q < Pos.size(); q++)
 				{
 					Pos_ex.push_back( Pos[q] );
@@ -146,6 +145,7 @@ Aperture OneMetre::GetAperture(double p)
 				Apert_ex = Apert;
 			}
 
+			//Finally deal with the end of the metre
 			if ( Pos.size() > 0 && Pos[ Pos.size()-1 ] < 0.99 )
 			{
 				cout << "Warning: aperture definition added at the end of the metre!" << endl;
@@ -154,14 +154,17 @@ Aperture OneMetre::GetAperture(double p)
 			}
 		}
 
+		//If the requested position is at the start of the metre, return the first entry
 		if ( p == 0.0 )
 		{
 			Atmp = Apert_ex[0];
 		}
+		//If the requested position is at the end of the metre, return the last entry
 		else if ( p == 1.0 )
 		{
 			Atmp = Apert_ex[Apert_ex.size()-1];
 		}
+		//Otherwise, interpolate
 		else if ( Pos_ex.size() >= 2 )
 		{
 			// Find the 'bin' of the position 'p'
@@ -182,11 +185,26 @@ Aperture OneMetre::GetAperture(double p)
 
 			for (int i = 1; i <= 4; i++) // Here, I would have [k=Pos_ex.size() => 'Bus error'] if p=1!!
 			{
-				Atmp_vec.push_back( Apert_ex[k-1].GetApert(i) + (Apert_ex[k].GetApert(i)-Apert_ex[k-1].GetApert(i))/(Pos_ex[k]-Pos_ex[k-1]) * ((p-floor(p))-Pos_ex[k-1]) );
+				Atmp_vec.push_back( Apert_ex[k-1].GetApert(i) + (Apert_ex[k].GetApert(i) - Apert_ex[k-1].GetApert(i)) / (Pos_ex[k]-Pos_ex[k-1]) * ((p - floor(p)) - Pos_ex[k-1]) );
+			}
+
+			//What type of aperture is this?
+			ApertureClass_t ApType1 = Apert_ex[k-1].GetApertureType();
+			ApertureClass_t ApType2 = Apert_ex[k].GetApertureType();
+			ApertureClass_t ApTypeReal;
+
+			if(ApType1 != ApType2)
+			{
+				ApTypeReal = INTERPOLATED;
+			}
+			else
+			{
+				ApTypeReal = ApType1;
 			}
 
 			// This includes the case that p=Pos_ex[i] for some i
-			Atmp.PutApert( Atmp_vec );
+			//Assume a rectellipse type
+			Atmp.PutApert( Atmp_vec, ApTypeReal);
 			Atmp_vec.clear();
 		}
 	}
@@ -219,7 +237,7 @@ Aperture OneMetre::GetAperture(double p)
 				Atmp_vec.push_back(Apert_ex[k].GetApert(i));
 			}
 		}
-		Atmp.PutApert( Atmp_vec );
+		Atmp.PutApert( Atmp_vec, INTERPOLATED );
 	}
 	return Atmp;
 }

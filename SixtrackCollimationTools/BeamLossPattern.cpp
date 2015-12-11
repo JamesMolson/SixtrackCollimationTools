@@ -59,6 +59,14 @@ double CheckPos(double pp, double); // See CheckPos.cpp
 
 int main (int argc, char* argv[])
 {
+
+/**
+* Input files:
+* tracks2.dat : as output by Sixtrack
+* ApertureFile.txt as output by a MAD twiss call with the following headers: KEYWORD, NAME, PARENT, S, L, APER_1, APER_2, APER_3, APER_4
+* @see ReadTwiss.cpp
+*/
+
 	if (argc < 5)
 	{
 		cout << "Some input is missing!" << endl;
@@ -75,13 +83,13 @@ int main (int argc, char* argv[])
 	double Dl = 0.100; // Precision to identify longitudinal loss positions
 
 	//Apply Survey correction as read in survey file (ON by default)
-	int _S_ = 1; // Flag for using survey
+	bool _S_ = false; // Flag for using survey
 
 	//Apply correction from crossing/separation as read from survey fil
-	int _X_ = 0; // Flag for using crossing
+	bool _X_ = false; // Flag for using crossing
 
 	//Save the last turn of the trajectory of each lost particle
-	int _SaveLost_ = 0; // Save the trajectories of lost particles (last turn)
+	bool _SaveLost_ = false; // Save the trajectories of lost particles (last turn)
 
 	// add flag for survey only (Guillaume runs)
 
@@ -136,7 +144,7 @@ int main (int argc, char* argv[])
 	//The beam "energy"
 	string EN = argv[1];
 
-	//The input tracks file
+	//The input tracks file (tracks2.dat)
 	string File = argv[2];
 
 	//The aperture file
@@ -151,7 +159,7 @@ int main (int argc, char* argv[])
 	output += argv[3];
 	output2 += argv[3];
 
-	if ( _S_ | _X_ )
+	if ( _S_ || _X_ )
 	{
 		output += ".";
 		output2 += ".";
@@ -186,16 +194,17 @@ int main (int argc, char* argv[])
 	vector<string> Keyword, Name, Parent;
 	vector<string> KeywordNoQuotes, NameNoQuotes, ParentNoQuotes;
 	vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
+	vector<ApertureClass_t> ApertureType;
 
 	// Read twiss file with apertures (no drifts!)
-	double AcceleratorLength = ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4);
+	double AcceleratorLength = ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4, &ApertureType);
 
 	size_t OldPrecision = cout.precision(16);
 	cout << "Found accelerator length from MAD headers: " << AcceleratorLength << endl;
 	cout.precision(OldPrecision);
 
 	//Splits up the machine aperture into 1m blocks
-	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, AcceleratorLength);
+	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 
 	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
 
@@ -212,6 +221,7 @@ int main (int argc, char* argv[])
 	Apert2.clear();
 	Apert3.clear();
 	Apert4.clear();
+	ApertureType.clear();
 
 
 	// Read Survey data for the orbit position (Survey + Crossing + derivatives)
@@ -451,7 +461,7 @@ int main (int argc, char* argv[])
 		in.open(File.c_str(), ios::in);
 		if (!in)
 		{
-			cout<<"Impossible to open the file!!"<<endl;
+			cout << "Impossible to open the file!!" << endl;
 			exit(0);
 		}
 		in.getline(c_str,256); // Skip the first line with the header

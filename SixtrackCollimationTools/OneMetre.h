@@ -61,16 +61,18 @@ private:
 	vector<Aperture> Apert;
 
 	/**
-	* Extended position and aperture vector with additional
+	* Extended position and aperture vector with additional definitions at 0.0 and 1.0, for aperture interpolation.
+	* Position
 	*/
 	vector<double> Pos_ex;
 
 	/**
-	* definitions at 0.0 and 1.0, for aperture interpolation.
+	* Extended position and aperture vector with additional definitions at 0.0 and 1.0, for aperture interpolation.
+	* Aperture
 	*/
 	vector<Aperture> Apert_ex;
 
-	/**	
+	/**
 	* Aperture in vector format - useful later
 	*/
 	//	vector<double> Apert_vec;
@@ -96,11 +98,11 @@ public:
 
 	~OneMetre();
 
-	void DefineAperture(double p, double a1, double a2, double a3, double a4);
+	void DefineAperture(double p, double a1, double a2, double a3, double a4, ApertureClass_t ApertureType);
 
 	void DefineAperture(double p, Aperture Ap);
 
-	void DefineAperture(double p, vector<double> A4);
+	void DefineAperture(double p, vector<double> A4, ApertureClass_t ApertureType);
 
 	void GetApertDef(vector<double> *Position, vector<Aperture> *ThisApert);
 

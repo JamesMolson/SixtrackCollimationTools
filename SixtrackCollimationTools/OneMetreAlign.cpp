@@ -8,7 +8,7 @@ OneMetreAlign::~OneMetreAlign()
 {
 }
 
-void OneMetreAlign::DefineApertureAlign(double p, double a1, double a2, double a3, double a4, double Dx, double Dy)
+void OneMetreAlign::DefineApertureAlign(double p, double a1, double a2, double a3, double a4, ApertureClass_t ApertureType, double Dx, double Dy)
 {
 	if ( p == 1.0 )
 	{
@@ -26,7 +26,7 @@ void OneMetreAlign::DefineApertureAlign(double p, double a1, double a2, double a
 	Pos.push_back( p-floor(p) );
 
 	Atmp.empty();
-	Atmp.PutApert(a1, a2, a3, a4);
+	Atmp.PutApert(a1, a2, a3, a4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
 
@@ -55,7 +55,7 @@ void OneMetreAlign::DefineApertureAlign(double p, Aperture Ap, double Dx, double
 	DyAlign.push_back( Dy );
 }
 
-void OneMetreAlign::DefineApertureAlign(double p, vector<double> A4, double Dx, double Dy)
+void OneMetreAlign::DefineApertureAlign(double p, vector<double> A4, ApertureClass_t ApertureType, double Dx, double Dy)
 {
 	if ( p == 1.0 )
 	{
@@ -73,7 +73,7 @@ void OneMetreAlign::DefineApertureAlign(double p, vector<double> A4, double Dx, 
 	Pos.push_back( p-floor(p) );
 
 	Atmp.empty();
-	Atmp.PutApert(A4);
+	Atmp.PutApert(A4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
 
@@ -81,7 +81,7 @@ void OneMetreAlign::DefineApertureAlign(double p, vector<double> A4, double Dx, 
 	DyAlign.push_back( Dy );
 }
 
-void OneMetreAlign::DefineAperture(double p, double a1, double a2, double a3, double a4)
+void OneMetreAlign::DefineAperture(double p, double a1, double a2, double a3, double a4, ApertureClass_t ApertureType)
 {
 	if ( p == 1.0 )
 	{
@@ -99,7 +99,7 @@ void OneMetreAlign::DefineAperture(double p, double a1, double a2, double a3, do
 	Pos.push_back( p-floor(p) );
 
 	Atmp.empty();
-	Atmp.PutApert(a1, a2, a3, a4);
+	Atmp.PutApert(a1, a2, a3, a4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
 
@@ -128,7 +128,7 @@ void OneMetreAlign::DefineAperture(double p, Aperture Ap)
 	DyAlign.push_back(0.0);
 }
 
-void OneMetreAlign::DefineAperture(double p, vector<double> A4)
+void OneMetreAlign::DefineAperture(double p, vector<double> A4, ApertureClass_t ApertureType)
 {
 	if ( p == 1.0 )
 	{
@@ -146,7 +146,7 @@ void OneMetreAlign::DefineAperture(double p, vector<double> A4)
 	Pos.push_back( p-floor(p) );
 
 	Atmp.empty();
-	Atmp.PutApert(A4);
+	Atmp.PutApert(A4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
 
@@ -259,11 +259,25 @@ Aperture OneMetreAlign::GetAperture(double p)
 				Atmp_vec.push_back( Apert_ex[k-1].GetApert(i) + (Apert_ex[k].GetApert(i)-Apert_ex[k-1].GetApert(i))/(Pos_ex[k]-Pos_ex[k-1]) * ((p-floor(p))-Pos_ex[k-1]) );
 			}
 
+            //What type of aperture is this?
+            ApertureClass_t ApType1 = Apert_ex[k-1].GetApertureType();
+            ApertureClass_t ApType2 = Apert_ex[k].GetApertureType();
+            ApertureClass_t ApTypeReal;
+
+            if(ApType1 != ApType2)
+            {
+                ApTypeReal = INTERPOLATED;
+            }
+            else
+            {
+                ApTypeReal = ApType1;
+            }
+
 			// This includes the case that p=Pos_ex[i] for some i
 			Dx_tmp = DxAlign_ex[k-1] + (DxAlign_ex[k]-DxAlign_ex[k-1])/(Pos_ex[k]-Pos_ex[k-1]) * ((p-floor(p))-Pos_ex[k-1]);
 			Dy_tmp = DyAlign_ex[k-1] + (DyAlign_ex[k]-DyAlign_ex[k-1])/(Pos_ex[k]-Pos_ex[k-1]) * ((p-floor(p))-Pos_ex[k-1]);
 
-			Atmp.PutApert( Atmp_vec );
+			Atmp.PutApert( Atmp_vec, ApTypeReal );
 			Atmp.SetApertAlign(Dx_tmp, Dy_tmp);
 			Atmp_vec.clear();
 		}
@@ -294,11 +308,11 @@ Aperture OneMetreAlign::GetAperture(double p)
 			}
 			else
 			{
-			Atmp_vec.push_back(Apert_ex[k].GetApert(i));
+				Atmp_vec.push_back(Apert_ex[k].GetApert(i));
 			}
 		}
 
-		Atmp.PutApert( Atmp_vec );
+		Atmp.PutApert( Atmp_vec, INTERPOLATED );
 		Atmp.SetApertAlign(DxAlign[k], DyAlign[k]);
 	}
 

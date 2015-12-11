@@ -84,13 +84,13 @@ public:
 	~OneMetreAlign();
 
 	// If alignment is not defined, put it to zero!
-	void DefineAperture(double p, double a1, double a2, double a3, double a4);
+	void DefineAperture(double p, double a1, double a2, double a3, double a4, ApertureClass_t ApertureType);
 	void DefineAperture(double p, Aperture Ap);
-	void DefineAperture(double p, vector<double> A4);
+	void DefineAperture(double p, vector<double> A4, ApertureClass_t ApertureType);
 
-	void DefineApertureAlign(double p, double a1, double a2, double a3, double a4, double Dx, double Dy);
+	void DefineApertureAlign(double p, double a1, double a2, double a3, double a4, ApertureClass_t ApertureType, double Dx, double Dy);
 	void DefineApertureAlign(double p, Aperture Ap, double Dx, double Dy);
-	void DefineApertureAlign(double p, vector<double> A4, double Dx, double Dy);
+	void DefineApertureAlign(double p, vector<double> A4, ApertureClass_t ApertureType, double Dx, double Dy);
 
 	void GetApertDef(vector<double> *Position, vector<Aperture> *ThisApert);
 

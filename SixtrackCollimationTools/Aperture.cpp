@@ -1,6 +1,6 @@
 #include "Aperture.h"
 
-Aperture::Aperture() : MyApert(), MyName(""), Dx_align(0), Dy_align(0), Angle(0), LostFlag(0), x_n(), y_n(), CorrectDefinition(0)
+Aperture::Aperture() : MyApert(), MyName(""), ApertureType(0), Dx_align(0), Dy_align(0), Angle(0), LostFlag(false), x_n(0), y_n(0), CorrectDefinition(false)
 {
 }
 
@@ -8,18 +8,21 @@ Aperture::~Aperture()
 {
 }
 
-void Aperture::PutApert(double a1, double a2, double a3, double a4)
+void Aperture::PutApert(double a1, double a2, double a3, double a4, ApertureClass_t ApertureT)
 {
 	double pi = atan2(0.0,-1.0);
 
 	MyApert.clear();
 
+	/*
 	if ( // a3 ==0 || a4 == 0 || // This case now defines the rectangular aperture!
 			 (a1 != 0 && a2 == 0) ||
 			 (a1 == 0 && a2 != 0) )
+	*/
+	if(ApertureT == UNKNOWN || ApertureT == NONE )
 	{
 		cout << "ERROR: Invalid aperture definition!!" << endl;
-		cout << a1 << " " << a2 << " " << a3 << " " << a4 << " " << endl;
+		cout << a1 << " " << a2 << " " << a3 << " " << a4 << endl;
 	}
 	else
 	{
@@ -37,12 +40,13 @@ void Aperture::PutApert(double a1, double a2, double a3, double a4)
 	}
 }
 
-void Aperture::PutApert(vector<double> ThisAp)
+void Aperture::PutApert(vector<double> ThisAp, ApertureClass_t ApertureT)
 {
 	double pi = atan2(0.0,-1.0);
 
 	MyApert.clear();
 	MyApert = ThisAp;
+	ApertureType = ApertureT;
 
 	// For rectangular aperture, A3=0 and A4=angle!
 	if ( ThisAp[2] == 0 )
@@ -78,24 +82,24 @@ string Aperture::GetName()
 * the fitting procedure, I add some checks to make the aperture
 * definition compatible with 'known' aperture plots!
 */
-int Aperture::IsLost(double x, double y)
+bool Aperture::IsLost(double x, double y)
 {
 	double a1 = MyApert[0], 
 		a2 = MyApert[1], 
 		a3 = MyApert[2],
 		a4 = MyApert[3];
 
-	CorrectDefinition = 0;
+	CorrectDefinition = false;
 	if ( a1 > a3 && a3 != 0 )
 	{
 		a1 = a3;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	if ( a2 > a4 && a4 > 0)
 	{
 		a2 = a4;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	// Exclude RaceTrack and Coll!
@@ -103,7 +107,7 @@ int Aperture::IsLost(double x, double y)
 	{
 		a3 = a1;
 		a4 = a2;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	// Collimator with negative angle or angle > .5 (no apertures > 1!)
@@ -111,7 +115,7 @@ int Aperture::IsLost(double x, double y)
 	if ( a4 < 0 || a4 > .5 )
 	{
 		a3 = 0;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 	/*
 	// Warning if aperture definition is changed.
@@ -125,22 +129,26 @@ int Aperture::IsLost(double x, double y)
 	}
 	*/
 
+	//Put in adjustments for the survey offsets.
 	x_n = x - Dx_align;
 	y_n = y - Dy_align;
 
+	//Rotate into the rectangular aperture plane
 	double theta = atan2(y_n, x_n);
 	double R = sqrt( x_n * x_n + y_n * y_n );
 	x_n = R * cos( Angle - theta );
 	y_n = R * sin( Angle - theta );
 
-	LostFlag = 0;
+
+	//Finally check if the particle is within the aperture or not
+	LostFlag = false;
 
 	// RectEllipse
 	if ( a1 != 0.0 && a3 > 0 )
 	{
 		if ( x_n*x_n/a3/a3 + y_n*y_n/a4/a4 >= 1 || fabs(x_n) >= a1 || fabs(y_n) >= a2)
 		{
-			LostFlag = 1;
+			LostFlag = true;
 		}
 	}
 	// RaceTrack: remember to use Ap[2]/2!!
@@ -150,14 +158,14 @@ int Aperture::IsLost(double x, double y)
 		{
 			if (fabs(y_n) >= a4 )
 			{
-				LostFlag = 1;
+				LostFlag = true;
 			}
 		}
 		else if ( fabs(x_n) > a3/2 )
 		{
 			if ( (fabs(x_n)-a3/2)*(fabs(x_n)-a3/2)+y_n*y_n >= a4*a4)
 			{
-				LostFlag = 1;
+				LostFlag = true;
 			}
 		}
 	}
@@ -165,7 +173,7 @@ int Aperture::IsLost(double x, double y)
 	{
 		if ( fabs(x_n) >= a1 || fabs(y_n) >= a2 )
 		{
-			LostFlag = 1;
+			LostFlag = true;
 		}
 	}
 
@@ -174,8 +182,7 @@ int Aperture::IsLost(double x, double y)
 
 double Aperture::GiveAperture(double q)
 {
-	// WARNING: If this memebr is modified, also PlotAperture 
-	//					should be change accordingly!!!
+	// WARNING: If this memebr is modified, also PlotAperture should be change accordingly!!!
 
 	double pi = atan2(0.0,-1.0);
 	double T, Tc;
@@ -200,17 +207,17 @@ double Aperture::GiveAperture(double q)
 
 	// Check to avoid unknown combination of RectEllipse apertures.
 	// (this will be repeated in IsLost!)
-	CorrectDefinition = 0;
+	CorrectDefinition = false;
 	if ( a1 > a3 && a3 != 0 )
 	{
 		a1 = a3;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	if ( a2 > a4 && a4 > 0)
 	{
 		a2 = a4;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	// Exclude RaceTrack and Coll!
@@ -218,7 +225,7 @@ double Aperture::GiveAperture(double q)
 	{
 		a3 = a1;
 		a4 = a2;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	// Collimator with negative angle or angle > .5 (no apertures > 1!)
@@ -226,7 +233,7 @@ double Aperture::GiveAperture(double q)
 	if ( a4 < 0 || a4 > .5 )
 	{
 		a3 = 0;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	/*
@@ -369,7 +376,7 @@ double Aperture::GiveAperture(double q)
 			Dx_tmp = a2;
 		}
 	}
-	
+
 	DT_tmp = sqrt(Dx_tmp*Dx_tmp+Dy_tmp*Dy_tmp);
 
 	return DT_tmp;
@@ -389,17 +396,17 @@ void Aperture::PlotAperture(string output)
 
 	size_t N = 200; // number of point to plot
 
-	CorrectDefinition = 0;
+	CorrectDefinition = false;
 	if ( a1 > a3 && a3 != 0 )
 	{
 		a1 = a3;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	if ( a2 > a4 && a4 > 0)
 	{
 		a2 = a4;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	// Exclude RaceTrack and Coll!
@@ -407,7 +414,7 @@ void Aperture::PlotAperture(string output)
 	{
 		a3 = a1;
 		a4 = a2;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 
 	// Collimator with negative angle or angle > .5 (no apertures > 1!)
@@ -415,7 +422,7 @@ void Aperture::PlotAperture(string output)
 	if ( a4 < 0 || a4 > .5 )
 	{
 		a3 = 0;
-		CorrectDefinition = 1;
+		CorrectDefinition = true;
 	}
 	/*
 	if ( CorrectDefinition ){
@@ -589,5 +596,23 @@ void Aperture::empty()
 	MyApert.clear();
 	Dx_align = 0;
 	Dy_align = 0;
-	Angle = 0;	
+	Angle = 0;
+	ApertureType = 0;
+}
+
+ApertureClass_t Aperture::GetApertureType()
+{
+	return ApertureType;
+}
+
+ApertureClass_t FindApertureType(size_t i, size_t j, std::vector<ApertureClass_t> ApertureType)
+{
+    if(ApertureType[i] == ApertureType[j])
+    {
+        return ApertureType[i];
+    }
+    else
+    {
+        return INTERPOLATED;
+    }
 }

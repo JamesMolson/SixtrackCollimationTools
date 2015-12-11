@@ -30,14 +30,16 @@
 void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<string> N, 
 				vector<string> Pa, vector<double> P, vector<double> L, 
 				vector<double> A1, vector<double> A2, vector<double> A3, 
-				vector<double> A4, double AccLength)
+				vector<double> A4, vector<ApertureClass_t> ApertureType, double AccLength)
 {
 	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
+	double AcceleratorRemains = AccLength - floor(AccLength);
 
 	double a1, a2, a3, a4;
 	double a1_e, a2_e, a3_e, a4_e; // tmp apertures at the end of the metre
 	double P_end;
 	double a1_end, a2_end, a3_end, a4_end;
+	ApertureClass_t ap_end;
 
 	OneMetre Metre_tmp;
 
@@ -52,11 +54,12 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 
 	// Beginng on the sequence - I assume that the sequence never starts
 	// with an element with length~=0
-	size_t count, The_i;
+	size_t count=0, The_i=0;
 	size_t i = 0;
 
 	Metre_tmp.empty();
 
+	//Try to find the first non-zero aperture.
 	while ( ApertMod[i] == 0 )
 	{
 		i++;
@@ -74,36 +77,41 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 	//	cout<<(int)floor(P[i])<<endl;
 	for (size_t k = 0; k < floor(P[i]); k++)
 	{
-		Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4);
-		Metre_tmp.DefineAperture(0.999, a1, a2, a3, a4);
+		Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4, ApertureType[i]);
+		Metre_tmp.DefineAperture(0.999, a1, a2, a3, a4, ApertureType[i]);
 		TheSequence->push_back(Metre_tmp);
 		Metre_tmp.empty();
 		count++;
 	}
 
-	Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4); // Same aperture at beginning 
-	
-	//	while (count < K.size()){
+	Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4, ApertureType[i]); // Same aperture at beginning 
+
+	/**
+	* This loop starts at the first non-zero aperture and iterates until the end of the accelerator
+	* In each case we check that the location has an aperture defined.
+	* Different code paths are used for zero and non-zero length elements.
+	*/
 	for (size_t j = The_i + 1; j < K.size(); j++)
 	{
-		// Case 1
+		// Case 1: both points have the same starting metre - thin element.
 		if ( ApertMod[j] != 0 && L[j] == 0.0 && (floor(P[j]) - floor(P[The_i]) == 0.0 ) )
 		{
-			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i]);
+			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i]);
 			The_i = j;
 		}
-		// Case 2
+		// Case 2: The second point is not in the same 1m as the first - thin element.
 		else if ( ApertMod[j] != 0 && L[j] == 0.0 && (floor(P[j])-floor(P[The_i]) > 0.0) )
 		{
 			// Close this metre (k=0)
-			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i]);
+			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i]);
 
 			a1_e = (A1[j]-A1[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A1[The_i];
 			a2_e = (A2[j]-A2[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A2[The_i];
 			a3_e = (A3[j]-A3[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A3[The_i];
 			a4_e = (A4[j]-A4[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A4[The_i];
 
-			Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e);
+			
+			Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
@@ -111,37 +119,37 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 			// Add interpolated apertures to all the empty metres in between (k=1:Delta)
 			for (size_t k = 1; k < (floor(P[j])-floor(P[The_i])); k++)
 			{
-				Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e);
+				Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 
 				a1_e = (A1[j]-A1[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k) )) + A1[The_i];
 				a2_e = (A2[j]-A2[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k) )) + A2[The_i];
 				a3_e = (A3[j]-A3[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k) )) + A3[The_i];
 				a4_e = (A4[j]-A4[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k) )) + A4[The_i];
 
-				Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e);
+				Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 				TheSequence->push_back(Metre_tmp);	// Add new metres, but the index that counts the sequence elements does not change!!
 				count++;
 				Metre_tmp.empty();
 			}
 
 			// Start a new metre
-			Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e);
+			Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 			The_i = j; // P[j] will be added later!
 		}
-		// Element with length inside the same metre
+		// Element with length inside the same metre - thick element
 		else if ( ApertMod[j] != 0 && L[j] > 0.0 && floor(P[j]) == floor(P[The_i]) )
 		{
-			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i]);
-			Metre_tmp.DefineAperture(P[j]-L[j], A1[j], A2[j], A3[j], A4[j]);
+			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i]);
+			Metre_tmp.DefineAperture(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
 			The_i = j;	// Aperture at the end of the element to be added later.
 		}
-		// No empty metres between 'The_i' and beginning of long element
+		// No empty metres between 'The_i' and beginning of long element - thick element
 		else if ( ApertMod[j] != 0 && L[j] > 0.0 && floor(P[j]) > floor(P[The_i]) && floor(P[j]-L[j]) == floor(P[The_i]) )
 		{
 			// Add last points to the definition (also at the end)
-			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i]);
-			Metre_tmp.DefineAperture(P[j]-L[j], A1[j], A2[j], A3[j], A4[j]);
-			Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j]);
+			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i]);
+			Metre_tmp.DefineAperture(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
+			Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
@@ -150,21 +158,21 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 			// Note the values of k!
 			for (size_t k = 1; k < ( floor(P[j]) - floor(P[The_i]) ); k++)
 			{
-				Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j]);
-				Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j]);
+				Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
+				Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
 				TheSequence->push_back(Metre_tmp);
 				count++;
 				Metre_tmp.empty();
 			}
 
 			// Start the new metre that contains the end of the long element
-			Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j]);
+			Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j], ApertureType[j] );
 			The_i = j;
 		}
-		// There are empty metres between 'The_i' and beginning of long element
+		// There are empty metres between 'The_i' and beginning of long element - thick element
 		else if ( ApertMod[j] != 0 && L[j] > 0.0 && floor(P[j]) > floor(P[The_i]) && floor(P[j]-L[j]) > floor(P[The_i]))
 		{
-			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i]);
+			Metre_tmp.DefineAperture(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i] );
 
 			// Linear interpolation up to the beginning of the long metre
 			a1_e = (A1[j]-A1[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A1[The_i];
@@ -172,7 +180,7 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 			a3_e = (A3[j]-A3[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A3[The_i];
 			a4_e = (A4[j]-A4[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A4[The_i];
 
-			Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e);
+			Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
@@ -180,46 +188,46 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 			// Fill other metres in between
 			for (size_t k = 1; k < (floor(P[j]-L[j])-floor(P[The_i]) ); k++)
 			{ 
-				Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e);
+				Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 
 				a1_e = (A1[j]-A1[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A1[The_i];
 				a2_e = (A2[j]-A2[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A2[The_i];
 				a3_e = (A3[j]-A3[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A3[The_i];
 				a4_e = (A4[j]-A4[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A4[The_i];
 
-				Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e);
+				Metre_tmp.DefineAperture(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
 				TheSequence->push_back(Metre_tmp);
 				count++;
 				Metre_tmp.empty();
 			}
 
 			// Metre in which the long element starts
-			Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e);
-			Metre_tmp.DefineAperture(P[j]-L[j], A1[j], A2[j], A3[j], A4[j]);
+			Metre_tmp.DefineAperture(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(j, The_i, ApertureType) );
+			Metre_tmp.DefineAperture(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
 
 			// All metres along the long element
 			if ( floor(P[j]) == floor(P[j]-L[j]) )
 			{
-				Metre_tmp.DefineAperture(P[j], A1[j], A2[j], A3[j], A4[j]);
+				Metre_tmp.DefineAperture(P[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
 				The_i = j;
 			}
 			else if ( floor(P[j]) > floor(P[j]-L[j]) )
 			{
-				Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j]);
+				Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j]);
 				TheSequence->push_back(Metre_tmp);
 				count++;
 				Metre_tmp.empty();
 
 				for (int k = 1; k < (int)( floor(P[j]) - floor(P[j]-L[j]) ); k++)
 				{
-					Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j]);
-					Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j]);
+					Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j], FindApertureType(j, The_i, ApertureType) );
+					Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j], FindApertureType(j, The_i, ApertureType) );
 					TheSequence->push_back(Metre_tmp);
 					count++;
 					Metre_tmp.empty();
 				}
 
-				Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j]);
+				Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j], FindApertureType(j, The_i, ApertureType) );
 				The_i = j;
 			}
 		}
@@ -231,21 +239,23 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 			a2_end=A2[j];
 			a3_end=A3[j];
 			a4_end=A4[j];
+			ap_end=ApertureType[j];
 		}
 	}
 
 	// Always include the last point with aperture and close the corresponding metre!
 	// This only works if the last point is a marker...
 	// Not worth to write the code for the general case!
-	Metre_tmp.DefineAperture(P_end, a1_end, a2_end, a3_end, a4_end);
+	Metre_tmp.DefineAperture(P_end, a1_end, a2_end, a3_end, a4_end, ap_end);
 
+	//Is this the very last entry in the accelerator?
 	if (floor(P_end) == floor(AccLength))
 	{
-		Metre_tmp.DefineAperture(0.8832, a1_end, a2_end, a3_end, a4_end);
+		Metre_tmp.DefineAperture(AcceleratorRemains, a1_end, a2_end, a3_end, a4_end, ap_end);
 	}
 	else
 	{
-		Metre_tmp.DefineAperture(0.99999, a1_end, a2_end, a3_end, a4_end);
+		Metre_tmp.DefineAperture(0.99999, a1_end, a2_end, a3_end, a4_end, ap_end);
 	}
 
 	TheSequence->push_back(Metre_tmp);
@@ -258,22 +268,22 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 	{
 		for (size_t k = 1; k <= AcceleratorLengthMetre - TheSequence->size(); k++)
 		{ 
-			Metre_tmp.DefineAperture(0.0, a1_end, a2_end, a3_end, a4_end);
-			Metre_tmp.DefineAperture(0.99999, a1_end, a2_end, a3_end, a4_end);
+			Metre_tmp.DefineAperture(0.0, a1_end, a2_end, a3_end, a4_end, ap_end);
+			Metre_tmp.DefineAperture(0.99999, a1_end, a2_end, a3_end, a4_end, ap_end);
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
 		}
 
 		Metre_tmp.empty();
-		Metre_tmp.DefineAperture(0.0, a1_end, a2_end, a3_end, a4_end);
+		Metre_tmp.DefineAperture(0.0, a1_end, a2_end, a3_end, a4_end, ap_end);
 
 		if (floor(P_end) == floor(AccLength))
 		{
-			Metre_tmp.DefineAperture(P_end, a1_end, a2_end, a3_end, a4_end);
+			Metre_tmp.DefineAperture(P_end, a1_end, a2_end, a3_end, a4_end, ap_end);
 		}
 
-		Metre_tmp.DefineAperture(0.8832, a1_end, a2_end, a3_end, a4_end);
+		Metre_tmp.DefineAperture(AcceleratorRemains, a1_end, a2_end, a3_end, a4_end, ap_end);
 		TheSequence->push_back(Metre_tmp);
 		count++;
 		Metre_tmp.empty();
@@ -286,13 +296,15 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<string> N, 
 			 vector<string> Pa, vector<double> P, vector<double> L, 
 			 vector<double> A1, vector<double> A2, vector<double> A3, 
-			 vector<double> A4, vector<double> xA, vector<double> yA, double AccLength)
+			 vector<double> A4, vector<double> xA, vector<double> yA, vector<ApertureClass_t> ApertureType, double AccLength)
 {
 	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
+	double AcceleratorRemains = AccLength - floor(AccLength);
 
 	double a1, a2, a3, a4, x, y,
 		a1_e, a2_e, a3_e, a4_e, x_e, y_e,// tmp apertures at the end of the metre
 		P_end, a1_end, a2_end, a3_end, a4_end, x_end, y_end;
+	ApertureClass_t ap_end;
 
 	OneMetreAlign Metre_tmp;
 
@@ -313,7 +325,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 
 	// Beginng of the sequence - I assume that the sequence never starts
 	// with an element with length~=0
-	size_t count, The_i;
+	size_t count=0, The_i=0;
 	size_t i = 0;
 
 	Metre_tmp.empty();
@@ -334,28 +346,28 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	// First aperture starting from the beginning of the sequence!
 	for (size_t k = 0; k < floor(P[i]); k++)
 	{
-		Metre_tmp.DefineApertureAlign(0.0, a1, a2, a3, a4, x, y);
-		Metre_tmp.DefineApertureAlign(0.999, a1, a2, a3, a4, x, y);
+		Metre_tmp.DefineApertureAlign(0.0, a1, a2, a3, a4, ApertureType[i], x, y);
+		Metre_tmp.DefineApertureAlign(0.999, a1, a2, a3, a4, ApertureType[i], x, y);
 		TheSequence->push_back(Metre_tmp);
 		Metre_tmp.empty();
 		count++;
 	}
 
-	Metre_tmp.DefineApertureAlign(0.0, a1, a2, a3, a4, x, y); // Same aperture at beginning 
+	Metre_tmp.DefineApertureAlign(0.0, a1, a2, a3, a4, ApertureType[i], x, y); // Same aperture at beginning 
 
 	for (size_t j = The_i + 1; j < K.size(); j++)
 	{
 		// Case 1
 		if ( ApertMod[j] != 0 && L[j] == 0.0 && (floor(P[j]) - floor(P[The_i]) == 0.0 ) )
 		{
-			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], xA[The_i], yA[The_i]);
+			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i], xA[The_i], yA[The_i]);
 			The_i = j;
 		}
 		// Case 2
 		else if ( ApertMod[j] != 0 && L[j] == 0.0 && (floor(P[j])-floor(P[The_i]) > 0.0) )
 		{
 			// Close this metre (k=0)
-			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], xA[The_i], yA[The_i]);
+			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i], xA[The_i], yA[The_i]);
 
 			a1_e = (A1[j]-A1[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A1[The_i];
 			a2_e = (A2[j]-A2[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A2[The_i];
@@ -364,7 +376,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			x_e	= (xA[j]-xA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + xA[The_i];
 			y_e	= (yA[j]-yA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + yA[The_i];
 
-			Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+			Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
@@ -372,7 +384,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			// Add interpolated apertures to all the empty metres in between (k=1:Delta)
 			for (size_t k = 1; k < (floor(P[j])-floor(P[The_i]) ); k++)
 			{
-				Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+				Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 
 				a1_e = (A1[j]-A1[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A1[The_i];
 				a2_e = (A2[j]-A2[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A2[The_i];
@@ -381,30 +393,30 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 				x_e	= (xA[j]-xA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + xA[The_i];
 				y_e	= (yA[j]-yA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + yA[The_i];
 
-				Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+				Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 				TheSequence->push_back(Metre_tmp);	// Add new metres, but the index that counts the sequence elements does not change!!
 				count++;
 				Metre_tmp.empty();
 			}
 
 			// Start a new metre
-			Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+			Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 			The_i = j; // P[j] will be added later!
 		}
 		// Element with length inside the same metre
 		else if ( ApertMod[j] != 0 && L[j] > 0.0 && floor(P[j]) == floor(P[The_i]) )
 		{
-			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], xA[The_i], yA[The_i]);
-			Metre_tmp.DefineApertureAlign(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i], xA[The_i], yA[The_i]);
+			Metre_tmp.DefineApertureAlign(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 			The_i = j;	// Aperture at the end of the element to be added later.
 		}
 		// No empty metres between 'The_i' and beginning of long element
 		else if ( ApertMod[j] != 0 && L[j] > 0.0 && floor(P[j]) > floor(P[The_i]) && floor(P[j]-L[j]) == floor(P[The_i]) )
 		{
 			// Add last points to the definition (also at the end)
-			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], xA[The_i], yA[The_i]);
-			Metre_tmp.DefineApertureAlign(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
-			Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i], xA[The_i], yA[The_i]);
+			Metre_tmp.DefineApertureAlign(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
+			Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
@@ -413,21 +425,21 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			// Note the values of k!
 			for (size_t k = 1; k < ( floor(P[j]) - floor(P[The_i]) ); k++)
 			{
-				Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
-				Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+				Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
+				Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 				TheSequence->push_back(Metre_tmp);
 				count++;
 				Metre_tmp.empty();
 			}
-	
+
 			// Start the new metre that contains the end of the long element
-			Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+			Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 			The_i = j;
 		}
 		// There are empty metres between 'The_i' and beginning of long element
 		else if ( ApertMod[j] != 0 && L[j] > 0.0 && floor(P[j]) > floor(P[The_i]) && floor(P[j]-L[j]) > floor(P[The_i]))
 		{
-			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], xA[The_i], yA[The_i]);
+			Metre_tmp.DefineApertureAlign(P[The_i], A1[The_i], A2[The_i], A3[The_i], A4[The_i], ApertureType[The_i], xA[The_i], yA[The_i]);
 
 			// Linear interpolation up to the beginning of the long metre
 			a1_e = (A1[j]-A1[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A1[The_i];
@@ -437,7 +449,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			x_e	= (xA[j]-xA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + xA[The_i];
 			y_e	= (yA[j]-yA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + yA[The_i];
 
-			Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+			Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
@@ -445,7 +457,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			// Fill other metres in between
 			for (size_t k = 1; k < (floor(P[j]-L[j])-floor(P[The_i]) ); k++)
 			{ 
-				Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+				Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 
 				a1_e = (A1[j]-A1[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A1[The_i];
 				a2_e = (A2[j]-A2[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A2[The_i];
@@ -454,39 +466,39 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 				x_e	= (xA[j]-xA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + xA[The_i];
 				y_e	= (yA[j]-yA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + yA[The_i];
 
-				Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
+				Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 				TheSequence->push_back(Metre_tmp);
 				count++;
 				Metre_tmp.empty();
 			}
 
 			// Metre in which the long element starts
-			Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, x_e, y_e);
-			Metre_tmp.DefineApertureAlign(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+			Metre_tmp.DefineApertureAlign(0.0, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
+			Metre_tmp.DefineApertureAlign(P[j]-L[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 
 			// All metres along the long element
 			if ( floor(P[j]) == floor(P[j]-L[j]) )
 			{
-				Metre_tmp.DefineApertureAlign(P[j], A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+				Metre_tmp.DefineApertureAlign(P[j], A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 				The_i = j;
 			} 
 			else if ( floor(P[j]) > floor(P[j]-L[j]) )
 			{
-				Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+				Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 				TheSequence->push_back(Metre_tmp);
 				count++;
 				Metre_tmp.empty();
 
 				for (size_t k = 1; k < ( floor(P[j]) - floor(P[j]-L[j]) ); k++)
 				{ 
-					Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
-					Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+					Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
+					Metre_tmp.DefineApertureAlign(0.99999, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 					TheSequence->push_back(Metre_tmp);
 					count++;
 					Metre_tmp.empty();
 				}
-			
-				Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], xA[j], yA[j]);
+
+				Metre_tmp.DefineApertureAlign(0.0, A1[j], A2[j], A3[j], A4[j], ApertureType[j], xA[j], yA[j]);
 				The_i = j;
 			}
 		}
@@ -500,21 +512,22 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			a4_end=A4[j];
 			x_end=yA[j];
 			y_end=yA[j];
+			ap_end=ApertureType[j];
 		}
 	}
 
 	// Always include the last point with aperture and close the corresponding metre!
 	// This only works if the last point is a marker...
 	// Not worth to write the code for the general case!
-	Metre_tmp.DefineApertureAlign(P_end, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+	Metre_tmp.DefineApertureAlign(P_end, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 
 	if (floor(P_end) == floor(AccLength))
 	{
-		Metre_tmp.DefineApertureAlign(0.8832, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+		Metre_tmp.DefineApertureAlign(AcceleratorRemains, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 	}
 	else
 	{
-		Metre_tmp.DefineApertureAlign(0.99999, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+		Metre_tmp.DefineApertureAlign(0.99999, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 	}
 
 	TheSequence->push_back(Metre_tmp);
@@ -527,22 +540,22 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	{
 		for (size_t k = 1; k <= AcceleratorLengthMetre - TheSequence->size(); k++)
 		{ 
-			Metre_tmp.DefineApertureAlign(0.0, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
-			Metre_tmp.DefineApertureAlign(0.99999, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+			Metre_tmp.DefineApertureAlign(0.0, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
+			Metre_tmp.DefineApertureAlign(0.99999, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 			TheSequence->push_back(Metre_tmp);
 			count++;
 			Metre_tmp.empty();
 		}
 
 		Metre_tmp.empty();
-		Metre_tmp.DefineApertureAlign(0.0, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+		Metre_tmp.DefineApertureAlign(0.0, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 
 		if (floor(P_end) == floor(AccLength))
 		{
-			Metre_tmp.DefineApertureAlign(P_end, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+			Metre_tmp.DefineApertureAlign(P_end, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 		}
 
-		Metre_tmp.DefineApertureAlign(0.8832, a1_end, a2_end, a3_end, a4_end, x_end, y_end);
+		Metre_tmp.DefineApertureAlign(AcceleratorRemains, a1_end, a2_end, a3_end, a4_end, ap_end, x_end, y_end);
 		TheSequence->push_back(Metre_tmp);
 		count++;
 		Metre_tmp.empty();
@@ -560,7 +573,7 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string o
 
 	vector<double> position;
 	vector<Aperture> aperture;
-	
+
 	if ( s1 > 1.0 )
 	{
 		s1 = s1 - 1.0;
@@ -604,7 +617,7 @@ void PlotAll(vector<OneMetre> TheSequence, string output)
 
 	vector<double> position;
 	vector<Aperture> aperture;
-	
+
 	cout << "The aperture definitions of all the sequence " << " are being saved in the file \"" << output << "\"" << endl;
 
 	ofstream out;
@@ -617,7 +630,7 @@ void PlotAll(vector<OneMetre> TheSequence, string output)
 		position.clear();
 		aperture.clear();
 		TheSequence[i].GetApertDef(&position, &aperture);
-	
+
 		for(size_t j = 0; j < position.size(); j++)
 		{
 			out << setw(12) << pos + position[j]
@@ -643,7 +656,7 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double D
 	double pos;
 	vector<double> position;
 	vector<Aperture> aperture;
-	
+
 	if ( s1 > 1.0 )
 	{
 		s1 = s1 - 1.0;
