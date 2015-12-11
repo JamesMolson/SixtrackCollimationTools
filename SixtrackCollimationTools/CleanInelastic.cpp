@@ -35,9 +35,9 @@ int main (int argc, char* argv[])
 
 	if (argc < 5)
 	{
-		cout<<"Some input is missing!"<<endl;
-		cout<<"The command line should look like:"<<endl;
-		cout<<" -> CleanInelastic Impact.file Loss.file Coll.positions coll_summary file <-"<<endl;
+		cout << "Some input is missing!" << endl;
+		cout << "The command line should look like:" << endl;
+		cout << "-> " << argv[0] << " Impact.file Loss.file Coll.positions coll_summary file <-" << endl;
 		exit(0);
 	}
 
@@ -47,12 +47,12 @@ int main (int argc, char* argv[])
 	string summ_file = argv[4];
 
 	// Write summary
-	cout<<"- - - - - - - -"<<endl;
-	cout<<setw(22)<<"Impact file: "<<inel_file<<endl;
-	cout<<setw(22)<<"Loss file: "<<loss_file<<endl;
-	cout<<setw(22)<<"Collimator file: "<<list_file<<endl;
-	cout<<setw(22)<<"\"coll_summary\" file: "<<summ_file<<endl;
-	cout<<"- - - - - - - -"<<endl;
+	cout << "- - - - - - - -" << endl;
+	cout << setw(22) << "Impact file: " << inel_file << endl;
+	cout << setw(22) << "Loss file: " << loss_file << endl;
+	cout << setw(22) << "Collimator file: "<< list_file << endl;
+	cout << setw(22) << "\"coll_summary\" file: "<< summ_file << endl;
+	cout << "- - - - - - - -" << endl;
 
 
 	size_t Nmax = 50000;	// Maximum values of Npart
@@ -86,7 +86,6 @@ int main (int argc, char* argv[])
 	size_t j = 0;
 	char c_str[256];
 
-
 	// Initializations
 	for (size_t i = 0; i <= NCollMax; i++)
 	{
@@ -102,7 +101,6 @@ int main (int argc, char* argv[])
 		POS_lost.push_back(0.0);
 	}
 
-
 	// Get collimator name vs sixtrack number
 	in.open(summ_file.c_str(), ios::in);
 	if (!in)
@@ -114,7 +112,8 @@ int main (int argc, char* argv[])
 	in.getline(c_str,256); // Skip the header line
 	while (1)
 	{
-		in>>i1>>str_tmp>>i2>>i3>>d1>>d2>>d3;
+		in >> i1 >> str_tmp >> i2 >> i3 >> d1 >> d2 >> d3;
+
 		if (!in.good())
 		{
 			break;
@@ -133,21 +132,21 @@ int main (int argc, char* argv[])
 			count++;
 		}
 	}
-	cout<<"Number of collimators: "<<count<<endl;
+	cout << "Number of collimators: " << count << endl;
 
 
 	// Get the collimator positions
 	in.open(list_file.c_str(), ios::in);
 	if (!in)
 	{
-		cout<<"Impossible to open the file \""<<list_file<<"\"!!"<<endl;
+		cout << "Impossible to open the file \"" << list_file << "\"!!" << endl;
 		exit(0);
 	}
 
 	in.getline(c_str,256); // Skip the header line
 	while (1)
 	{
-		in>>i1>>str_tmp>>d1;
+		in >> i1 >> str_tmp >> d1;
 
 		if (!in.good())
 		{
@@ -158,7 +157,7 @@ int main (int argc, char* argv[])
 		CollPos.push_back(d1);
 	}
 	in.close();
-	cout<<"Number of collimator positions: "<<CollName.size()<<endl;
+	cout << "Number of collimator positions: " << CollName.size() << endl;
 
 	// Assign the collimator position.
 	for (size_t i = 0; i < Length.size(); i++)
@@ -185,19 +184,23 @@ int main (int argc, char* argv[])
 	}
 
 	// Read loss file
-	//
 	in.open(loss_file.c_str(), ios::in);
-	if (!in){
-		cout<<"Impossible to open the file \""<<loss_file<<"\"!!"<<endl;
+
+	if (!in)
+	{
+		cout << "Impossible to open the file \"" << loss_file << "\"!!" << endl;
 		exit(0);
 	}
+
 	while (1)
 	{
-		in>>i1>>i2>>d1>>d2>>d3>>d4>>d5>>d6>>i3>>i4;
+		in >> i1 >> i2 >> d1 >> d2 >> d3 >> d4 >> d5 >> d6 >> i3 >> i4;
+
 		if (!in.good())
 		{
 			break;
 		}
+
 		NPART_lost[i1] = 1;
 		NTURN_lost[i1] = i2;
 		POS_lost[i1] = d1;
@@ -206,16 +209,17 @@ int main (int argc, char* argv[])
 
 	// Read the impact file
 	in.open(inel_file.c_str(), ios::in);
+
 	if (!in)
 	{
-		cout<<"Impossible to open the file \""<<inel_file<<"\"!!"<<endl;
+		cout << "Impossible to open the file \"" << inel_file << "\"!!" << endl;
 		exit(0);
 	}
 	in.getline(c_str,256); // Skip the header line
 
 	while (1)
 	{
-		in>>i1>>d1>>d2>>d3>>d4>>d5>>d6>>i2>>i3>>i4;
+		in >> i1 >> d1 >> d2 >> d3 >> d4 >> d5 >> d6 >> i2 >> i3 >> i4;
 		if (!in.good())
 		{
 			break;
