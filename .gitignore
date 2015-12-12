@@ -3,4 +3,5 @@ SixtrackCollimationTools/BeamLossPattern
 SixtrackCollimationTools/CleanInelastic
 SixtrackCollimationTools/CountAbs
 SixtrackCollimationTools/GetAperture
+Build/*
 
