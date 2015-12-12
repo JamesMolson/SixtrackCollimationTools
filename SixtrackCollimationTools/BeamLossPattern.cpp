@@ -83,13 +83,25 @@ int main (int argc, char* argv[])
 	double Dl = 0.100; // Precision to identify longitudinal loss positions
 
 	//Apply Survey correction as read in survey file (ON by default)
+	#ifdef ENABLE_SURVEY
+	bool _S_ = true; // Flag for using survey
+	#else
 	bool _S_ = false; // Flag for using survey
+	#endif
 
 	//Apply correction from crossing/separation as read from survey file
+	#ifdef ENABLE_CROSSING
+	bool _X_ = true; // Flag for using crossing
+	#else
 	bool _X_ = false; // Flag for using crossing
+	#endif
 
 	//Save the last turn of the trajectory of each lost particle
+	#ifdef ENABLE_SAVELOST
+	bool _SaveLost_ = true; // Save the trajectories of lost particles (last turn)
+	#else
 	bool _SaveLost_ = false; // Save the trajectories of lost particles (last turn)
+	#endif
 
 	// add flag for survey only (Guillaume runs)
 
