@@ -85,7 +85,7 @@ int main (int argc, char* argv[])
 	//Apply Survey correction as read in survey file (ON by default)
 	bool _S_ = false; // Flag for using survey
 
-	//Apply correction from crossing/separation as read from survey fil
+	//Apply correction from crossing/separation as read from survey file
 	bool _X_ = false; // Flag for using crossing
 
 	//Save the last turn of the trajectory of each lost particle
@@ -113,7 +113,7 @@ int main (int argc, char* argv[])
 	//	double s_t_save, x_t_save, y_t_save; // SR, 14-04-2005
 	//	int found_loss = 0;
 
-	int line_number = 0;
+	size_t line_number = 0;
 
 	vector<double> Slost, Xlost, XPlost, Ylost, YPlost, ENlost; // SR, 15-04-2005
 	vector<int> Nlost, Tlost,Hlost, LastTurn;
@@ -296,7 +296,7 @@ int main (int argc, char* argv[])
 			Xorb = Xsur + Xx;
 			Yorb = Ysur + Yx;
 
-			if ( (Accelerator[(int)s_t].GetAperture(s_t-floor(s_t))).IsLost(x_t + Xorb, y_t + Yorb) )
+			if ( (Accelerator[static_cast<size_t>(s_t)].GetAperture(s_t-floor(s_t))).IsLost(x_t + Xorb, y_t + Yorb) )
 			{
 				// Store coordinates of lost particles 
 				// (no interpolation - location of sixtrack lens)
@@ -354,7 +354,7 @@ int main (int argc, char* argv[])
 					//cout<<setw(12)<<new_s_t<<setw(15)<<new_x_t<<setw(15)<<new_y_t<<endl;
 					//cout<<(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t)<<endl;
 					// This requires changes for the case with old/new point before/after end of the ring
-					while ( new_s_t < s_t && !(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
+					while ( new_s_t < s_t && !(Accelerator[static_cast<size_t>(new_s_t)].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
 					{
 						//cout<<setw(12)<<new_s_t<<setw(12)<<new_x_t<<setw(12)<<new_y_t<<endl;
 						new_s_t = CheckPos( new_s_t + Dl, AcceleratorLength);
@@ -403,6 +403,10 @@ int main (int argc, char* argv[])
 	out.open(output.c_str());
 	out.precision(6);
 
+	out << setw(10) << "#N" << setw(10) << "Turn" << setw(10) << "s" << setw(15) << "x" 
+		<< setw(15) << "xp" << setw(15) << "y" << setw(15) << "yp" << setw(15) << "dE"
+		<< setw(5) << "Type" << setw(4) << "LastTurn" << endl;
+
 	for (size_t i = 0; i < Nlost.size(); i++)
 	{
 		out << setw(10) << Nlost[i]
@@ -421,6 +425,11 @@ int main (int argc, char* argv[])
 
 	out.open(output2.c_str());
 	out.precision(6);
+
+	out << setw(10) << "#N" << setw(10) << "Turn" << setw(10) << "s" << setw(15) << "x" 
+		<< setw(15) << "xp" << setw(15) << "y" << setw(15) << "yp" << setw(15) << "dE"
+		<< setw(5) << "Type" << setw(4) << "LastTurn" << endl;
+
 	for (size_t i = 0; i < Nlost2.size(); i++)
 	{
 		out << setw(10) << Nlost2[i]
@@ -433,11 +442,11 @@ int main (int argc, char* argv[])
 			<< setw(15) << ENlost2[i]
 			<< setw(5) << Hlost2[i]
 			<< setw(4) << LastTurn[i]
-			<<endl;
+			<< endl;
 	}
 	out.close();
 
-	cout<<"Total number of read lines: "<<line_number<<endl;
+	cout << "Total number of read lines: " << line_number << endl;
 
 	if ( _SaveLost_ )
 	{
