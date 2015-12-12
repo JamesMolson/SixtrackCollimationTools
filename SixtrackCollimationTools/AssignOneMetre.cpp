@@ -373,8 +373,8 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			a2_e = (A2[j]-A2[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A2[The_i];
 			a3_e = (A3[j]-A3[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A3[The_i];
 			a4_e = (A4[j]-A4[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A4[The_i];
-			x_e	= (xA[j]-xA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + xA[The_i];
-			y_e	= (yA[j]-yA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + yA[The_i];
+			x_e = (xA[j]-xA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + xA[The_i];
+			y_e = (yA[j]-yA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + yA[The_i];
 
 			Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 			TheSequence->push_back(Metre_tmp);
@@ -390,8 +390,8 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 				a2_e = (A2[j]-A2[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A2[The_i];
 				a3_e = (A3[j]-A3[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A3[The_i];
 				a4_e = (A4[j]-A4[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A4[The_i];
-				x_e	= (xA[j]-xA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + xA[The_i];
-				y_e	= (yA[j]-yA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + yA[The_i];
+				x_e = (xA[j]-xA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + xA[The_i];
+				y_e = (yA[j]-yA[The_i]) / (P[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + yA[The_i];
 
 				Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 				TheSequence->push_back(Metre_tmp);	// Add new metres, but the index that counts the sequence elements does not change!!
@@ -446,8 +446,8 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			a2_e = (A2[j]-A2[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A2[The_i];
 			a3_e = (A3[j]-A3[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A3[The_i];
 			a4_e = (A4[j]-A4[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + A4[The_i];
-			x_e	= (xA[j]-xA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + xA[The_i];
-			y_e	= (yA[j]-yA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + yA[The_i];
+			x_e = (xA[j]-xA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + xA[The_i];
+			y_e = (yA[j]-yA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i])) + yA[The_i];
 
 			Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 			TheSequence->push_back(Metre_tmp);
@@ -463,8 +463,8 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 				a2_e = (A2[j]-A2[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A2[The_i];
 				a3_e = (A3[j]-A3[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A3[The_i];
 				a4_e = (A4[j]-A4[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + A4[The_i];
-				x_e	= (xA[j]-xA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + xA[The_i];
-				y_e	= (yA[j]-yA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + yA[The_i];
+				x_e = (xA[j]-xA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + xA[The_i];
+				y_e = (yA[j]-yA[The_i]) / (P[j]-L[j]-P[The_i]) * (1.0 - P[The_i] + floor(P[The_i] + static_cast<double>(k))) + yA[The_i];
 
 				Metre_tmp.DefineApertureAlign(0.99999, a1_e, a2_e, a3_e, a4_e, FindApertureType(The_i, j, ApertureType), x_e, y_e);
 				TheSequence->push_back(Metre_tmp);
