@@ -45,7 +45,7 @@ int main (int argc, char* argv[])
 	{
 		cout << "Some input is missing!" << endl;
 		cout << "The command line should look like:" << endl;
-		cout << " -> " << argv[0] << " s1 halo EN optics <-" << endl;
+		cout << "-> " << argv[0] << " s1 tracks2.dat EN optics <-" << endl;
 		exit(0);
 	}
 
@@ -99,7 +99,7 @@ int main (int argc, char* argv[])
 
 	cout << "-> Reading impact file: \"" << input << "\" <-" << endl << endl;
 	in.getline(c_str,256); // Skip the header line
-	while (1)
+	while (true)
 	{
 		in >> Np_t >> Ntu_t >> S_t;
 
@@ -135,7 +135,8 @@ int main (int argc, char* argv[])
 	}
 	cout << "-> Reading loss file: \"" << input << "\" <-" << endl << endl;
 
-	while (1)
+	inn.getline(c_str,256); // Skip the header line
+	while (true)
 	{
 		inn >> Np_t >> Ntu_t >> S_t >> x_t >> xp_t >> y_t >> yp_t >> e_t >> Hflag_t >> Nsurv_t;
 
