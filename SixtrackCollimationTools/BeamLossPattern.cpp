@@ -193,10 +193,18 @@ int main (int argc, char* argv[])
 	cout << "Beam energy: " << EN << endl;
 	cout << "Twiss file: " << Twiss << endl;
 	cout << "Input file: " << File << endl;
-	cout << "Output files -> " << endl;
+	cout << endl;
+
+	cout << "Output files:" << endl;
 	cout << "Loss patterns with 1m resolution: " << output << endl;
 	cout << "Interpolated loss patterns with 0.10 m resol.: " << output2 << endl;
+	cout << endl;
 
+	cout << "Run settings:" << endl;
+	cout << "Survey: " << _S_ << endl;
+	cout << "Crossing: " << _X_ << endl;
+	cout << "SaveLost tracks: " << _SaveLost_ << endl;
+	cout << endl;
 	//////////////////////////////
 	// Setup the aperture model //
 	//////////////////////////////
@@ -257,7 +265,7 @@ int main (int argc, char* argv[])
 	}
 
 	in.getline(c_str,256); // Skip the first line with the header
-	while (1)
+	while (true)
 	{
 		in >> n_t >> n_tu >> s_t >> x_t >> xp_t >> y_t >> yp_t >> en_t >> n_h;
 
@@ -365,6 +373,7 @@ int main (int argc, char* argv[])
 
 					//cout<<setw(12)<<new_s_t<<setw(15)<<new_x_t<<setw(15)<<new_y_t<<endl;
 					//cout<<(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t)<<endl;
+
 					// This requires changes for the case with old/new point before/after end of the ring
 					while ( new_s_t < s_t && !(Accelerator[static_cast<size_t>(new_s_t)].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
 					{
@@ -497,7 +506,7 @@ int main (int argc, char* argv[])
 		}
 		out_part << "% " << c_str << endl;
 
-		while (1)
+		while (true)
 		{
 			in >> n_t >> n_tu >> s_t >> x_t >> xp_t >> y_t >> yp_t >> en_t >> n_h;
 
