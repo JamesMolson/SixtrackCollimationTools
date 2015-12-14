@@ -19,7 +19,7 @@ CountNAbs:
 	${CPP} ${CCFLAGS} CountNabs.cpp -o CountNAbs
 
 clean:
-	rm -f *.o BeamLossPattern GetAperture CleanInelastic CountAbs
+	rm -f *.o BeamLossPattern GetAperture CleanInelastic CountNAbs
 
 %.o: %.cpp
 	${CPP} ${CCFLAGS} -c $< -o $@
