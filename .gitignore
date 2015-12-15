@@ -2,6 +2,7 @@ SixtrackCollimationTools/*.o
 SixtrackCollimationTools/BeamLossPattern
 SixtrackCollimationTools/CleanInelastic
 SixtrackCollimationTools/CountAbs
+SixtrackCollimationTools/CountNAbs
 SixtrackCollimationTools/GetAperture
 Build/*
 
