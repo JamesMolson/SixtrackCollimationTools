@@ -95,7 +95,7 @@ double Survey::GetSurvey(double pos)
 	}
 
 	// I assume that pos is give in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return Xsurvey[n];
 }
 
@@ -191,7 +191,7 @@ double Survey::GetCrossX(double pos)
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return Xcrossing[n];
 }
 
@@ -205,7 +205,7 @@ double Survey::GetCrossY(double pos)
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return Ycrossing[n];
 }
 
@@ -217,7 +217,7 @@ double Survey::GetCrossXP(double pos)
 		exit(0);
 	}
 	// I assume that pos is given in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return XPcrossing[n];
 }
 
@@ -231,7 +231,7 @@ double Survey::GetCrossYP(double pos)
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return YPcrossing[n];
 }
 
@@ -282,7 +282,7 @@ double Survey::GetCOx(double pos)
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return COx[n];
 }
 
@@ -295,7 +295,7 @@ double Survey::GetCOy(double pos)
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
-	int n = (int)(pos*10);
+	int n = (pos*10);
 	return COy[n];
 }
 
