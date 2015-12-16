@@ -193,6 +193,15 @@ public:
 	* @param y The y coordinate of the particle.
 	* @return A bool set to true if the particle is lost.
 	*/
+	bool IsLostOld(double x, double y);
+
+	/**
+	* Is a particle lost at this aperture?
+	* This is the updated version to take into account the ApertureType.
+	* @param x The x coordinate of the particle.
+	* @param y The y coordinate of the particle.
+	* @return A bool set to true if the particle is lost.
+	*/
 	bool IsLost(double x, double y);
 
 	/**

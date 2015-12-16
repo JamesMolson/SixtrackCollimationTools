@@ -82,10 +82,10 @@ string Aperture::GetName()
 * the fitting procedure, I add some checks to make the aperture
 * definition compatible with 'known' aperture plots!
 */
-bool Aperture::IsLost(double x, double y)
+bool Aperture::IsLostOld(double x, double y)
 {
-	double a1 = MyApert[0], 
-		a2 = MyApert[1], 
+	double a1 = MyApert[0],
+		a2 = MyApert[1],
 		a3 = MyApert[2],
 		a4 = MyApert[3];
 
@@ -180,13 +180,158 @@ bool Aperture::IsLost(double x, double y)
 	return LostFlag;
 }
 
+/**
+* New version.
+* Checks if a particle is lost.
+* Uses the ApertureType field to determine the type of aperture, rather than try and calculate it from the aperture parameters.
+* See http://madx.web.cern.ch/madx/releases/last-dev/madxuguide.pdf
+*/
+bool Aperture::IsLost(double x, double y)
+{
+	double a1 = MyApert[0],
+		a2 = MyApert[1],
+		a3 = MyApert[2],
+		a4 = MyApert[3];
+
+	//Put in adjustments for the survey offsets.
+	x_n = x - Dx_align;
+	y_n = y - Dy_align;
+
+	//Rotate into the rectangular aperture plane
+	double theta = atan2(y_n, x_n);
+	double R = sqrt( x_n * x_n + y_n * y_n );
+	x_n = R * cos( Angle - theta );
+	y_n = R * sin( Angle - theta );
+
+
+	//Finally check if the particle is within the aperture or not
+	LostFlag = false;
+
+	if(ApertureType == CIRCLE)
+	{
+		//Check we are within the circle
+		if(((x_n*x_n) + (y_n*y_n)) >= (a1*a1))
+		{
+			LostFlag = true;
+		}
+	}
+	else if(ApertureType == RECTELLIPSE)
+	{
+		//Need to check both the rectangular and elliptical component
+
+		//Start with the ellipse - it defines the horizontal limit in most cases
+		//The rectangle generally limits the top of the beamscreen (in the arc at least)
+		//Most particles are lost in the area defined by the ellipse
+		if((x_n*x_n)/(a3*a3) + (y_n*y_n)/(a4*a4) >= 1)
+		{
+			LostFlag = true;
+		}
+
+		//Then do the rectangle
+		if(fabs(x_n) >= a1 || fabs(y_n) >= a2)
+		{
+			LostFlag = true;
+		}
+	}
+	else if(ApertureType == RACETRACK)
+	{
+		// RaceTrack: remember to use Ap[2]/2!!
+		if ( fabs(x_n) <= a3 / 2 )
+		{
+			if (fabs(y_n) >= a4 )
+			{
+				LostFlag = true;
+			}
+		}
+		else if ( fabs(x_n) > a3/2 )
+		{
+			if ( (fabs(x_n)-a3/2)*(fabs(x_n)-a3/2)+y_n*y_n >= a4*a4)
+			{
+				LostFlag = true;
+			}
+		}
+	}
+	else if(ApertureType == RECTCIRCLE || ApertureType == LHCSCREEN)
+	{
+		//Circle first this time
+		//For RECTCIRCLE the radius is stored in a3 (I think)
+		if((x_n*x_n + y_n*y_n) >= (a3*a3))
+		{
+			LostFlag = true;
+		}
+
+		//Then the rectangle
+		if(fabs(x_n) >= a1 || fabs(y_n) >= a2)
+		{
+			LostFlag = true;
+		}
+	}
+	else if(ApertureType == ELLIPSE)
+	{
+		//Not sure if the parameters are in a1,a2 or a3,a4 - I think it is a3 and a4 - CHECK
+		if((x_n*x_n)/(a3*a3) + (y_n*y_n)/(a4*a4) >= 1)
+		{
+			LostFlag = true;
+		}
+	}
+	else if(ApertureType == RECTANGLE)
+	{
+		if(fabs(x_n) >= a1 || fabs(y_n) >= a2)
+		{
+			LostFlag = true;
+		}
+	}
+	else if(ApertureType == INTERPOLATED)
+	{
+		//cout << "INTERPOLATED - x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << endl;
+		//Difficult to deal with
+		//Assume rectellipse for now...
+
+		if((x_n*x_n)/(a3*a3) + (y_n*y_n)/(a4*a4) >= 1)
+		{
+			LostFlag = true;
+		}
+
+		//Then do the rectangle
+		if(fabs(x_n) >= a1 || fabs(y_n) >= a2)
+		{
+			LostFlag = true;
+		}
+	}
+	else if(ApertureType == NONE)
+	{
+		//Do nothing
+	}
+	else if(ApertureType == OCTAGON)
+	{
+		cerr << "Octagon aperture type requested and is not yet implemented - BUG" << endl;
+		exit(1);
+	}
+	else if(ApertureType == UNKNOWN)
+	{
+		cerr << "Unknown aperture type requested - BUG" << endl;
+		cerr << "x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << endl;
+		cerr << "ApertureType: " << ApertureType << endl;
+		exit(1);
+	}
+	else
+	{
+		cerr << "This should not be reached - ApertureType error" << endl;
+		cerr << "x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << endl;
+		cerr << "ApertureType: " << ApertureType << endl;
+		exit(1);
+	}
+
+	return LostFlag;
+}
+
 double Aperture::GiveAperture(double q)
 {
 	// WARNING: If this memebr is modified, also PlotAperture should be change accordingly!!!
 
 	double pi = atan2(0.0,-1.0);
 	double T, Tc;
-	double Dx_tmp, Dy_tmp, DT_tmp;
+	double Dx_tmp = 0, Dy_tmp = 0, DT_tmp = 0;
 
 	double a1 = MyApert[0], 
 		a2 = MyApert[1], 
