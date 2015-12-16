@@ -42,7 +42,8 @@ int main (int argc, char* argv[])
 	cout << "Found accelerator length from MAD headers: " << AcceleratorLength << endl;
 	cout.precision(OldPrecision);
 
-	AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
+	//AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
+	AssignOneMetre(&Accelerator, Keyword, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 
 	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
 

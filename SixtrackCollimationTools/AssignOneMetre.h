@@ -31,13 +31,11 @@
 
 using namespace std;
 
-void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<string> N, 
-			vector<string> Pa, vector<double> P, vector<double> L, 
+void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<double> P, vector<double> L, 
 			vector<double> A1, vector<double> A2, vector<double> A3, 
 			vector<double> A4, vector<size_t> ApertureType, double AccLength);
 
-void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<string> N, 
-			vector<string> Pa, vector<double> P, vector<double> L, 
+void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<double> P, vector<double> L, 
 			vector<double> A1, vector<double> A2, vector<double> A3, 
 			vector<double> A4, vector<double> DxA, vector<double> DyA, vector<size_t> ApertureType, double AccLength);
 

@@ -27,9 +27,14 @@
  TheSequence->push_back(Metre_tmp);
  Metre_tmp.empty();
 */
+/*
 void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<string> N, 
 				vector<string> Pa, vector<double> P, vector<double> L, 
 				vector<double> A1, vector<double> A2, vector<double> A3, 
+				vector<double> A4, vector<ApertureClass_t> ApertureType, double AccLength)
+*/
+void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<double> P,
+				vector<double> L, vector<double> A1, vector<double> A2, vector<double> A3, 
 				vector<double> A4, vector<ApertureClass_t> ApertureType, double AccLength)
 {
 	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
@@ -292,10 +297,14 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 	cout << endl << "All aperture information has been read and ";
 	cout << "the sequence has been created!" << endl << endl;
 }
-
+/*
 void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<string> N, 
 			 vector<string> Pa, vector<double> P, vector<double> L, 
 			 vector<double> A1, vector<double> A2, vector<double> A3, 
+			 vector<double> A4, vector<double> xA, vector<double> yA, vector<ApertureClass_t> ApertureType, double AccLength)
+*/
+void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<double> P,
+			 vector<double> L, vector<double> A1, vector<double> A2, vector<double> A3, 
 			 vector<double> A4, vector<double> xA, vector<double> yA, vector<ApertureClass_t> ApertureType, double AccLength)
 {
 	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
