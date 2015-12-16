@@ -63,6 +63,7 @@ int main (int argc, char* argv[])
 
 	// Write Aperture vs s every 10 cm
 	ofstream out_Accelerator("AcceleratorAperture.dat");
+	cout << "Writing output to AcceleratorAperture.dat" << endl;
 	out_Accelerator<<"%1=s [km]; 2=Ax [m]; 3=Ay [m]; 4=A45deg [m]"<<endl;
 
 	Aperture Atmp;
