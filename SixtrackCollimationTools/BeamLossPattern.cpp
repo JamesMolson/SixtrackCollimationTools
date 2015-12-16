@@ -204,7 +204,7 @@ int main (int argc, char* argv[])
 	cout << "Survey: " << _S_ << endl;
 	cout << "Crossing: " << _X_ << endl;
 	cout << "SaveLost tracks: " << _SaveLost_ << endl;
-	cout << endl;
+
 	//////////////////////////////
 	// Setup the aperture model //
 	//////////////////////////////
