@@ -223,7 +223,7 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<doub
 				count++;
 				Metre_tmp.empty();
 
-				for (int k = 1; k < (int)( floor(P[j]) - floor(P[j]-L[j]) ); k++)
+				for (int k = 1; k < static_cast<int>( floor(P[j]) - floor(P[j]-L[j]) ); k++)
 				{
 					Metre_tmp.DefineAperture(0.0, A1[j], A2[j], A3[j], A4[j], FindApertureType(j, The_i, ApertureType) );
 					Metre_tmp.DefineAperture(0.99999, A1[j], A2[j], A3[j], A4[j], FindApertureType(j, The_i, ApertureType) );
@@ -599,7 +599,7 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string o
 	out.precision(8); // At least this precision, otherwise not enough digits for the longitudinal coordinate s!!
 	out.open(output.c_str());
 
-	for (int i = (int) s1; i < (int) s2; i++)
+	for (int i = static_cast<int>(s1); i < static_cast<int>(s2); i++)
 	{
 		pos = double( i );
 		position.clear();
@@ -746,7 +746,7 @@ void PlotAll(vector<OneMetre> TheSequence, double Ds, string output)
 		position.clear();
 		aperture.clear();
 
-		for (int j = 0; j < (int) 1/Ds; j++)
+		for (int j = 0; j < static_cast<int>(1/Ds); j++)
 		{
 			pos = double( j ) * Ds + static_cast<double>(i);
 			position.push_back( pos );
