@@ -237,7 +237,7 @@ Aperture OneMetreAlign::GetAperture(double p)
 			Atmp = Apert_ex[Apert_ex.size()-1];
 			Atmp.SetApertAlign(DxAlign[DxAlign.size()-1], DyAlign[DyAlign.size()-1]);
 		}
-		else if ( (int)Pos_ex.size() >= 2 )
+		else if ( Pos_ex.size() >= 2 )
 		{
 			// Find the 'bin' of the position 'p'
 			k = 0;
