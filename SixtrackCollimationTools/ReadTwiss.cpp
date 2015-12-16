@@ -25,7 +25,7 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	char chr_tmp[256];
 	string str_tmp;
 
-	int len;
+	size_t len;
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
@@ -65,35 +65,49 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 		Pa->push_back(tT);
 		P->push_back(atof(tP));
 		L->push_back(atof(tL));
-		A1->push_back(atof(tA1));
-		A2->push_back(atof(tA2));
-		A3->push_back(atof(tA3));
-		A4->push_back(atof(tA4));
+
+		//If we are in a circular aperture, A2,A3,A4 will be zero.
+		//Set all of these to the A1 value (radius) to make interpolation easier
+		if(GetApertureType(ApType) == CIRCLE)
+		{
+			A1->push_back(atof(tA1));
+			A2->push_back(atof(tA1));
+			A3->push_back(atof(tA1));
+			A4->push_back(atof(tA1));
+		}
+		else
+		{
+			A1->push_back(atof(tA1));
+			A2->push_back(atof(tA2));
+			A3->push_back(atof(tA3));
+			A4->push_back(atof(tA4));
+		}
+
 		ApertureType->push_back(GetApertureType(ApType));
 
 		// Element names without quotes
 		ost.str("");
-		len=(int)strlen(tK);
+		len=strlen(tK);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tK[i];
 		}
 
 		Kn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tN);
+		len=strlen(tN);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tN[i];
 		}
 
 		Nn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tT);
+		len=strlen(tT);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tT[i];
 		}
@@ -136,7 +150,7 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	char chr_tmp[256];
 	string str_tmp;
 
-	int len;
+	size_t len;
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
@@ -180,36 +194,51 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 			Pa->push_back(tT);
 			P->push_back(atof(tP));
 			L->push_back(atof(tL));
-			A1->push_back(atof(tA1));
-			A2->push_back(atof(tA2));
-			A3->push_back(atof(tA3));
-			A4->push_back(atof(tA4));
+
+			//If we are in a circular aperture, A2,A3,A4 will be zero.
+			//Set all of these to the A1 value (radius) to make interpolation easier
+			if(GetApertureType(ApType) == CIRCLE)
+			{
+				A1->push_back(atof(tA1));
+				A2->push_back(atof(tA1));
+				A3->push_back(atof(tA1));
+				A4->push_back(atof(tA1));
+			}
+			else
+			{
+				A1->push_back(atof(tA1));
+				A2->push_back(atof(tA2));
+				A3->push_back(atof(tA3));
+				A4->push_back(atof(tA4));
+			}
+
 			ApertureType->push_back(GetApertureType(ApType));
+
 		}
  
 		// Element names without quotes
 		ost.str("");
-		len=(int)strlen(tK);
+		len=strlen(tK);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tK[i];
 		}
 
 		Kn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tN);
+		len=strlen(tN);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tN[i];
 		}
 
 		Nn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tT);
+		len=strlen(tT);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tT[i];
 		}
@@ -253,7 +282,7 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	char chr_tmp[256];
 	string str_tmp;
 
-	int len;
+	size_t len;
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
@@ -294,35 +323,49 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 		P->push_back(atof(tP));
 		L->push_back(atof(tL));
 		KL->push_back(atof(tKL));
-		A1->push_back(atof(tA1));
-		A2->push_back(atof(tA2));
-		A3->push_back(atof(tA3));
-		A4->push_back(atof(tA4));
+
+		//If we are in a circular aperture, A2,A3,A4 will be zero.
+		//Set all of these to the A1 value (radius) to make interpolation easier
+		if(GetApertureType(ApType) == CIRCLE)
+		{
+			A1->push_back(atof(tA1));
+			A2->push_back(atof(tA1));
+			A3->push_back(atof(tA1));
+			A4->push_back(atof(tA1));
+		}
+		else
+		{
+			A1->push_back(atof(tA1));
+			A2->push_back(atof(tA2));
+			A3->push_back(atof(tA3));
+			A4->push_back(atof(tA4));
+		}
+
 		ApertureType->push_back(GetApertureType(ApType));
  
 		// Element names without quotes
 		ost.str("");
-		len=(int)strlen(tK);
+		len=strlen(tK);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tK[i];
 		}
 
 		Kn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tN);
+		len=strlen(tN);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tN[i];
 		}
 
 		Nn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tT);
+		len=strlen(tT);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tT[i];
 		}
@@ -366,7 +409,7 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 	char chr_tmp[256];
 	string str_tmp;
 
-	int len;
+	size_t len;
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
@@ -407,37 +450,51 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 		Pa->push_back(tT);
 		P->push_back(atof(tP));
 		L->push_back(atof(tL));
-		A1->push_back(atof(tA1));
-		A2->push_back(atof(tA2));
-		A3->push_back(atof(tA3));
-		A4->push_back(atof(tA4));
 		DX->push_back(atof(tDX));
 		DY->push_back(atof(tDY));
+
+		//If we are in a circular aperture, A2,A3,A4 will be zero.
+		//Set all of these to the A1 value (radius) to make interpolation easier
+		if(GetApertureType(ApType) == CIRCLE)
+		{
+			A1->push_back(atof(tA1));
+			A2->push_back(atof(tA1));
+			A3->push_back(atof(tA1));
+			A4->push_back(atof(tA1));
+		}
+		else
+		{
+			A1->push_back(atof(tA1));
+			A2->push_back(atof(tA2));
+			A3->push_back(atof(tA3));
+			A4->push_back(atof(tA4));
+		}
+
 		ApertureType->push_back(GetApertureType(ApType));
 
 		// Element names without quotes
 		ost.str("");
-		len=(int)strlen(tK);
+		len=strlen(tK);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tK[i];
 		}
 
 		Kn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tN);
+		len=strlen(tN);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tN[i];
 		}
 
 		Nn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tT);
+		len=strlen(tT);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tT[i];
 		}
@@ -481,7 +538,7 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 	char chr_tmp[256];
 	string str_tmp;
 
-	int len;
+	size_t len;
 	ostringstream ost;
 
 	ifstream InputFile(in.c_str());
@@ -536,27 +593,27 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 
 		// Element names without quotes
 		ost.str("");
-		len=(int)strlen(tK);
+		len=strlen(tK);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tK[i];
 		}
 
 		Kn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tN);
+		len=strlen(tN);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tN[i];
 		}
 
 		Nn->push_back(ost.str());
 		ost.str("");
-		len=(int)strlen(tT);
+		len=strlen(tT);
 
-		for (int i = 1; i < len-1; i++)
+		for (size_t i = 1; i < len-1; i++)
 		{
 			ost << tT[i];
 		}
