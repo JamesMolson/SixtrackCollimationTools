@@ -223,7 +223,7 @@ Aperture OneMetre::GetAperture(double p)
 
 	if ( do_special )
 	{
-		cout << "Special case: aperture definitions at " << Pos_ex[k] << " and " << Pos_ex[k+1] << " are identical!" << endl;
+		cout << "Special case: aperture definitions at k = " << k << "\tPosition: " << Pos_ex[k] << " and " << Pos_ex[k+1] << " are identical!" << endl;
 		Atmp_vec.clear();
 
 		for (int i = 1; i <= 4; i++)
