@@ -18,6 +18,7 @@ PROJECT(BEAMLOSSPATTERN)
 OPTION(ENABLE_SURVEY "Enable survey. Default ON" ON)
 OPTION(ENABLE_CROSSING "Enable crossing. Default OFF" OFF)
 OPTION(ENABLE_SAVELOST "Save the trajectories of the last turn of lost particles. Default OFF" OFF)
+OPTION(BUILD_TESTING "Enable testing" ON)
 
 #Set version info
 set(${PROJECT_NAME}_VERSION “2.0.0”)
@@ -47,3 +48,9 @@ if(ENABLE_SAVELOST)
 endif(ENABLE_SAVELOST)
 
 add_subdirectory(SixtrackCollimationTools)
+
+IF(BUILD_TESTING)
+	ENABLE_TESTING()
+	INCLUDE(CTest)
+	add_subdirectory(Tests)
+ENDIF(BUILD_TESTING)
