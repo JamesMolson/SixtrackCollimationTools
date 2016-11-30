@@ -281,6 +281,36 @@ bool Aperture::IsLost(double x, double y)
 			LostFlag = true;
 		}
 	}
+	else if(ApertureType == OCTAGON)
+	{
+		//This is just taken from trrun.f90 in MAD-X. - credit to: 2015-Feb-20  18:42:26  ghislain: added octagon shape
+		//Compute the tangents.
+		double tana1 = tan(a3);
+		double tana2 = tan((2*atan2(1,1)) - a4);
+
+		//Make some constants.
+		//(hh*tana2 - hw)
+		double c1 = (a2*tana2 - a1);
+
+		//hw*tana1
+		double c2 = a1*tana1;
+
+		//hh - hw*tana1
+		double c3 = a2 - c2;
+		double fabsx = fabs(x_n);
+		double fabsy = fabs(y_n);
+
+		//First check the rectangle
+		if(fabsx >= a1 || fabsy >= a2)
+		{
+			LostFlag = true;
+		}
+
+		if(c1*(fabsy - c2) - c3*(fabsx - a1) <= 0 )
+		{
+			LostFlag = true;
+		}
+	}
 	else if(ApertureType == INTERPOLATED)
 	{
 		//cout << "INTERPOLATED - x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << endl;
@@ -301,11 +331,6 @@ bool Aperture::IsLost(double x, double y)
 	else if(ApertureType == NONE)
 	{
 		//Do nothing
-	}
-	else if(ApertureType == OCTAGON)
-	{
-		std::cerr << "Octagon aperture type requested and is not yet implemented - BUG" << std::endl;
-		exit(EXIT_FAILURE);
 	}
 	else if(ApertureType == UNKNOWN)
 	{
