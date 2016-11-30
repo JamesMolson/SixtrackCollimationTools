@@ -85,7 +85,7 @@ void OneMetre::DefineAperture(double p, std::vector<double> A4, ApertureClass_t 
 
 Aperture OneMetre::GetAperture(double p)
 {
-	bool done = 0,do_special = 0;
+	bool done = false,do_special = false;
 	size_t k = 0;
 
 	//	if ( p = 1.0 )	// Add this to avoid some segmentation fault (SR, 13/09/2004)

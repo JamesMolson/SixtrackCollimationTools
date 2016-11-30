@@ -156,7 +156,7 @@ void OneMetreAlign::DefineAperture(double p, std::vector<double> A4, ApertureCla
 
 Aperture OneMetreAlign::GetAperture(double p)
 {
-	bool done = 0,do_special = 0;
+	bool done = false,do_special = false;
 	size_t k = 0;
 
 	double Dx_tmp, Dy_tmp;
@@ -321,7 +321,7 @@ Aperture OneMetreAlign::GetAperture(double p)
 
 double OneMetreAlign::GetAlignX( double p )
 {
-	bool done = 0, do_special = 0;
+	bool done = false, do_special = false;
 	size_t k = 0;
 
 	if ( p > 1.0 )
@@ -435,7 +435,7 @@ double OneMetreAlign::GetAlignX( double p )
 
 double OneMetreAlign::GetAlignY( double p )
 {
-	bool done = 0,do_special = 0;
+	bool done = false,do_special = false;
 	size_t k = 0;
 
 	if ( p > 1.0 )
