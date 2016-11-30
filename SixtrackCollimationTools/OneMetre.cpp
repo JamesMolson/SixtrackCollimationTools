@@ -112,7 +112,7 @@ Aperture OneMetre::GetAperture(double p)
 	else if ( Pos.size() == 1 ) // one aperture only -> same aperture in all the metre!
 	{
 		Atmp = Apert[0];
-		done = 1;
+		done = true;
 	}
 
 	if ( !done )
@@ -217,7 +217,7 @@ Aperture OneMetre::GetAperture(double p)
 		if ( Pos_ex[i] == Pos_ex[i+1] && Pos_ex[i+1] == p)
 		{
 			k = i;
-			do_special = 1;
+			do_special = true;
 		}
 	}
 
