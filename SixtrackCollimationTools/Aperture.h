@@ -199,11 +199,14 @@ public:
 
 	/**
 	* Give aperture at a given angle theta
+	* @param q An angle at which the size of the aperture is requested.
+	* @return The size of the aperture at the requested angle
 	*/
 	double GiveAperture(double q);
 
 	/**
 	* Plot the aperture profile
+	* @param output A file name for the plot output
 	*/
 	void PlotAperture(std::string output);
 
