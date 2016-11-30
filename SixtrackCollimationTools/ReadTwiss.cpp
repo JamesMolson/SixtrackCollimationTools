@@ -33,7 +33,7 @@ double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::s
 
 	if(!InputFile.good())
 	{
-		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Could not open input aperture file: " << in << std::endl;
 		std::cerr << "Exiting" << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -165,7 +165,7 @@ double ReadTwissNoDrifts(std::string in, std::vector<std::string> *K, std::vecto
 
 	if(!InputFile.good())
 	{
-		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Could not open input aperture file: " << in << std::endl;
 		std::cerr << "Exiting" << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -304,7 +304,7 @@ double ReadTwissK(std::string in, std::vector<std::string> *K, std::vector<std::
 
 	if(!InputFile.good())
 	{
-		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Could not open input aperture file: " << in << std::endl;
 		std::cerr << "Exiting" << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -438,7 +438,7 @@ double ReadTwissDX(std::string in, std::vector<std::string> *K, std::vector<std:
 
 	if(!InputFile.good())
 	{
-		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Could not open input aperture file: " << in << std::endl;
 		std::cerr << "Exiting" << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -574,7 +574,7 @@ double ReadTwissDXNoDrifts(std::string in, std::vector<std::string> *K, std::vec
 
 	if(!InputFile.good())
 	{
-		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Could not open input aperture file: " << in << std::endl;
 		std::cerr << "Exiting" << std::endl;
 		exit(EXIT_FAILURE);
 	}
