@@ -54,6 +54,8 @@
 *											 account. Still have to decide how to treat the alignment...
 *
 */
+#ifndef Aperture_h
+#define Aperture_h 1
 
 #include <string>
 #include <sstream>
@@ -62,16 +64,9 @@
 #include <vector>
 
 #include <iomanip>
-//#include <algorithm>
+#include <cmath>
 
-#include <stdio.h>
 #include <stdlib.h> 
-#include <string.h> 
-#include <ctype.h>
-#include <math.h>
-
-#ifndef Aperture_h
-#define Aperture_h 1
 
 /**
  * Typedef for access to the enum

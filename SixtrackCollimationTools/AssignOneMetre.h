@@ -17,10 +17,7 @@
 #include <iomanip>
 #include <algorithm>
 
-#include <stdio.h>
-#include <stdlib.h> 
-#include <ctype.h>
-#include <math.h>
+#include <stdlib.h>
 
 #include "Aperture.h"
 #include "OneMetre.h"

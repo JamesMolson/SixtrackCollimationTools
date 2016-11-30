@@ -1,4 +1,5 @@
 #include "ReadTwiss.h"
+#include "string.h"
 
 double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, 
 		 std::vector<std::string> *Pa, std::vector<std::string> *Kn, std::vector<std::string> *Nn, 

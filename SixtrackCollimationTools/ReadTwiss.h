@@ -10,11 +10,7 @@
 #include <iomanip>
 #include <algorithm>
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
-
 #include "Aperture.h"
 
 double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, 

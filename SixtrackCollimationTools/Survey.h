@@ -11,13 +11,7 @@
 #include <vector>
 
 #include <iomanip>
-//#include <algorithm>
-
-#include <stdio.h>
 #include <stdlib.h>
-//#include <string.h>
-#include <ctype.h>
-#include <math.h>
 
 class Survey
 {
