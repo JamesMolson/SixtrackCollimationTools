@@ -31,6 +31,13 @@ double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::s
 
 	std::ifstream InputFile(in.c_str());
 
+	if(!InputFile.good())
+	{
+		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Exiting" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -155,6 +162,13 @@ double ReadTwissNoDrifts(std::string in, std::vector<std::string> *K, std::vecto
 	std::ostringstream ost;
 
 	std::ifstream InputFile(in.c_str());
+
+	if(!InputFile.good())
+	{
+		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Exiting" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
@@ -288,6 +302,13 @@ double ReadTwissK(std::string in, std::vector<std::string> *K, std::vector<std::
 
 	std::ifstream InputFile(in.c_str());
 
+	if(!InputFile.good())
+	{
+		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Exiting" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
@@ -414,6 +435,13 @@ double ReadTwissDX(std::string in, std::vector<std::string> *K, std::vector<std:
 	std::ostringstream ost;
 
 	std::ifstream InputFile(in.c_str());
+
+	if(!InputFile.good())
+	{
+		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Exiting" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
@@ -543,6 +571,13 @@ double ReadTwissDXNoDrifts(std::string in, std::vector<std::string> *K, std::vec
 	std::ostringstream ost;
 
 	std::ifstream InputFile(in.c_str());
+
+	if(!InputFile.good())
+	{
+		std::cerr << "Could not open input twiss file: " << in << std::endl;
+		std::cerr << "Exiting" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
