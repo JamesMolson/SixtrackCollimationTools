@@ -89,7 +89,7 @@ void AssignOneMetre(std::vector<OneMetre> *TheSequence, std::vector<std::string>
 		count++;
 	}
 
-	Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4, ApertureType[i]); // Same aperture at beginning 
+	Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4, ApertureType[i]); // Same aperture at beginning
 
 	/**
 	* This loop starts at the first non-zero aperture and iterates until the end of the accelerator

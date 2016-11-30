@@ -32,6 +32,7 @@ void OneMetre::DefineAperture(double p, double a1, double a2, double a3, double 
 	Atmp.PutApert(a1, a2, a3, a4, ApertureType);
 	Apert.push_back(Atmp);
 	Atmp.empty();
+
 	//	std::cout<<"Aperture definition inserted at the position "<<p<<" -> "<<p-floor(p)<<"."<<std::endl;
 	//	std::cout<<"Total number of aperture definitions: "<<Pos.size()<<"."<<std::endl;
 }
@@ -285,11 +286,12 @@ void OneMetre::status()
 
 	for (size_t i = 0; i < Pos.size(); i++)
 	{
-		std::cout << std::setw(10) << Pos[i]
-			<< std::setw(10) << Apert[i].GetApert(1)
-			<< std::setw(10) << Apert[i].GetApert(2)
-			<< std::setw(10) << Apert[i].GetApert(3)
-			<< std::setw(10) << Apert[i].GetApert(4)
+		std::cout << std::setw(11) << Pos[i]
+			<< std::setw(11) << Apert[i].GetApert(1)
+			<< std::setw(11) << Apert[i].GetApert(2)
+			<< std::setw(11) << Apert[i].GetApert(3)
+			<< std::setw(11) << Apert[i].GetApert(4)
+			<< std::setw(15) << GetApertureTypeName(Apert[i].GetApertureType())
 			<< std::endl;
 	}
 	std::cout << std::endl;
@@ -303,11 +305,12 @@ void OneMetre::status()
 
 		for (size_t i = 0; i < Pos_ex.size(); i++)
 		{
-			std::cout << std::setw(10) << Pos_ex[i]
-				<< std::setw(10) << Apert_ex[i].GetApert(1)
-				<< std::setw(10) << Apert_ex[i].GetApert(2)
-				<< std::setw(10) << Apert_ex[i].GetApert(3)
-				<< std::setw(10) << Apert_ex[i].GetApert(4)
+			std::cout << std::setw(11) << Pos_ex[i]
+				<< std::setw(11) << Apert_ex[i].GetApert(1)
+				<< std::setw(11) << Apert_ex[i].GetApert(2)
+				<< std::setw(11) << Apert_ex[i].GetApert(3)
+				<< std::setw(11) << Apert_ex[i].GetApert(4)
+				<< std::setw(15) << GetApertureTypeName(Apert[i].GetApertureType())
 				<< std::endl;
 		}
 

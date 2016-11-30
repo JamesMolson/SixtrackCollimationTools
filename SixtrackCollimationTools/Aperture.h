@@ -83,17 +83,17 @@ typedef size_t ApertureClass_t;
  */
 typedef enum
 {
-    NONE,
-    UNKNOWN,
-    CIRCLE,
-    RECTANGLE,
-    ELLIPSE,
-    RECTCIRCLE,
-    LHCSCREEN,
-    RECTELLIPSE,
-    RACETRACK,
-    OCTAGON,
-    INTERPOLATED
+	NONE,
+	UNKNOWN,
+	CIRCLE,
+	RECTANGLE,
+	ELLIPSE,
+	RECTCIRCLE,
+	LHCSCREEN,
+	RECTELLIPSE,
+	RACETRACK,
+	OCTAGON,
+	INTERPOLATED
 } ApertureClass;
 
 
@@ -112,8 +112,7 @@ private:
 	std::string MyName;
 
 	/**
-	* The type of this aperture.
-	* @see ApertureTypes.h
+	* The type of this aperture as defined in enum ApertureClass
 	*/
 	ApertureClass_t ApertureType;
 
@@ -226,21 +225,36 @@ public:
 	* Gets the type of this aperture.
 	*/
 	ApertureClass_t GetApertureType();
+
+	void SetApertureType(ApertureClass_t ApertureType);
 };
 
 /**
- * Find the aperture type
- * If the type of i and j are the same, return the type.
- * If they are different, return INTERPOLATED
- *
- * Could possibly return the sum of the enum types to determine which types are merging.
- *
- * @param[in] i An index for an entry in ApertureType to perform a comparison on.
- * @param[in] j An index for an entry in ApertureType to perform a comparison on.
- * @return An ApertureClass_t with the type of aperture for this entry.
- */
+* Find the aperture type
+* If the type of i and j are the same, return the type.
+* If they are different, return INTERPOLATED
+*
+* Could possibly return the sum of the enum types to determine which types are merging.
+*
+* @param[in] i An index for an entry in ApertureType to perform a comparison on.
+* @param[in] j An index for an entry in ApertureType to perform a comparison on.
+* @return An ApertureClass_t with the type of aperture for this entry.
+*/
 ApertureClass_t FindApertureType(size_t i, size_t j, std::vector<ApertureClass_t> ApertureType);
 
+/**
+* Reads the aperture type and converts it to a string
+* @parm type An ApertureClass_t that gives the aperture type as defined above
+* @return A string containing the type of Aperture.
+*/
+std::string GetApertureTypeName(ApertureClass_t type);
+
+/**
+* Reads the aperture type and converts it to an integer that gives the type of aperture for future operations.
+* @parm ApType A string containing the type of Aperture.
+* @return An ApertureClass_t that gives the aperture type as defined above
+*/
+ApertureClass_t GetApertureTypeClass(char* ApType);
 
 #endif
 

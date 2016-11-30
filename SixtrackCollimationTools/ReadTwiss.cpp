@@ -76,7 +76,7 @@ double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::s
 
 		//If we are in a circular aperture, A2,A3,A4 will be zero.
 		//Set all of these to the A1 value (radius) to make interpolation easier
-		if(GetApertureType(ApType) == CIRCLE)
+		if(GetApertureTypeClass(ApType) == CIRCLE)
 		{
 			A1->push_back(atof(tA1));
 			A2->push_back(atof(tA1));
@@ -91,7 +91,7 @@ double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::s
 			A4->push_back(atof(tA4));
 		}
 
-		ApertureType->push_back(GetApertureType(ApType));
+		ApertureType->push_back(GetApertureTypeClass(ApType));
 
 		// Element names without quotes
 		ost.str("");
@@ -199,7 +199,6 @@ double ReadTwissNoDrifts(std::string in, std::vector<std::string> *K, std::vecto
 	while (InputFile.getline(chr_tmp,256))
 	{
 		sscanf(chr_tmp,"%s%s%s%s%s%s%s%s%s%s",tK,tN,tT,tP,tL,tA1,tA2,tA3,tA4,ApType);
-
 		str_tmp = tK;
 
 		if ( str_tmp.find("DRIFT",0) == std::string::npos )
@@ -212,7 +211,7 @@ double ReadTwissNoDrifts(std::string in, std::vector<std::string> *K, std::vecto
 
 			//If we are in a circular aperture, A2,A3,A4 will be zero.
 			//Set all of these to the A1 value (radius) to make interpolation easier
-			if(GetApertureType(ApType) == CIRCLE)
+			if(GetApertureTypeClass(ApType) == CIRCLE)
 			{
 				A1->push_back(atof(tA1));
 				A2->push_back(atof(tA1));
@@ -227,7 +226,7 @@ double ReadTwissNoDrifts(std::string in, std::vector<std::string> *K, std::vecto
 				A4->push_back(atof(tA4));
 			}
 
-			ApertureType->push_back(GetApertureType(ApType));
+			ApertureType->push_back(GetApertureTypeClass(ApType));
 
 		}
  
@@ -348,7 +347,7 @@ double ReadTwissK(std::string in, std::vector<std::string> *K, std::vector<std::
 
 		//If we are in a circular aperture, A2,A3,A4 will be zero.
 		//Set all of these to the A1 value (radius) to make interpolation easier
-		if(GetApertureType(ApType) == CIRCLE)
+		if(GetApertureTypeClass(ApType) == CIRCLE)
 		{
 			A1->push_back(atof(tA1));
 			A2->push_back(atof(tA1));
@@ -363,7 +362,7 @@ double ReadTwissK(std::string in, std::vector<std::string> *K, std::vector<std::
 			A4->push_back(atof(tA4));
 		}
 
-		ApertureType->push_back(GetApertureType(ApType));
+		ApertureType->push_back(GetApertureTypeClass(ApType));
  
 		// Element names without quotes
 		ost.str("");
@@ -484,7 +483,7 @@ double ReadTwissDX(std::string in, std::vector<std::string> *K, std::vector<std:
 
 		//If we are in a circular aperture, A2,A3,A4 will be zero.
 		//Set all of these to the A1 value (radius) to make interpolation easier
-		if(GetApertureType(ApType) == CIRCLE)
+		if(GetApertureTypeClass(ApType) == CIRCLE)
 		{
 			A1->push_back(atof(tA1));
 			A2->push_back(atof(tA1));
@@ -499,7 +498,7 @@ double ReadTwissDX(std::string in, std::vector<std::string> *K, std::vector<std:
 			A4->push_back(atof(tA4));
 		}
 
-		ApertureType->push_back(GetApertureType(ApType));
+		ApertureType->push_back(GetApertureTypeClass(ApType));
 
 		// Element names without quotes
 		ost.str("");
@@ -624,7 +623,7 @@ double ReadTwissDXNoDrifts(std::string in, std::vector<std::string> *K, std::vec
 			A4->push_back(atof(tA4));
 			DX->push_back(atof(tDX));
 			DY->push_back(atof(tDY));
-			ApertureType->push_back(GetApertureType(ApType));
+			ApertureType->push_back(GetApertureTypeClass(ApType));
 		}
 
 		// Element names without quotes
@@ -666,43 +665,3 @@ double ReadTwissDXNoDrifts(std::string in, std::vector<std::string> *K, std::vec
 	return AcceleratorLength;
 }
 
-ApertureClass_t GetApertureType(char* ApType)
-{
-	std::string ApTemp = ApType;
-	if(ApTemp == "\"CIRCLE\"")
-	{
-		return CIRCLE;
-	}
-	else if(ApTemp == "\"RECTANGLE\"")
-	{
-		return RECTANGLE;
-	}
-	else if(ApTemp == "\"ELLIPSE\"")
-	{
-		return ELLIPSE;
-	}
-	else if(ApTemp == "\"RECTCIRCLE\"")
-	{
-		return RECTCIRCLE;
-	}
-	else if(ApTemp == "\"LHCSCREEN\"")
-	{
-		return LHCSCREEN;
-	}
-	else if(ApTemp == "\"RECTELLIPSE\"")
-	{
-		return RECTELLIPSE;
-	}
-	else if(ApTemp == "\"RACETRACK\"")
-	{
-		return RACETRACK;
-	}
-	else if(ApTemp == "\"OCTAGON\"")
-	{
-		return OCTAGON;
-	}
-	else
-	{
-		return UNKNOWN;
-	}
-}

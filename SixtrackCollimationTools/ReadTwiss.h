@@ -45,12 +45,5 @@ double ReadTwissDXNoDrifts(std::string in, std::vector<std::string> *K, std::vec
 			 std::vector<double> *A2, std::vector<double> *A3, std::vector<double> *A4, 
 			 std::vector<double> *DX, std::vector<double> *DY, std::vector<ApertureClass_t> *ApertureType);
 
-/*
-* Reads the aperture type and converts it to an integer that gives the type of aperture for future operations.
-* @parm ApType A string containing the type of Aperture.
-* @return An ApertureClass_t that gives the aperture type as defined below
-*/
-ApertureClass_t GetApertureType(char* ApType);
-
 #endif
 

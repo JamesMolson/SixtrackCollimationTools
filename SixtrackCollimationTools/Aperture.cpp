@@ -14,11 +14,6 @@ void Aperture::PutApert(double a1, double a2, double a3, double a4, ApertureClas
 
 	MyApert.clear();
 
-	/*
-	if ( // a3 ==0 || a4 == 0 || // This case now defines the rectangular aperture!
-			 (a1 != 0 && a2 == 0) ||
-			 (a1 == 0 && a2 != 0) )
-	*/
 	if(ApertureT == UNKNOWN || ApertureT == NONE )
 	{
 		std::cout << "ERROR: Invalid aperture definition!!" << std::endl;
@@ -31,10 +26,12 @@ void Aperture::PutApert(double a1, double a2, double a3, double a4, ApertureClas
 		MyApert.push_back(a2);
 		MyApert.push_back(a3);
 		MyApert.push_back(a4);
+		MyApert.push_back(a4);
+		SetApertureType(ApertureT);
 	}
 
 	// For rectangular aperture, A3=0 and A4=angle!
-	if ( a3 == 0 )
+	if ( a3 == 0 && ApertureT == RECTANGLE)
 	{
 		Angle = a4 * pi / 180;
 	}
@@ -46,10 +43,10 @@ void Aperture::PutApert(std::vector<double> ThisAp, ApertureClass_t ApertureT)
 
 	MyApert.clear();
 	MyApert = ThisAp;
-	ApertureType = ApertureT;
+	SetApertureType(ApertureT);
 
 	// For rectangular aperture, A3=0 and A4=angle!
-	if ( ThisAp[2] == 0 )
+	if ( ThisAp[2] == 0 && ApertureT == RECTANGLE)
 	{
 		Angle = ThisAp[3] * pi / 180;
 	}
@@ -202,7 +199,6 @@ bool Aperture::IsLost(double x, double y)
 	double R = sqrt( x_n * x_n + y_n * y_n );
 	x_n = R * cos( Angle - theta );
 	y_n = R * sin( Angle - theta );
-
 
 	//Finally check if the particle is within the aperture or not
 	LostFlag = false;
@@ -767,12 +763,16 @@ void Aperture::empty()
 	Dx_align = 0;
 	Dy_align = 0;
 	Angle = 0;
-	ApertureType = 0;
+	ApertureType = UNKNOWN;
 }
 
 ApertureClass_t Aperture::GetApertureType()
 {
 	return ApertureType;
+}
+void Aperture::SetApertureType(ApertureClass_t ApType)
+{
+	ApertureType = ApType;
 }
 
 ApertureClass_t FindApertureType(size_t i, size_t j, std::vector<ApertureClass_t> ApertureType)
@@ -786,3 +786,95 @@ ApertureClass_t FindApertureType(size_t i, size_t j, std::vector<ApertureClass_t
         return INTERPOLATED;
     }
 }
+
+std::string GetApertureTypeName(ApertureClass_t type)
+{
+	if(type == NONE)
+	{
+		return "NONE";
+	}
+	else if(type == UNKNOWN)
+	{
+		return "UNKNOWN";
+	}
+	else if(type == CIRCLE)
+	{
+		return "CIRCLE";
+	}
+	else if(type == RECTANGLE)
+	{
+		return "RECTANGLE";
+	}
+	else if(type == ELLIPSE)
+	{
+		return "ELLIPSE";
+	}
+	else if(type == RECTCIRCLE)
+	{
+		return "RECTCIRCLE";
+	}
+	else if(type == LHCSCREEN)
+	{
+		return "LHCSCREEN";
+	}
+	else if(type == RECTELLIPSE)
+	{
+		return "RECTELLIPSE";
+	}
+	else if(type == RACETRACK)
+	{
+		return "RACETRACK";
+	}
+	else if(type == OCTAGON)
+	{
+		return "OCTAGON";
+	}
+	else if(type == INTERPOLATED)
+	{
+		return "INTERPOLATED";
+	}
+
+	return "ERROR IN GetApertureTypeName()";
+}
+
+ApertureClass_t GetApertureTypeClass(char* ApType)
+{
+	std::string ApTemp = ApType;
+	if(ApTemp == "\"CIRCLE\"")
+	{
+		return CIRCLE;
+	}
+	else if(ApTemp == "\"RECTANGLE\"")
+	{
+		return RECTANGLE;
+	}
+	else if(ApTemp == "\"ELLIPSE\"")
+	{
+		return ELLIPSE;
+	}
+	else if(ApTemp == "\"RECTCIRCLE\"")
+	{
+		return RECTCIRCLE;
+	}
+	else if(ApTemp == "\"LHCSCREEN\"")
+	{
+		return LHCSCREEN;
+	}
+	else if(ApTemp == "\"RECTELLIPSE\"")
+	{
+		return RECTELLIPSE;
+	}
+	else if(ApTemp == "\"RACETRACK\"")
+	{
+		return RACETRACK;
+	}
+	else if(ApTemp == "\"OCTAGON\"")
+	{
+		return OCTAGON;
+	}
+	else
+	{
+		return UNKNOWN;
+	}
+}
+
