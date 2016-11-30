@@ -614,6 +614,7 @@ void PlotSomeMetres(std::vector<OneMetre> TheSequence, double s1, double s2, std
 			<< std::setw(12) << aperture[j].GetApert(2)
 			<< std::setw(12) << aperture[j].GetApert(3)
 			<< std::setw(12) << aperture[j].GetApert(4)
+			<< std::setw(15) << GetApertureTypeName(aperture[j].GetApertureType())
 			<< std::endl;
 		}
 	}
@@ -647,6 +648,7 @@ void PlotAll(std::vector<OneMetre> TheSequence, std::string output)
 				<< std::setw(12) << aperture[j].GetApert(2)
 				<< std::setw(12) << aperture[j].GetApert(3)
 				<< std::setw(12) << aperture[j].GetApert(4)
+				<< std::setw(15) << GetApertureTypeName(aperture[j].GetApertureType())
 				<< std::endl;
 		}
 	}
@@ -694,32 +696,12 @@ void PlotSomeMetres(std::vector<OneMetre> TheSequence, double s1, double s2, dou
 			out << std::setw(12) << Atmp.GetApert(1);
 			out << std::setw(12) << Atmp.GetApert(2);
 			out << std::setw(12) << Atmp.GetApert(3);
-			out << std::setw(12) << Atmp.GetApert(4) << std::endl;
+			out << std::setw(12) << Atmp.GetApert(4);
+			out << std::setw(15) << GetApertureTypeName(Atmp.GetApertureType());
+			out << std::endl;
 		}
 	}
 	out.close();
-
-	/*
-	for (int i = (int) s1; i < (int) s2; i++){
-		//		position.clear();
-		//		aperture.clear();
-		for (int j = 0; j < (int) 1/Ds; j++){
-			 pos = double( j ) * Ds + (double) i;
-			 position.push_back( pos );
-			 aperture.push_back( TheSequence[i].GetAperture( pos ) );
-		}
-	}
-	ofstream out;
-	out.open(output.c_str());
-	for( int k = 0; k < (int) position.size(); k++){
-		out<<std::setw(12)<<position[k]
-			 <<std::setw(12)<<aperture[k].GetApert(1)
-			 <<std::setw(12)<<aperture[k].GetApert(2)
-			 <<std::setw(12)<<aperture[k].GetApert(3)
-			 <<std::setw(12)<<aperture[k].GetApert(4)<<std::endl;
-	}
-	out.close();
-	*/
 }
 
 void PlotAll(std::vector<OneMetre> TheSequence, double Ds, std::string output)

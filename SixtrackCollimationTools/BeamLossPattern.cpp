@@ -224,7 +224,6 @@ int main (int argc, char* argv[])
 	std::cout.precision(OldPrecision);
 
 	//Splits up the machine aperture into 1m blocks
-	//AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 	AssignOneMetre(&Accelerator, Keyword, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 
 	std::cout << "Length of the read sequence: " << Accelerator.size() << " metres." << std::endl << std::endl;
@@ -424,11 +423,11 @@ int main (int argc, char* argv[])
 	std::cout << "Writing outputs ...." << std::endl;
 	out.open(output.c_str());
 	out.precision(6);
-
+/*
 	out << std::setw(10) << "#N" << std::setw(10) << "Turn" << std::setw(10) << "s" << std::setw(15) << "x" 
 		<< std::setw(15) << "xp" << std::setw(15) << "y" << std::setw(15) << "yp" << std::setw(15) << "dE"
 		<< std::setw(5) << "Type" << std::setw(4) << "LastTurn" << std::endl;
-
+*/
 	for (size_t i = 0; i < Nlost.size(); i++)
 	{
 		out << std::setw(10) << Nlost[i]
@@ -447,11 +446,11 @@ int main (int argc, char* argv[])
 
 	out.open(output2.c_str());
 	out.precision(6);
-
+/*
 	out << std::setw(10) << "#N" << std::setw(10) << "Turn" << std::setw(10) << "s" << std::setw(15) << "x" 
 		<< std::setw(15) << "xp" << std::setw(15) << "y" << std::setw(15) << "yp" << std::setw(15) << "dE"
 		<< std::setw(5) << "Type" << std::setw(4) << "LastTurn" << std::endl;
-
+*/
 	for (size_t i = 0; i < Nlost2.size(); i++)
 	{
 		out << std::setw(10) << Nlost2[i]
@@ -492,7 +491,7 @@ int main (int argc, char* argv[])
 		in.open(File.c_str(), std::ios::in);
 		if (!in)
 		{
-			std::cout << "Impossible to open the file!!" << std::endl;
+			std::cerr << "Cannot open LostParticles.dat" << std::endl;
 			exit(EXIT_FAILURE);
 		}
 		in.getline(c_str,256); // Skip the first line with the header
