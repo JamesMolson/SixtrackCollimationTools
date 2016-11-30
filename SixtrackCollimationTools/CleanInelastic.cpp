@@ -28,60 +28,58 @@
 #include <ctype.h>
 #include <math.h>
 
-using namespace std;
-
 int main (int argc, char* argv[])
 {
 
 	if (argc < 5)
 	{
-		cout << "Some input is missing!" << endl;
-		cout << "The command line should look like:" << endl;
-		cout << "-> " << argv[0] << " Impact.file Loss.file Coll.positions coll_summary file <-" << endl;
-		exit(0);
+		std::cout << "Some input is missing!" << std::endl;
+		std::cout << "The command line should look like:" << std::endl;
+		std::cout << "-> " << argv[0] << " Impact.file Loss.file Coll.positions coll_summary file <-" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	string inel_file = argv[1];
-	string loss_file = argv[2];
-	string list_file = argv[3];
-	string summ_file = argv[4];
+	std::string inel_file = argv[1];
+	std::string loss_file = argv[2];
+	std::string list_file = argv[3];
+	std::string summ_file = argv[4];
 
 	// Write summary
-	cout << "- - - - - - - -" << endl;
-	cout << setw(22) << "Impact file: " << inel_file << endl;
-	cout << setw(22) << "Loss file: " << loss_file << endl;
-	cout << setw(22) << "Collimator file: "<< list_file << endl;
-	cout << setw(22) << "\"coll_summary\" file: "<< summ_file << endl;
-	cout << "- - - - - - - -" << endl;
+	std::cout << "- - - - - - - -" << std::endl;
+	std::cout << std::setw(22) << "Impact file: " << inel_file << std::endl;
+	std::cout << std::setw(22) << "Loss file: " << loss_file << std::endl;
+	std::cout << std::setw(22) << "Collimator file: "<< list_file << std::endl;
+	std::cout << std::setw(22) << "\"coll_summary\" file: "<< summ_file << std::endl;
+	std::cout << "- - - - - - - -" << std::endl;
 
 
 	size_t Nmax = 50000;	// Maximum values of Npart
 	size_t NCollMax = 100;	// Maximum number of collimators
 
-	vector<double> Length;	// Names (and icoll) from SixTrack
-	vector<string> Name;
+	std::vector<double> Length;	// Names (and icoll) from SixTrack
+	std::vector<std::string> Name;
 
-	vector<string> CollName;	// Name and position from matlab 
-	vector<double> CollPos;
+	std::vector<std::string> CollName;	// Name and position from matlab 
+	std::vector<double> CollPos;
 
-	vector<double> Position;	// Position vs icoll
+	std::vector<double> Position;	// Position vs icoll
 
 	// Location of losses
-	vector<int> NPART_lost, NTURN_lost;
-	vector<double> POS_lost;
+	std::vector<int> NPART_lost, NTURN_lost;
+	std::vector<double> POS_lost;
 
 	// Locations of inelastic impacts
-	vector<int> NCOLL_inel, FLAG_inel, NPART_inel, NTURN_inel;
-	vector<double> ANGLE_inel, POS_inel, X_inel, XP_inel,Y_inel, YP_inel;
+	std::vector<int> NCOLL_inel, FLAG_inel, NPART_inel, NTURN_inel;
+	std::vector<double> ANGLE_inel, POS_inel, X_inel, XP_inel,Y_inel, YP_inel;
 
 	// Input/output streams
-	ifstream in;
-	ofstream out1, out2;
+	std::ifstream in;
+	std::ofstream out1, out2;
 
 	// Temporary auxiliary variables
 	int i1, i2, i3, i4;
 	double d1, d2, d3, d4, d5, d6;
-	string str_tmp;
+	std::string str_tmp;
 	int count = 0,n_p;
 	size_t j = 0;
 	char c_str[256];
@@ -102,11 +100,11 @@ int main (int argc, char* argv[])
 	}
 
 	// Get collimator name vs sixtrack number
-	in.open(summ_file.c_str(), ios::in);
+	in.open(summ_file.c_str(), std::ios::in);
 	if (!in)
 	{
-		cout << "Impossible to open the file \"" << summ_file << "\"!!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file \"" << summ_file << "\"!!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	in.getline(c_str,256); // Skip the header line
@@ -132,15 +130,15 @@ int main (int argc, char* argv[])
 			count++;
 		}
 	}
-	cout << "Number of collimators: " << count << endl;
+	std::cout << "Number of collimators: " << count << std::endl;
 
 
 	// Get the collimator positions
-	in.open(list_file.c_str(), ios::in);
+	in.open(list_file.c_str(), std::ios::in);
 	if (!in)
 	{
-		cout << "Impossible to open the file \"" << list_file << "\"!!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file \"" << list_file << "\"!!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	in.getline(c_str,256); // Skip the header line
@@ -157,7 +155,7 @@ int main (int argc, char* argv[])
 		CollPos.push_back(d1);
 	}
 	in.close();
-	cout << "Number of collimator positions: " << CollName.size() << endl;
+	std::cout << "Number of collimator positions: " << CollName.size() << std::endl;
 
 	// Assign the collimator position.
 	for (size_t i = 0; i < Length.size(); i++)
@@ -173,8 +171,8 @@ int main (int argc, char* argv[])
 
 			if ( j == CollName.size() )
 			{
-				cout << "Error: Position of collimator \"" << Name[i] << "\" NOT found!" << endl;
-				exit(0);
+				std::cout << "Error: Position of collimator \"" << Name[i] << "\" NOT found!" << std::endl;
+				exit(EXIT_FAILURE);
 			}
 			else
 			{
@@ -184,15 +182,15 @@ int main (int argc, char* argv[])
 	}
 
 	// Read loss file
-	in.open(loss_file.c_str(), ios::in);
+	in.open(loss_file.c_str(), std::ios::in);
 
 	if (!in)
 	{
-		cout << "Impossible to open the file \"" << loss_file << "\"!!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file \"" << loss_file << "\"!!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	while (1)
+	while (true)
 	{
 		in >> i1 >> i2 >> d1 >> d2 >> d3 >> d4 >> d5 >> d6 >> i3 >> i4;
 
@@ -208,16 +206,16 @@ int main (int argc, char* argv[])
 	in.close();
 
 	// Read the impact file
-	in.open(inel_file.c_str(), ios::in);
+	in.open(inel_file.c_str(), std::ios::in);
 
 	if (!in)
 	{
-		cout << "Impossible to open the file \"" << inel_file << "\"!!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file \"" << inel_file << "\"!!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 	in.getline(c_str,256); // Skip the header line
 
-	while (1)
+	while (true)
 	{
 		in >> i1 >> d1 >> d2 >> d3 >> d4 >> d5 >> d6 >> i2 >> i3 >> i4;
 		if (!in.good())
@@ -298,5 +296,5 @@ int main (int argc, char* argv[])
 	Y_inel.clear(); 
 	YP_inel.clear();
 
-	return 0;
+	return EXIT_SUCCESS;
 }

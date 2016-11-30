@@ -45,23 +45,23 @@ Survey::~Survey()
 	COy.clear(); 
 }
 
-void Survey::LoadAccelerator(string in)
+void Survey::LoadAccelerator(std::string in)
 {
 	S.clear();
 	Xsurvey.clear();
 
 	double s, p;
 
-	ifstream input;
-	input.open(in.c_str(), ios::in);
+	std::ifstream input;
+	input.open(in.c_str(), std::ios::in);
 
 	if (!input)
 	{
-		cout << "Impossible to open the file " << in << " !!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file " << in << " !!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	while (1)
+	while (true)
 	{
 		input >> s >> p;
 
@@ -90,8 +90,8 @@ double Survey::GetSurvey(double pos)
 {
 	if ( S.size() < 1 )
 	{
-		cout << "Error: Accelerator survey has not been initialized" << endl;
-		exit(0);
+		std::cout << "Error: Accelerator survey has not been initialized" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// I assume that pos is give in metre, with spacing of 10 cm!
@@ -99,7 +99,7 @@ double Survey::GetSurvey(double pos)
 	return Xsurvey[n];
 }
 
-void Survey::LoadAccelerator_Crossing(string in)
+void Survey::LoadAccelerator_Crossing(std::string in)
 {
 	S.clear();
 	Xsurvey.clear();
@@ -109,18 +109,18 @@ void Survey::LoadAccelerator_Crossing(string in)
 	double s, Xx, Yx, Xs;
 	char chr_tmp[256];
 
-	ifstream input;
-	input.open(in.c_str(), ios::in);
+	std::ifstream input;
+	input.open(in.c_str(), std::ios::in);
 
 	if (!input)
 	{
-		cout << "Impossible to open the file " << in << " !!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file " << in << " !!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	input.getline(chr_tmp,256); // Skip first line with header
 
-	while (1)
+	while (true)
 	{
 		input >> s >> Xx >> Yx >> Xs;
 
@@ -138,7 +138,7 @@ void Survey::LoadAccelerator_Crossing(string in)
 	//	cout<<in<<endl;
 }
 
-void Survey::LoadAccelerator_Crossing_XP(string in)
+void Survey::LoadAccelerator_Crossing_XP(std::string in)
 {
 	S.clear();
 	Xsurvey.clear();
@@ -150,18 +150,18 @@ void Survey::LoadAccelerator_Crossing_XP(string in)
 	double s, Xx, Yx, Xs, XPx, YPx;
 	char chr_tmp[256];
 
-	ifstream input;
-	input.open(in.c_str(), ios::in);
+	std::ifstream input;
+	input.open(in.c_str(), std::ios::in);
 
 	if (!input)
 	{
-		cout << "Impossible to open the file " << in << " !!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file " << in << " !!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	input.getline(chr_tmp,256); // Skip first line with header
 
-	while (1)
+	while (true)
 	{
 		input >> s >> Xx >> Yx >> Xs >> XPx >> YPx;
 
@@ -186,8 +186,8 @@ double Survey::GetCrossX(double pos)
 {
 	if ( Xcrossing.size() < 1 )
 	{
-		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
-		exit(0);
+		std::cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
@@ -200,8 +200,8 @@ double Survey::GetCrossY(double pos)
 {
 	if ( Ycrossing.size() < 1 )
 	{
-		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
-		exit(0);
+		std::cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
@@ -213,8 +213,8 @@ double Survey::GetCrossXP(double pos)
 {
 	if ( XPcrossing.size() < 1 )
 	{
-		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
-		exit(0);
+		std::cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 	// I assume that pos is given in metre, with spacing of 10 cm!
 	int n = (pos*10);
@@ -226,8 +226,8 @@ double Survey::GetCrossYP(double pos)
 {
 	if ( YPcrossing.size() < 1 )
 	{
-		cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << endl;
-		exit(0);
+		std::cout << "Error: Accelerator positions due to crossing schemes have not been initialized" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
@@ -235,7 +235,7 @@ double Survey::GetCrossYP(double pos)
 	return YPcrossing[n];
 }
 
-void Survey::LoadCO(string in)
+void Survey::LoadCO(std::string in)
 {
 	S.clear();
 	COx.clear();
@@ -244,18 +244,18 @@ void Survey::LoadCO(string in)
 	double s, cox, coy;
 	char chr_tmp[256];
 
-	ifstream input;
-	input.open(in.c_str(), ios::in);
+	std::ifstream input;
+	input.open(in.c_str(), std::ios::in);
 
 	if (!input)
 	{
-		cout << "Impossible to open the file " << in << " !!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file " << in << " !!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	input.getline(chr_tmp,256); // Skip first line with header
 
-	while (1)
+	while (true)
 	{
 		input >> s >> cox >> coy;
 
@@ -277,8 +277,8 @@ double Survey::GetCOx(double pos)
 {
 	if ( COx.size() < 1 )
 	{
-		cout << "Error: The closed orbit has not been initialized!" << endl;
-		exit(0);
+		std::cout << "Error: The closed orbit has not been initialized!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!
@@ -290,8 +290,8 @@ double Survey::GetCOy(double pos)
 {
 	if ( COy.size() < 1 )
 	{
-		cout << "Error: The closed orbit has not been initialized!" << endl;
-		exit(0);
+		std::cout << "Error: The closed orbit has not been initialized!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// I assume that pos is given in metre, with spacing of 10 cm!

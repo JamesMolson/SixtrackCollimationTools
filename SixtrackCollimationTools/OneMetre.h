@@ -23,6 +23,8 @@
 * point where the aperture as been defined.
 *
 */
+#ifndef OneMetre_h
+#define OneMetre_h 1
 
 #include "Aperture.h"
 
@@ -36,15 +38,10 @@
 #include <algorithm>
 
 #include <stdio.h>
-#include <stdlib.h> 
-#include <string.h> 
+#include <stdlib.h>
+//#include <string.h>
 #include <ctype.h>
 #include <math.h>
-
-using namespace std;
-
-#ifndef OneMetre_h
-#define OneMetre_h 1
 
 class OneMetre
 {
@@ -53,24 +50,24 @@ private:
 	/**
 	* Position where aperture is defined.
 	*/
-	vector<double> Pos;
+	std::vector<double> Pos;
 
 	/**
 	* Corresponding apertures.
 	*/
-	vector<Aperture> Apert;
+	std::vector<Aperture> Apert;
 
 	/**
 	* Extended position and aperture vector with additional definitions at 0.0 and 1.0, for aperture interpolation.
 	* Position
 	*/
-	vector<double> Pos_ex;
+	std::vector<double> Pos_ex;
 
 	/**
 	* Extended position and aperture vector with additional definitions at 0.0 and 1.0, for aperture interpolation.
 	* Aperture
 	*/
-	vector<Aperture> Apert_ex;
+	std::vector<Aperture> Apert_ex;
 
 	/**
 	* Aperture in vector format - useful later
@@ -90,7 +87,7 @@ private:
 	/**
 	* Temporary vector for various internal uses
 	*/
-	vector<double> Atmp_vec;
+	std::vector<double> Atmp_vec;
 
 public:
 
@@ -102,9 +99,9 @@ public:
 
 	void DefineAperture(double p, Aperture Ap);
 
-	void DefineAperture(double p, vector<double> A4, ApertureClass_t ApertureType);
+	void DefineAperture(double p, std::vector<double> A4, ApertureClass_t ApertureType);
 
-	void GetApertDef(vector<double> *Position, vector<Aperture> *ThisApert);
+	void GetApertDef(std::vector<double> *Position, std::vector<Aperture> *ThisApert);
 
 	/**
 	* Get aperture at a given position.

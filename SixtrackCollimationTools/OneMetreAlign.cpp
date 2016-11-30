@@ -17,10 +17,10 @@ void OneMetreAlign::DefineApertureAlign(double p, double a1, double a2, double a
 
 	if ( Pos.size() > 0 && (p-floor(p)) < Pos[ Pos.size()-1 ] - 0.000001 )
 	{
-		cout << "ERROR: New position is smaller than previously defined aperture locations!" << endl;
-		cout << "       New position must be larger than the last one previously defined." << endl;
-		cout << "       Old position: " << Pos[ Pos.size()-1 ] << " - new position: " << p << " -> " << p-floor(p) << endl;
-		exit(0);
+		std::cout << "ERROR: New position is smaller than previously defined aperture locations!" << std::endl;
+		std::cout << "       New position must be larger than the last one previously defined." << std::endl;
+		std::cout << "       Old position: " << Pos[ Pos.size()-1 ] << " - new position: " << p << " -> " << p-floor(p) << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	Pos.push_back( p-floor(p) );
@@ -43,10 +43,10 @@ void OneMetreAlign::DefineApertureAlign(double p, Aperture Ap, double Dx, double
 
 	if ( Pos.size() > 0 && (p-floor(p)) < Pos[ Pos.size()-1 ] - 0.000001 )
 	{
-		cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<endl;
-		cout<<"       New position must be larger than the last one previously defined."<<endl;
-		cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<endl;
-		exit(0);
+		std::cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<std::endl;
+		std::cout<<"       New position must be larger than the last one previously defined."<<std::endl;
+		std::cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	Pos.push_back( p-floor(p) );
@@ -55,7 +55,7 @@ void OneMetreAlign::DefineApertureAlign(double p, Aperture Ap, double Dx, double
 	DyAlign.push_back( Dy );
 }
 
-void OneMetreAlign::DefineApertureAlign(double p, vector<double> A4, ApertureClass_t ApertureType, double Dx, double Dy)
+void OneMetreAlign::DefineApertureAlign(double p, std::vector<double> A4, ApertureClass_t ApertureType, double Dx, double Dy)
 {
 	if ( p == 1.0 )
 	{
@@ -64,10 +64,10 @@ void OneMetreAlign::DefineApertureAlign(double p, vector<double> A4, ApertureCla
 
 	if ( Pos.size() > 0 && (p-floor(p)) < Pos[ Pos.size()-1 ] - 0.000001 )
 	{
-		cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<endl;
-		cout<<"       New position must be larger than the last one previously defined."<<endl;
-		cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<endl;
-		exit(0);
+		std::cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<std::endl;
+		std::cout<<"       New position must be larger than the last one previously defined."<<std::endl;
+		std::cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	Pos.push_back( p-floor(p) );
@@ -90,10 +90,10 @@ void OneMetreAlign::DefineAperture(double p, double a1, double a2, double a3, do
 
 	if ( Pos.size() > 0 && (p-floor(p)) < Pos[ Pos.size()-1 ] - 0.000001 )
 	{
-		cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<endl;
-		cout<<"       New position must be larger than the last one previously defined."<<endl;
-		cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<endl;
-		exit(0);
+		std::cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<std::endl;
+		std::cout<<"       New position must be larger than the last one previously defined."<<std::endl;
+		std::cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	Pos.push_back( p-floor(p) );
@@ -116,10 +116,10 @@ void OneMetreAlign::DefineAperture(double p, Aperture Ap)
 
 	if ( Pos.size() > 0 && (p-floor(p)) < Pos[ Pos.size()-1 ] - 0.000001 )
 	{
-		cout << "ERROR: New position is smaller than previously defined aperture locations!" << endl;
-		cout << "       New position must be larger than the last one previously defined." << endl;
-		cout << "       Old position: " << Pos[ Pos.size()-1 ] << " - new position: " << p << " -> " << p-floor(p) << endl;
-		exit(0);
+		std::cout << "ERROR: New position is smaller than previously defined aperture locations!" << std::endl;
+		std::cout << "       New position must be larger than the last one previously defined." << std::endl;
+		std::cout << "       Old position: " << Pos[ Pos.size()-1 ] << " - new position: " << p << " -> " << p-floor(p) << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	Pos.push_back( p-floor(p) );
@@ -128,7 +128,7 @@ void OneMetreAlign::DefineAperture(double p, Aperture Ap)
 	DyAlign.push_back(0.0);
 }
 
-void OneMetreAlign::DefineAperture(double p, vector<double> A4, ApertureClass_t ApertureType)
+void OneMetreAlign::DefineAperture(double p, std::vector<double> A4, ApertureClass_t ApertureType)
 {
 	if ( p == 1.0 )
 	{
@@ -137,10 +137,10 @@ void OneMetreAlign::DefineAperture(double p, vector<double> A4, ApertureClass_t 
 
 	if ( Pos.size() > 0 && (p-floor(p)) < Pos[ Pos.size()-1 ] - 0.000001 )
 	{
-		cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<endl;
-		cout<<"       New position must be larger than the last one previously defined."<<endl;
-		cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<endl;
-		exit(0);
+		std::cout<<"ERROR: New position is smaller than previously defined aperture locations!"<<std::endl;
+		std::cout<<"       New position must be larger than the last one previously defined."<<std::endl;
+		std::cout<<"       Old position: "<<Pos[ Pos.size()-1 ]<<" - new position: "<<p<<" -> "<<p-floor(p)<<std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	Pos.push_back( p-floor(p) );
@@ -169,9 +169,9 @@ Aperture OneMetreAlign::GetAperture(double p)
 	// Preliminary checks:
 	if ( Pos.size() == 0)
 	{
-		cout << "ERROR: The aperture has not been initialized properly:" << endl;
-		cout << "\tNo aperture has been defined in this OneMetreAlign" << endl;
-		exit(0);
+		std::cout << "ERROR: The aperture has not been initialized properly:" << std::endl;
+		std::cout << "\tNo aperture has been defined in this OneMetreAlign" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 	else if ( Pos.size() == 1 )
 	{
@@ -190,7 +190,7 @@ Aperture OneMetreAlign::GetAperture(double p)
 			// Only if this has not been done yet (i.e., only if Pos_ex.size()==0 )
 			if ( Pos.size() > 0 && Pos[0] > 0.001 )
 			{
-				cout << "Warning: aperture definition added at the beginning of the metre!" << endl;
+				std::cout << "Warning: aperture definition added at the beginning of the metre!" << std::endl;
 				Pos_ex.push_back(0.0);
 				Apert_ex.push_back(Apert[0]);
 				DxAlign_ex.push_back(DxAlign[0]);
@@ -214,7 +214,7 @@ Aperture OneMetreAlign::GetAperture(double p)
 
 			if ( Pos.size() > 0 && Pos[ Pos.size()-1 ] < 0.99 )
 			{
-				cout << "Warning: aperture definition added at the end of the metre!" << endl;
+				std::cout << "Warning: aperture definition added at the end of the metre!" << std::endl;
 				Pos_ex.push_back( 0.999999999 );
 				Apert_ex.push_back( Apert[Apert.size()-1] );
 				DxAlign_ex.push_back( DxAlign[DxAlign.size()-1] );
@@ -297,7 +297,7 @@ Aperture OneMetreAlign::GetAperture(double p)
 
 	if ( do_special )
 	{
-		cout << "Special case: aperture definitions at " << Pos_ex[k] << " and " << Pos_ex[k+1] << " are identical!" << endl;
+		std::cout << "Special case: aperture definitions at " << Pos_ex[k] << " and " << Pos_ex[k+1] << " are identical!" << std::endl;
 		Atmp_vec.clear();
 
 		for (int i = 1; i <= 4; i++)
@@ -332,9 +332,9 @@ double OneMetreAlign::GetAlignX( double p )
 	// Preliminary checks:
 	if ( Pos.size() == 0)
 	{
-		cout << "ERROR: The aperture has not been initialized properly:" << endl;
-		cout << "       No aperture has been defined in this OneMetreAlign" << endl;
-		exit(0);
+		std::cout << "ERROR: The aperture has not been initialized properly:" << std::endl;
+		std::cout << "       No aperture has been defined in this OneMetreAlign" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 	else if ( Pos.size() == 1 )// one aperture only -> same aperture in all the metre!
 	{
@@ -351,7 +351,7 @@ double OneMetreAlign::GetAlignX( double p )
 			// Only if this has not been done yet (i.e., only if Pos_ex.size()==0 )
 			if ( Pos.size() > 0 && Pos[0] > 0.001 )
 			{
-				cout << "Warning: aperture definition added at the beginning of the metre!" << endl;
+				std::cout << "Warning: aperture definition added at the beginning of the metre!" << std::endl;
 				Pos_ex.push_back(0.0);
 				Apert_ex.push_back(Apert[0]);
 				DxAlign_ex.push_back(DxAlign[0]);
@@ -376,7 +376,7 @@ double OneMetreAlign::GetAlignX( double p )
 
 			if ( Pos.size() > 0 && Pos[ Pos.size()-1 ] < 0.99 )
 			{
-				cout << "Warning: aperture definition added at the end of the metre!" << endl;
+				std::cout << "Warning: aperture definition added at the end of the metre!" << std::endl;
 				Pos_ex.push_back( 0.999999999 );
 				Apert_ex.push_back( Apert[Apert.size()-1] );
 				DxAlign_ex.push_back( DxAlign[DxAlign.size()-1] );
@@ -426,7 +426,7 @@ double OneMetreAlign::GetAlignX( double p )
 
 	if ( do_special )
 	{
-		cout << "Special case: aperture definitions at " << Pos_ex[k] << " and " << Pos_ex[k+1] << " are identical!" << endl;
+		std::cout << "Special case: aperture definitions at " << Pos_ex[k] << " and " << Pos_ex[k+1] << " are identical!" << std::endl;
 		DxA = DxAlign_ex[k]; // ??
 	}
 
@@ -446,9 +446,9 @@ double OneMetreAlign::GetAlignY( double p )
 	// Preliminary checks:
 	if ( Pos.size() == 0)
 	{
-		cout << "ERROR: The aperture has not been initialized properly:" << endl;
-		cout<<"       No aperture has been defined in this OneMetreAlign"<<endl;
-		exit(0);
+		std::cout << "ERROR: The aperture has not been initialized properly:" << std::endl;
+		std::cout<<"       No aperture has been defined in this OneMetreAlign"<<std::endl;
+		exit(EXIT_FAILURE);
 	}
 	else if ( Pos.size() == 1 )
 	{ // one aperture only -> same aperture in all the metre!
@@ -464,7 +464,7 @@ double OneMetreAlign::GetAlignY( double p )
 			// Only if this has not been done yet (i.e., only if Pos_ex.size()==0 )
 			if ( Pos.size() > 0 && Pos[0] > 0.001 )
 			{
-				cout<<"Warning: aperture definition added at the beginning of the metre!"<<endl;
+				std::cout<<"Warning: aperture definition added at the beginning of the metre!"<<std::endl;
 				Pos_ex.push_back(0.0);
 				Apert_ex.push_back(Apert[0]);
 				DxAlign_ex.push_back(DxAlign[0]);
@@ -488,7 +488,7 @@ double OneMetreAlign::GetAlignY( double p )
 
 			if ( Pos.size() > 0 && Pos[ Pos.size()-1 ] < 0.99 )
 			{
-				cout << "Warning: aperture definition added at the end of the metre!" << endl;
+				std::cout << "Warning: aperture definition added at the end of the metre!" << std::endl;
 				Pos_ex.push_back( 0.999999999 );
 				Apert_ex.push_back( Apert[Apert.size()-1] );
 				DxAlign_ex.push_back( DxAlign[DxAlign.size()-1] );
@@ -538,8 +538,8 @@ double OneMetreAlign::GetAlignY( double p )
 
 	if ( do_special )
 	{
-		cout << "Special case: aperture definitions at " << Pos_ex[k]
-		<< " and " << Pos_ex[k+1] << " are identical!" << endl;
+		std::cout << "Special case: aperture definitions at " << Pos_ex[k]
+		<< " and " << Pos_ex[k+1] << " are identical!" << std::endl;
 
 		DyA = DyAlign_ex[k]; // ??
 	}
@@ -563,14 +563,14 @@ double OneMetreAlign::GetAlignY( double p )
 * Test.GetApertDef(&pos, &pippo);
 * for( int i = 0; i < (int) pos.size(); i++)
 * {
-*	cout<<pos[i]<<" "
+*	std::cout<<pos[i]<<" "
 *		<<pippo[i].GetApert(1)<<" "
 *		<<pippo[i].GetApert(2)<<" "
 *		<<pippo[i].GetApert(3)<<" "
-*		<<pippo[i].GetApert(4)<<endl;
+*		<<pippo[i].GetApert(4)<<std::endl;
 * }
 */
-void OneMetreAlign::GetApertDef(vector<double> *Position, vector<Aperture> *ThisApert)
+void OneMetreAlign::GetApertDef(std::vector<double> *Position, std::vector<Aperture> *ThisApert)
 {
 	Position->clear();
 	ThisApert->clear();
@@ -583,53 +583,53 @@ void OneMetreAlign::GetApertDef(vector<double> *Position, vector<Aperture> *This
 
 void OneMetreAlign::status()
 {
-	cout << endl;
-	cout << "**** Present aperture definitions ****" << endl;
-	cout << "Number of aperture definitions = " << Pos.size() << endl;
-	cout.precision(4);
+	std::cout << std::endl;
+	std::cout << "**** Present aperture definitions ****" << std::endl;
+	std::cout << "Number of aperture definitions = " << Pos.size() << std::endl;
+	std::cout.precision(4);
 
 	for (size_t i = 0; i < Pos.size(); i++)
 	{
-		cout << setw(10) << Pos[i]
-			<< setw(10) << Apert[i].GetApert(1)
-			<< setw(10) << Apert[i].GetApert(2)
-			<< setw(10) << Apert[i].GetApert(3)
-			<< setw(10) << Apert[i].GetApert(4)
-			<< endl;
+		std::cout << std::setw(10) << Pos[i]
+			<< std::setw(10) << Apert[i].GetApert(1)
+			<< std::setw(10) << Apert[i].GetApert(2)
+			<< std::setw(10) << Apert[i].GetApert(3)
+			<< std::setw(10) << Apert[i].GetApert(4)
+			<< std::endl;
 	}
 
-	cout << endl;
+	std::cout << std::endl;
 
-	cout << "**** Present definitions of aperture misalignments ****" << endl;
-	cout << "Number of aperture definitions = " << Pos.size() << endl;
-	cout.precision(4);
+	std::cout << "**** Present definitions of aperture misalignments ****" << std::endl;
+	std::cout << "Number of aperture definitions = " << Pos.size() << std::endl;
+	std::cout.precision(4);
 
 	for (size_t i = 0; i < Pos.size(); i++)
 	{
-		cout<< setw(10) << Pos[i]
-			<< setw(4) << "Dx" << setw(10) << DxAlign[i]
-			<< setw(6) << "Dy" << setw(10) << DyAlign[i]
-			<< endl;
+		std::cout<< std::setw(10) << Pos[i]
+			<< std::setw(4) << "Dx" << std::setw(10) << DxAlign[i]
+			<< std::setw(6) << "Dy" << std::setw(10) << DyAlign[i]
+			<< std::endl;
 	}
-	cout << endl;
+	std::cout << std::endl;
 
 	if ( Pos_ex.size() > 0 )
 	{
-		cout << endl;
-		cout << "**** Aperture definitions of Extended aperture vector ****" << endl;
-		cout << "Number of aperture definitions = " << Pos_ex.size() << endl;
-		cout.precision(4);
+		std::cout << std::endl;
+		std::cout << "**** Aperture definitions of Extended aperture vector ****" << std::endl;
+		std::cout << "Number of aperture definitions = " << Pos_ex.size() << std::endl;
+		std::cout.precision(4);
 
 		for (size_t i = 0; i < Pos_ex.size(); i++)
 		{
-			cout<< setw(10) << Pos_ex[i]
-				<< setw(10) << Apert_ex[i].GetApert(1)
-				<< setw(10) << Apert_ex[i].GetApert(2)
-				<< setw(10) << Apert_ex[i].GetApert(3)
-				<< setw(10) << Apert_ex[i].GetApert(4)
-				<< endl;
+			std::cout<< std::setw(10) << Pos_ex[i]
+				<< std::setw(10) << Apert_ex[i].GetApert(1)
+				<< std::setw(10) << Apert_ex[i].GetApert(2)
+				<< std::setw(10) << Apert_ex[i].GetApert(3)
+				<< std::setw(10) << Apert_ex[i].GetApert(4)
+				<< std::endl;
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 

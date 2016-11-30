@@ -21,8 +21,8 @@ void Aperture::PutApert(double a1, double a2, double a3, double a4, ApertureClas
 	*/
 	if(ApertureT == UNKNOWN || ApertureT == NONE )
 	{
-		cout << "ERROR: Invalid aperture definition!!" << endl;
-		cout << a1 << " " << a2 << " " << a3 << " " << a4 << endl;
+		std::cout << "ERROR: Invalid aperture definition!!" << std::endl;
+		std::cout << a1 << " " << a2 << " " << a3 << " " << a4 << std::endl;
 	}
 	else
 	{
@@ -40,7 +40,7 @@ void Aperture::PutApert(double a1, double a2, double a3, double a4, ApertureClas
 	}
 }
 
-void Aperture::PutApert(vector<double> ThisAp, ApertureClass_t ApertureT)
+void Aperture::PutApert(std::vector<double> ThisAp, ApertureClass_t ApertureT)
 {
 	double pi = atan2(0.0,-1.0);
 
@@ -60,12 +60,12 @@ double Aperture::GetApert(int n)
 	return MyApert[n-1];
 }
 
-void Aperture::GiveName(string in)
+void Aperture::GiveName(std::string in)
 {
 	MyName = in;
 }
 
-string Aperture::GetName()
+std::string Aperture::GetName()
 {
 	return MyName;
 }
@@ -304,22 +304,22 @@ bool Aperture::IsLost(double x, double y)
 	}
 	else if(ApertureType == OCTAGON)
 	{
-		cerr << "Octagon aperture type requested and is not yet implemented - BUG" << endl;
-		exit(1);
+		std::cerr << "Octagon aperture type requested and is not yet implemented - BUG" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 	else if(ApertureType == UNKNOWN)
 	{
-		cerr << "Unknown aperture type requested - BUG" << endl;
-		cerr << "x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << endl;
-		cerr << "ApertureType: " << ApertureType << endl;
-		exit(1);
+		std::cerr << "Unknown aperture type requested - BUG" << std::endl;
+		std::cerr << "x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << std::endl;
+		std::cerr << "ApertureType: " << ApertureType << std::endl;
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		cerr << "This should not be reached - ApertureType error" << endl;
-		cerr << "x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << endl;
-		cerr << "ApertureType: " << ApertureType << endl;
-		exit(1);
+		std::cerr << "This should not be reached - ApertureType error" << std::endl;
+		std::cerr << "x: " << x << "\ty: " << y << "\ta1: " << a1 << "\ta2: " << a2 << "\ta3: " << a3 << "\ta4: " << a4 << std::endl;
+		std::cerr << "ApertureType: " << ApertureType << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	return LostFlag;
@@ -343,8 +343,8 @@ double Aperture::GiveAperture(double q)
 	T = q * pi / 180;
 	if (T > pi || T < -pi)
 	{
-		cout << "Please choose and angle between -pi and pi!" << endl;
-		exit(0);
+		std::cout << "Please choose and angle between -pi and pi!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	// Take the angle into accout
@@ -499,8 +499,8 @@ double Aperture::GiveAperture(double q)
 	}
 	else
 	{
-		cout << "WARNING: The given aperture is not classified among the known types" << endl;
-		cout << "         A1=" << a1 << " A2=" << a2 << " A3=" << a3 << " A4=" << a4 << endl;
+		std::cout << "WARNING: The given aperture is not classified among the known types" << std::endl;
+		std::cout << "         A1=" << a1 << " A2=" << a2 << " A3=" << a3 << " A4=" << a4 << std::endl;
 
 		// Temporary solution: I give the smallest value of x
 		if (a1 > a3)
@@ -527,7 +527,7 @@ double Aperture::GiveAperture(double q)
 	return DT_tmp;
 }
 
-void Aperture::PlotAperture(string output)
+void Aperture::PlotAperture(std::string output)
 {
 	double pi = atan2(0.0,-1.0);
 
@@ -580,7 +580,7 @@ void Aperture::PlotAperture(string output)
 	}
 	*/
 
-	ofstream out;
+	std::ofstream out;
 	out.open(output.c_str());
 
 	for (size_t i = 0; i < N; i++)
@@ -687,14 +687,14 @@ void Aperture::PlotAperture(string output)
 		}
 		else
 		{
-			cout << "WARNING: The given aperture is not classified among the known types" << endl;
-			cout << "         A1=" << a1 << " A2=" << a2 << " A3=" << a3 << " A4=" << a4 << endl;
+			std::cout << "WARNING: The given aperture is not classified among the known types" << std::endl;
+			std::cout << "         A1=" << a1 << " A2=" << a2 << " A3=" << a3 << " A4=" << a4 << std::endl;
 		}
 
 		DT_tmp=sqrt(Dx_tmp*Dx_tmp+Dy_tmp*Dy_tmp);
 
 		// Rotate first, and then displace!
-		out << setw(8) << q;
+		out << std::setw(8) << q;
 		//out<<setw(15)<<T;
 		//out<<setw(15)<<Dx_tmp;
 		//out<<setw(15)<<Dy_tmp;
@@ -702,9 +702,9 @@ void Aperture::PlotAperture(string output)
 		//out<<setw(15)<<Dy_tmp + Dy_align;
 		//out<<setw(15)<<Dx_tmp * cos( Angle ) + Dx_align;
 		//out<<setw(15)<<Dy_tmp * sin( Angle + pi / 2 )+ Dy_align;
-		out << setw(15) << DT_tmp * cos( Angle + T_n ) + Dx_align;
-		out << setw(15) << DT_tmp * sin( Angle + T_n ) + Dy_align;
-		out << setw(15) << DT_tmp << endl; // In aperture frame!
+		out << std::setw(15) << DT_tmp * cos( Angle + T_n ) + Dx_align;
+		out << std::setw(15) << DT_tmp * sin( Angle + T_n ) + Dy_align;
+		out << std::setw(15) << DT_tmp << std::endl; // In aperture frame!
 	}
 	out.close();
 }

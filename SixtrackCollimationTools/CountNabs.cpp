@@ -36,52 +36,50 @@
 #include <ctype.h>
 #include <math.h>
 
-using namespace std;
-
 int main (int argc, char* argv[])
 {
 
 	if (argc < 5)
 	{
-		cout << "Some input is missing!" << endl;
-		cout << "The command line should look like:" << endl;
-		cout << "-> " << argv[0] << " s1 tracks2.dat EN optics <-" << endl;
-		exit(0);
+		std::cout << "Some input is missing!" << std::endl;
+		std::cout << "The command line should look like:" << std::endl;
+		std::cout << "-> " << argv[0] << " s1 tracks2.dat EN optics <-" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	int s1;
-	string halo, EN, optics;
+	std::string halo, EN, optics;
 
 	s1 = static_cast<int>(atof(argv[1]));
 	halo = argv[2];
 	EN = argv[3];
 	optics = argv[4];
 
-	cout << endl << " Summary of input parameters: " << endl;
-	cout << setw(20) << "Seed:" << setw(9) << s1 << endl;
-	cout << setw(20) << "Halo type:" << "  " << halo << endl;
-	cout << setw(20) << "Beam energy:" << "  " << EN << endl;
-	cout << setw(20) << "Optics:" << "  " << optics << endl << endl;
+	std::cout << std::endl << " Summary of input parameters: " << std::endl;
+	std::cout << std::setw(20) << "Seed:" << std::setw(9) << s1 << std::endl;
+	std::cout << std::setw(20) << "Halo type:" << "  " << halo << std::endl;
+	std::cout << std::setw(20) << "Beam energy:" << "  " << EN << std::endl;
+	std::cout << std::setw(20) << "Optics:" << "  " << optics << std::endl << std::endl;
 
 	int Np_t, Ntu_t, Hflag_t, Nsurv_t;
 	double S_t, x_t, xp_t, y_t, yp_t, e_t;
-	vector<int> NPART, NTURN;
-	vector<double> POS;
+	std::vector<int> NPART, NTURN;
+	std::vector<double> POS;
 	size_t Nmax = 50000;
-	vector<int> NPART_lost, NTURN_lost;
-	vector<double> POS_lost;
-	vector<int> NPART_real, NTURN_real;
-	vector<double> POS_real;
-	vector<int> NPART_fake, NTURN_fake;
-	vector<double> POS_fake;
+	std::vector<int> NPART_lost, NTURN_lost;
+	std::vector<double> POS_lost;
+	std::vector<int> NPART_real, NTURN_real;
+	std::vector<double> POS_real;
+	std::vector<int> NPART_fake, NTURN_fake;
+	std::vector<double> POS_fake;
 	int count_ir7, count_ir3;
 	double p;
 
-	ostringstream ost;
-	ifstream in, inn;
-	ofstream out;
+	std::ostringstream ost;
+	std::ifstream in, inn;
+	std::ofstream out;
 	char c_str[256];
-	string input, output;
+	std::string input, output;
 
 
 	// Set input/output names for the impact files
@@ -90,14 +88,14 @@ int main (int argc, char* argv[])
 	ost.str("");
 		
 	// Read input file, create clean output and prepare required vector
-	in.open(input.c_str(), ios::in);
+	in.open(input.c_str(), std::ios::in);
 	if (!in)
 	{
-		cout << "Impossible to open the file \"" << input << "\"!!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file \"" << input << "\"!!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	cout << "-> Reading impact file: \"" << input << "\" <-" << endl << endl;
+	std::cout << "-> Reading impact file: \"" << input << "\" <-" << std::endl << std::endl;
 	in.getline(c_str,256); // Skip the header line
 	while (true)
 	{
@@ -126,14 +124,14 @@ int main (int argc, char* argv[])
 	ost << "LPI_BeamLoss." << s1 << "." << halo << "." << EN << "." << optics << ".s";
 	input = ost.str();
 	ost.str("");
-	inn.open(input.c_str(), ios::in);
+	inn.open(input.c_str(), std::ios::in);
 
 	if (!inn)
 	{
-		cout << "Impossible to open the file \"" << input << "\"!!" << endl;
-		exit(0);
+		std::cout << "Impossible to open the file \"" << input << "\"!!" << std::endl;
+		exit(EXIT_FAILURE);
 	}
-	cout << "-> Reading loss file: \"" << input << "\" <-" << endl << endl;
+	std::cout << "-> Reading loss file: \"" << input << "\" <-" << std::endl << std::endl;
 
 	inn.getline(c_str,256); // Skip the header line
 	while (true)
@@ -179,13 +177,13 @@ int main (int argc, char* argv[])
 		}
 	}
 
-	cout << "Number of particles touching the aperture before being lost "
-		<< "in a collimator: " << NPART.size()-NPART_real.size() << endl << endl;
+	std::cout << "Number of particles touching the aperture before being lost "
+		<< "in a collimator: " << NPART.size()-NPART_real.size() << std::endl << std::endl;
 
 	if ( NPART_real.size() != NPART_fake.size() )
 	{
-		cout << "Warning: sum of real and fake impacts does not give the total" << endl
-			<< "				 number of absorbed particles!" << endl;
+		std::cout << "Warning: sum of real and fake impacts does not give the total" << std::endl
+			<< "				 number of absorbed particles!" << std::endl;
 	}
 
 	// Count the losses in IR3/IR7
@@ -206,40 +204,40 @@ int main (int argc, char* argv[])
 		}
 	}
 
-	cout << "*******************************************************" << endl;
-	cout << "*  Summary of partile absorptions in the collimators  *" << endl; 
-	cout << "*******************************************************" << endl;
-	cout << "*" << setw(40) << "Total number of SixTrack impacts:"<< setw(12) << NPART.size() << " *" << endl;
-	cout << "*" << setw(40) << "Total number of REAL impacts:" << setw(12) << NPART_real.size() << " *" << endl;
-	cout << "*" << setw(40) << "Total number of FAKE impacts:" << setw(12) << NPART_fake.size() << " *" << endl;
-	cout << "*" << setw(40) << "Absorptions in the IR7 collimators:" << setw(12) << count_ir7 << " *" << endl;
-	cout << "*" << setw(40) << "Absorptions in the IR3 collimators:" << setw(12) << count_ir3 << " *" << endl;
-	cout << "*******************************************************" << endl;
+	std::cout << "*******************************************************" << std::endl;
+	std::cout << "*  Summary of partile absorptions in the collimators  *" << std::endl; 
+	std::cout << "*******************************************************" << std::endl;
+	std::cout << "*" << std::setw(40) << "Total number of SixTrack impacts:"<< std::setw(12) << NPART.size() << " *" << std::endl;
+	std::cout << "*" << std::setw(40) << "Total number of REAL impacts:" << std::setw(12) << NPART_real.size() << " *" << std::endl;
+	std::cout << "*" << std::setw(40) << "Total number of FAKE impacts:" << std::setw(12) << NPART_fake.size() << " *" << std::endl;
+	std::cout << "*" << std::setw(40) << "Absorptions in the IR7 collimators:" << std::setw(12) << count_ir7 << " *" << std::endl;
+	std::cout << "*" << std::setw(40) << "Absorptions in the IR3 collimators:" << std::setw(12) << count_ir3 << " *" << std::endl;
+	std::cout << "*******************************************************" << std::endl;
 
 	// Write output file for REAL impacts
 	ost<<"all_absorptions."<<s1<<"."<<halo<<"."<<EN<<"."<<optics<<".real.dat";
 	output = ost.str();
 	ost.str("");
-	cout << "Name of the REAL impact file: \""<<output<<"\"."<<endl << endl;
+	std::cout << "Name of the REAL impact file: \""<<output<<"\"."<< std::endl << std::endl;
 
 	out.open(output.c_str());
-	out << "%*******************************************************" << endl;
-	out << "%*  Summary of partile absorptions in the collimators  *" << endl; 
-	out << "%*******************************************************" << endl;
-	out << "%*"<< setw(40) << "Total number of SixTrack impacts:" << setw(12) << NPART.size() << " *" << endl;
-	out << "%*"<< setw(40) << "Total number of REAL impacts:" << setw(12) << NPART_real.size() << " *" << endl;
-	out << "%*"<< setw(40) << "Total number of FAKE impacts:" << setw(12) << NPART_fake.size() << " *" << endl;
-	out << "%*"<< setw(40) << "Absorptions in the IR7 collimators:" << setw(12) << count_ir7 << " *" << endl;
-	out << "%*"<< setw(40) << "Absorptions in the IR3 collimators:" << setw(12) << count_ir3 << " *" << endl;
-	out << "%*******************************************************" << endl;
-	out << setw(6) << "%Np" << setw(4) << "Ntu" << setw(12) << "Spos [ m ]" << endl;
+	out << "%*******************************************************" << std::endl;
+	out << "%*  Summary of partile absorptions in the collimators  *" << std::endl; 
+	out << "%*******************************************************" << std::endl;
+	out << "%*"<< std::setw(40) << "Total number of SixTrack impacts:" << std::setw(12) << NPART.size() << " *" << std::endl;
+	out << "%*"<< std::setw(40) << "Total number of REAL impacts:" << std::setw(12) << NPART_real.size() << " *" << std::endl;
+	out << "%*"<< std::setw(40) << "Total number of FAKE impacts:" << std::setw(12) << NPART_fake.size() << " *" << std::endl;
+	out << "%*"<< std::setw(40) << "Absorptions in the IR7 collimators:" << std::setw(12) << count_ir7 << " *" << std::endl;
+	out << "%*"<< std::setw(40) << "Absorptions in the IR3 collimators:" << std::setw(12) << count_ir3 << " *" << std::endl;
+	out << "%*******************************************************" << std::endl;
+	out << std::setw(6) << "%Np" << std::setw(4) << "Ntu" << std::setw(12) << "Spos [ m ]" << std::endl;
 	out.precision(10);
 
 	for (size_t i = 0; i < NPART_real.size(); i++)
 	{
-		out << setw(6) << NPART_real[i]
-			<< setw(4) << NTURN_real[i]
-			<< setw(12) << POS_real[i] << endl;
+		out << std::setw(6) << NPART_real[i]
+			<< std::setw(4) << NTURN_real[i]
+			<< std::setw(12) << POS_real[i] << std::endl;
 	}
 	out.close();
 
@@ -247,26 +245,26 @@ int main (int argc, char* argv[])
 	ost << "all_absorptions." << s1 << "." << halo << "." << EN << "." << optics << ".fake.dat";
 	output = ost.str();
 	ost.str("");
-	cout << "Name of the FAKE impact file: \"" << output << "\"." << endl << endl;
+	std::cout << "Name of the FAKE impact file: \"" << output << "\"." << std::endl << std::endl;
 
 	out.open(output.c_str());
-	out << "%*******************************************************" << endl;
-	out << "%*  Summary of partile absorptions in the collimators  *" << endl; 
-	out << "%*******************************************************" << endl;
-	out << "%*" << setw(40) << "Total number of SixTrack impacts:" << setw(12) << NPART.size() << " *" << endl;
-	out << "%*" << setw(40) << "Total number of REAL impacts:" << setw(12) << NPART_real.size() << " *" << endl;
-	out << "%*" << setw(40) << "Total number of FAKE impacts:" << setw(12) << NPART_fake.size() << " *" << endl;
-	out << "%*" << setw(40) << "Absorptions in the IR7 collimators:" << setw(12) << count_ir7 << " *" << endl;
-	out << "%*" << setw(40) << "Absorptions in the IR3 collimators:" << setw(12) << count_ir3 << " *" << endl;
-	out << "%*******************************************************" << endl;
-	out << setw(6) << "%Np" << setw(4) << "Ntu" << setw(12) << "Spos [ m ]" << endl;
+	out << "%*******************************************************" << std::endl;
+	out << "%*  Summary of partile absorptions in the collimators  *" << std::endl; 
+	out << "%*******************************************************" << std::endl;
+	out << "%*" << std::setw(40) << "Total number of SixTrack impacts:" << std::setw(12) << NPART.size() << " *" << std::endl;
+	out << "%*" << std::setw(40) << "Total number of REAL impacts:" << std::setw(12) << NPART_real.size() << " *" << std::endl;
+	out << "%*" << std::setw(40) << "Total number of FAKE impacts:" << std::setw(12) << NPART_fake.size() << " *" << std::endl;
+	out << "%*" << std::setw(40) << "Absorptions in the IR7 collimators:" << std::setw(12) << count_ir7 << " *" << std::endl;
+	out << "%*" << std::setw(40) << "Absorptions in the IR3 collimators:" << std::setw(12) << count_ir3 << " *" << std::endl;
+	out << "%*******************************************************" << std::endl;
+	out << std::setw(6) << "%Np" << std::setw(4) << "Ntu" << std::setw(12) << "Spos [ m ]" << std::endl;
 	out.precision(10);
 
 	for (size_t i = 0; i < NPART_fake.size(); i++)
 	{
-		out << setw(6) << NPART_fake[i]
-			<< setw(4) << NTURN_fake[i]
-			<< setw(12) << POS_fake[i] << endl;
+		out << std::setw(6) << NPART_fake[i]
+			<< std::setw(4) << NTURN_fake[i]
+			<< std::setw(12) << POS_fake[i] << std::endl;
 	}
 	out.close();
 
@@ -284,6 +282,6 @@ int main (int argc, char* argv[])
 	NTURN_fake.clear();
 	POS_fake.clear();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

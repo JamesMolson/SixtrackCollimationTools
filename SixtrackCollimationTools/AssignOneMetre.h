@@ -4,6 +4,8 @@
 *
 * Alternative: Generate a 'Sequence' object instead of usinf functions??
 */
+#ifndef AssignOneMetre_h
+#define AssignOneMetre_h 1
 
 #include <string>
 #include <sstream>
@@ -17,7 +19,6 @@
 
 #include <stdio.h>
 #include <stdlib.h> 
-#include <string.h> 
 #include <ctype.h>
 #include <math.h>
 
@@ -26,27 +27,22 @@
 #include "OneMetreAlign.h"
 #include "ReadTwiss.h"
 
-#ifndef AssignOneMetre_h
-#define AssignOneMetre_h 1
+void AssignOneMetre(std::vector<OneMetre> *TheSequence, std::vector<std::string> K, std::vector<double> P, std::vector<double> L, 
+			std::vector<double> A1, std::vector<double> A2, std::vector<double> A3, 
+			std::vector<double> A4, std::vector<size_t> ApertureType, double AccLength);
 
-using namespace std;
-
-void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<double> P, vector<double> L, 
-			vector<double> A1, vector<double> A2, vector<double> A3, 
-			vector<double> A4, vector<size_t> ApertureType, double AccLength);
-
-void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<double> P, vector<double> L, 
-			vector<double> A1, vector<double> A2, vector<double> A3, 
-			vector<double> A4, vector<double> DxA, vector<double> DyA, vector<size_t> ApertureType, double AccLength);
+void AssignOneMetreAlign(std::vector<OneMetreAlign> *TheSequence, std::vector<std::string> K, std::vector<double> P, std::vector<double> L, 
+			std::vector<double> A1, std::vector<double> A2, std::vector<double> A3, 
+			std::vector<double> A4, std::vector<double> DxA, std::vector<double> DyA, std::vector<size_t> ApertureType, double AccLength);
 
 // Write on a file the aperture from (s1-1) to (s2+1)
 // Give only the points where the aperture is defined
-void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string output, double AccLength);
-void PlotAll(vector<OneMetre> TheSequence, string output);
+void PlotSomeMetres(std::vector<OneMetre> TheSequence, double s1, double s2, std::string output, double AccLength);
+void PlotAll(std::vector<OneMetre> TheSequence, std::string output);
 
 // Intepolate the define aperture to get the information every Ds
-void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double Ds, string output, double AccLength);
-void PlotAll(vector<OneMetre> TheSequence, double Ds, string output);
+void PlotSomeMetres(std::vector<OneMetre> TheSequence, double s1, double s2, double Ds, std::string output, double AccLength);
+void PlotAll(std::vector<OneMetre> TheSequence, double Ds, std::string output);
 
 #endif
 

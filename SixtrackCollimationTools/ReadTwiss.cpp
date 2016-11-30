@@ -1,10 +1,10 @@
 #include "ReadTwiss.h"
 
-double ReadTwiss(string in, vector<string> *K, vector<string> *N, 
-		 vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
-		 vector<string> *Pan, vector<double> *P, vector<double> *L, 
-		 vector<double> *A1, vector<double> *A2, vector<double> *A3, 
-		 vector<double> *A4, vector<ApertureClass_t> *ApertureType)
+double ReadTwiss(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, 
+		 std::vector<std::string> *Pa, std::vector<std::string> *Kn, std::vector<std::string> *Nn, 
+		 std::vector<std::string> *Pan, std::vector<double> *P, std::vector<double> *L, 
+		 std::vector<double> *A1, std::vector<double> *A2, std::vector<double> *A3, 
+		 std::vector<double> *A4, std::vector<ApertureClass_t> *ApertureType)
 
 {
 	K->clear();
@@ -23,33 +23,33 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	char ApType[256];
 
 	char chr_tmp[256];
-	string str_tmp;
+	std::string str_tmp;
 
 	size_t len;
-	ostringstream ost;
+	std::ostringstream ost;
 
-	ifstream InputFile(in.c_str());
+	std::ifstream InputFile(in.c_str());
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		if (str_tmp.find("@ LENGTH",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
 		}
 	}
 	//Ugly, but gets the job done
-	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	std::string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
 	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("KEYWORD",0) != string::npos)
+		if (str_tmp.find("KEYWORD",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
@@ -117,19 +117,19 @@ double ReadTwiss(string in, vector<string> *K, vector<string> *N,
 	}
 	InputFile.close();
 
-	cout << endl;
-	cout << "Reading from \"" << in << "\"" << endl;
-	cout << "Total number of read elements: " << K->size() << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << "Reading from \"" << in << "\"" << std::endl;
+	std::cout << "Total number of read elements: " << K->size() << std::endl;
+	std::cout << std::endl;
 
 	return AcceleratorLength;
 }
 
-double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N, 
-			 vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
-			 vector<string> *Pan, vector<double> *P, vector<double> *L, 
-			 vector<double> *A1, vector<double> *A2, vector<double> *A3, 
-			 vector<double> *A4, vector<ApertureClass_t> *ApertureType)
+double ReadTwissNoDrifts(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, 
+			 std::vector<std::string> *Pa, std::vector<std::string> *Kn, std::vector<std::string> *Nn, 
+			 std::vector<std::string> *Pan, std::vector<double> *P, std::vector<double> *L, 
+			 std::vector<double> *A1, std::vector<double> *A2, std::vector<double> *A3, 
+			 std::vector<double> *A4, std::vector<ApertureClass_t> *ApertureType)
 
 {
 	K->clear();
@@ -148,33 +148,33 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	char ApType[256];
 
 	char chr_tmp[256];
-	string str_tmp;
+	std::string str_tmp;
 
 	size_t len;
-	ostringstream ost;
+	std::ostringstream ost;
 
-	ifstream InputFile(in.c_str());
+	std::ifstream InputFile(in.c_str());
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		if (str_tmp.find("@ LENGTH",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
 		}
 	}
 	//Ugly, but gets the job done
-	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	std::string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
 	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("KEYWORD",0) != string::npos)
+		if (str_tmp.find("KEYWORD",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
@@ -187,7 +187,7 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 
 		str_tmp = tK;
 
-		if ( str_tmp.find("DRIFT",0) == string::npos )
+		if ( str_tmp.find("DRIFT",0) == std::string::npos )
 		{
 			K->push_back(tK);
 			N->push_back(tN);
@@ -248,20 +248,20 @@ double ReadTwissNoDrifts(string in, vector<string> *K, vector<string> *N,
 	}
 	InputFile.close();
 
-	cout << endl;
-	cout << "Reading from \"" << in << "\"" << endl;
-	cout << "Total number of read elements: " << K->size() << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << "Reading from \"" << in << "\"" << std::endl;
+	std::cout << "Total number of read elements: " << K->size() << std::endl;
+	std::cout << std::endl;
 
 	return AcceleratorLength;
 }
 
 
-double ReadTwissK(string in, vector<string> *K, vector<string> *N, 
-		vector<string> *Pa, vector<string> *Kn, vector<string> *Nn, 
-		vector<string> *Pan, vector<double> *P, vector<double> *L, 
-		vector<double> *KL, vector<double> *A1, vector<double> *A2, 
-		vector<double> *A3, vector<double> *A4, vector<ApertureClass_t> *ApertureType)
+double ReadTwissK(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, 
+		std::vector<std::string> *Pa, std::vector<std::string> *Kn, std::vector<std::string> *Nn, 
+		std::vector<std::string> *Pan, std::vector<double> *P, std::vector<double> *L, 
+		std::vector<double> *KL, std::vector<double> *A1, std::vector<double> *A2, 
+		std::vector<double> *A3, std::vector<double> *A4, std::vector<ApertureClass_t> *ApertureType)
 {
 	K->clear();
 	N->clear();
@@ -280,33 +280,33 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	char ApType[256];
 
 	char chr_tmp[256];
-	string str_tmp;
+	std::string str_tmp;
 
 	size_t len;
-	ostringstream ost;
+	std::ostringstream ost;
 
-	ifstream InputFile(in.c_str());
+	std::ifstream InputFile(in.c_str());
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		if (str_tmp.find("@ LENGTH",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
 		}
 	}
 	//Ugly, but gets the job done
-	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	std::string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
 	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("KEYWORD",0) != string::npos)
+		if (str_tmp.find("KEYWORD",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
@@ -375,19 +375,19 @@ double ReadTwissK(string in, vector<string> *K, vector<string> *N,
 	}
 	InputFile.close();
 
-	cout << endl;
-	cout << "Reading from \"" << in << "\"" << endl;
-	cout << "Total number of read elements: " << K->size() << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << "Reading from \"" << in << "\"" << std::endl;
+	std::cout << "Total number of read elements: " << K->size() << std::endl;
+	std::cout << std::endl;
 
 	return AcceleratorLength;
 }
 
-double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
-		 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
-		 vector<double> *P, vector<double> *L, vector<double> *A1, 
-		 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
-		 vector<double> *DX, vector<double> *DY, vector<ApertureClass_t> *ApertureType)
+double ReadTwissDX(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, std::vector<std::string> *Pa, 
+		 std::vector<std::string> *Kn, std::vector<std::string> *Nn, std::vector<std::string> *Pan, 
+		 std::vector<double> *P, std::vector<double> *L, std::vector<double> *A1, 
+		 std::vector<double> *A2, std::vector<double> *A3, std::vector<double> *A4, 
+		 std::vector<double> *DX, std::vector<double> *DY, std::vector<ApertureClass_t> *ApertureType)
 {
 	K->clear();
 	N->clear();
@@ -407,33 +407,33 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 	char ApType[256];
 
 	char chr_tmp[256];
-	string str_tmp;
+	std::string str_tmp;
 
 	size_t len;
-	ostringstream ost;
+	std::ostringstream ost;
 
-	ifstream InputFile(in.c_str());
+	std::ifstream InputFile(in.c_str());
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		if (str_tmp.find("@ LENGTH",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
 		}
 	}
 	//Ugly, but gets the job done
-	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	std::string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
 	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("KEYWORD",0) != string::npos)
+		if (str_tmp.find("KEYWORD",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
@@ -504,19 +504,19 @@ double ReadTwissDX(string in, vector<string> *K, vector<string> *N, vector<strin
 	}
 	InputFile.close();
 
-	cout << endl;
-	cout << "Reading from \"" << in << "\"" << endl;
-	cout << "Total number of read elements: " << K->size() << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << "Reading from \"" << in << "\"" << std::endl;
+	std::cout << "Total number of read elements: " << K->size() << std::endl;
+	std::cout << std::endl;
 
 	return AcceleratorLength;
 }
 
-double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vector<string> *Pa, 
-			 vector<string> *Kn, vector<string> *Nn, vector<string> *Pan, 
-			 vector<double> *P, vector<double> *L, vector<double> *A1, 
-			 vector<double> *A2, vector<double> *A3, vector<double> *A4, 
-			 vector<double> *DX, vector<double> *DY, vector<ApertureClass_t> *ApertureType)
+double ReadTwissDXNoDrifts(std::string in, std::vector<std::string> *K, std::vector<std::string> *N, std::vector<std::string> *Pa, 
+			 std::vector<std::string> *Kn, std::vector<std::string> *Nn, std::vector<std::string> *Pan, 
+			 std::vector<double> *P, std::vector<double> *L, std::vector<double> *A1, 
+			 std::vector<double> *A2, std::vector<double> *A3, std::vector<double> *A4, 
+			 std::vector<double> *DX, std::vector<double> *DY, std::vector<ApertureClass_t> *ApertureType)
 {
 	K->clear();
 	N->clear();
@@ -536,33 +536,33 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 	char ApType[256];
 
 	char chr_tmp[256];
-	string str_tmp;
+	std::string str_tmp;
 
 	size_t len;
-	ostringstream ost;
+	std::ostringstream ost;
 
-	ifstream InputFile(in.c_str());
+	std::ifstream InputFile(in.c_str());
 
 	//First try and pull out the accelerator length variable
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("@ LENGTH",0) != string::npos)
+		if (str_tmp.find("@ LENGTH",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
 		}
 	}
 	//Ugly, but gets the job done
-	string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
+	std::string AcceleratorLengthString = str_tmp.substr(str_tmp.rfind(" ")+1,str_tmp.length()-str_tmp.rfind(" ")).c_str();
 	AcceleratorLength = atof(AcceleratorLengthString.c_str());
 
 	while (InputFile.getline(chr_tmp,256))
 	{
 		str_tmp = chr_tmp;
 
-		if (str_tmp.find("KEYWORD",0) != string::npos)
+		if (str_tmp.find("KEYWORD",0) != std::string::npos)
 		{
 			InputFile.getline(chr_tmp,256);
 			break;
@@ -575,7 +575,7 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 
 		str_tmp = tK;
 
-		if ( str_tmp.find("DRIFT",0) == string::npos )
+		if ( str_tmp.find("DRIFT",0) == std::string::npos )
 		{
 			K->push_back(tK);
 			N->push_back(tN);
@@ -622,17 +622,17 @@ double ReadTwissDXNoDrifts(string in, vector<string> *K, vector<string> *N, vect
 	}
 	InputFile.close();
 
-	cout << endl;
-	cout << "Reading from \"" << in << "\"" << endl;
-	cout << "Total number of read elements: " << K->size() << endl;
-	cout << endl;
+	std::cout << std::endl;
+	std::cout << "Reading from \"" << in << "\"" << std::endl;
+	std::cout << "Total number of read elements: " << K->size() << std::endl;
+	std::cout << std::endl;
 
 	return AcceleratorLength;
 }
 
 ApertureClass_t GetApertureType(char* ApType)
 {
-	string ApTemp = ApType;
+	std::string ApTemp = ApType;
 	if(ApTemp == "\"CIRCLE\"")
 	{
 		return CIRCLE;

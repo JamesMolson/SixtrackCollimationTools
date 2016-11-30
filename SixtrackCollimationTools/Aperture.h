@@ -73,8 +73,6 @@
 #ifndef Aperture_h
 #define Aperture_h 1
 
-using namespace std;
-
 /**
  * Typedef for access to the enum
  */
@@ -111,12 +109,12 @@ private:
 	/**
 	* A vector containing the 4 aperture definition parameters.
 	*/
-	vector<double> MyApert;
+	std::vector<double> MyApert;
 
 	/**
 	* The name of this aperture
 	*/
-	string MyName;
+	std::string MyName;
 
 	/**
 	* The type of this aperture.
@@ -160,7 +158,7 @@ public:
 	* @param[in] ThisAp A vector containing the 4 aperture parameters.
 	* @param[in] ApertureT The type of this aperture.
 	*/
-	void PutApert(vector<double> ThisAp, ApertureClass_t ApertureT);
+	void PutApert(std::vector<double> ThisAp, ApertureClass_t ApertureT);
 
 	/**
 	* Gets one of the 4 aperture parameters
@@ -173,19 +171,19 @@ public:
 	* Gets all of the 4 aperture parameters.
 	* @return A vector containing all 4 aperture parameters.
 	*/
-	vector<double> GetApert();
+	std::vector<double> GetApert();
 
 	/**
 	* Sets a name for this aperture.
 	* @param[in] in The name to set.
 	*/
-	void GiveName(string in);
+	void GiveName(std::string in);
 
 	/**
 	* Gets the name for this aperture.
 	* @return A string containing the name of this aperture.
 	*/
-	string GetName();
+	std::string GetName();
 
 	/**
 	* Is a particle lost at this aperture?
@@ -212,7 +210,7 @@ public:
 	/**
 	* Plot the aperture profile
 	*/
-	void PlotAperture(string output);
+	void PlotAperture(std::string output);
 
 	void SetApertAlign(double dx, double dy);
 	double GetApertAlignX();

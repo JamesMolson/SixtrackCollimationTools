@@ -1,3 +1,5 @@
+#ifndef Survey_h
+#define Survey_h 1
 /*
 * fix creator and distructor!
 */
@@ -12,33 +14,28 @@
 //#include <algorithm>
 
 #include <stdio.h>
-#include <stdlib.h> 
-#include <string.h> 
+#include <stdlib.h>
+//#include <string.h>
 #include <ctype.h>
 #include <math.h>
-
-#ifndef Survey_h
-#define Survey_h 1
-
-using namespace std;
 
 class Survey
 {
 private:
 
-	vector<double> S, Xsurvey;
-	vector<double> Xcrossing, Ycrossing;
-	vector<double> XPcrossing, YPcrossing;
-	vector<double> COx, COy;
+	std::vector<double> S, Xsurvey;
+	std::vector<double> Xcrossing, Ycrossing;
+	std::vector<double> XPcrossing, YPcrossing;
+	std::vector<double> COx, COy;
 
 public:
 
 	Survey();
 	~Survey();
 
-	void LoadAccelerator(string in);
-	void LoadAccelerator_Crossing(string in);
-	void LoadAccelerator_Crossing_XP(string in);
+	void LoadAccelerator(std::string in);
+	void LoadAccelerator_Crossing(std::string in);
+	void LoadAccelerator_Crossing_XP(std::string in);
 	double GetSurvey(double pos);
 	double GetCrossX(double pos);
 	double GetCrossY(double pos);
@@ -46,7 +43,7 @@ public:
 	double GetCrossYP(double pos);
 	void Clear();
 
-	void LoadCO(string in);
+	void LoadCO(std::string in);
 	double GetCOx(double pos);
 	double GetCOy(double pos);
 };

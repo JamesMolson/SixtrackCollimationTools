@@ -33,9 +33,9 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<stri
 				vector<double> A1, vector<double> A2, vector<double> A3, 
 				vector<double> A4, vector<ApertureClass_t> ApertureType, double AccLength)
 */
-void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<double> P,
-				vector<double> L, vector<double> A1, vector<double> A2, vector<double> A3, 
-				vector<double> A4, vector<ApertureClass_t> ApertureType, double AccLength)
+void AssignOneMetre(std::vector<OneMetre> *TheSequence, std::vector<std::string> K, std::vector<double> P,
+				std::vector<double> L, std::vector<double> A1, std::vector<double> A2, std::vector<double> A3, 
+				std::vector<double> A4, std::vector<ApertureClass_t> ApertureType, double AccLength)
 {
 	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
 	double AcceleratorRemains = AccLength - floor(AccLength);
@@ -50,7 +50,7 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<doub
 
 	// Define an auxiliary vector to see if the aperture is zero or not
 	// I take the sum squared of the 4 aperture components
-	vector<double> ApertMod;
+	std::vector<double> ApertMod;
 
 	for (size_t i = 0; i < A1.size(); i++)
 	{
@@ -78,8 +78,8 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<doub
 	a4 = A4[i];
 
 	// First aperture starting from the beginning of the sequence!
-	//	cout<<The_i<<" "<<N[i]<<" "<<P[i]<<endl;
-	//	cout<<(int)floor(P[i])<<endl;
+	//	std::cout<<The_i<<" "<<N[i]<<" "<<P[i]<<std::endl;
+	//	std::cout<<(int)floor(P[i])<<std::endl;
 	for (size_t k = 0; k < floor(P[i]); k++)
 	{
 		Metre_tmp.DefineAperture(0.0, a1, a2, a3, a4, ApertureType[i]);
@@ -266,7 +266,7 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<doub
 	TheSequence->push_back(Metre_tmp);
 	count++;
 	Metre_tmp.empty();
-	//	cout<<TheSequence->size()<<endl;
+	//	std::cout<<TheSequence->size()<<std::endl;
 
 	// End of the sequence
 	if (TheSequence->size() < AcceleratorLengthMetre)
@@ -294,8 +294,8 @@ void AssignOneMetre(vector<OneMetre> *TheSequence, vector<string> K, vector<doub
 		Metre_tmp.empty();
 	}
 
-	cout << endl << "All aperture information has been read and ";
-	cout << "the sequence has been created!" << endl << endl;
+	std::cout << std::endl << "All aperture information has been read and ";
+	std::cout << "the sequence has been created!" << std::endl << std::endl;
 }
 /*
 void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<string> N, 
@@ -303,9 +303,9 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 			 vector<double> A1, vector<double> A2, vector<double> A3, 
 			 vector<double> A4, vector<double> xA, vector<double> yA, vector<ApertureClass_t> ApertureType, double AccLength)
 */
-void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, vector<double> P,
-			 vector<double> L, vector<double> A1, vector<double> A2, vector<double> A3, 
-			 vector<double> A4, vector<double> xA, vector<double> yA, vector<ApertureClass_t> ApertureType, double AccLength)
+void AssignOneMetreAlign(std::vector<OneMetreAlign> *TheSequence, std::vector<std::string> K, std::vector<double> P,
+			 std::vector<double> L, std::vector<double> A1, std::vector<double> A2, std::vector<double> A3, 
+			 std::vector<double> A4, std::vector<double> xA, std::vector<double> yA, std::vector<ApertureClass_t> ApertureType, double AccLength)
 {
 	size_t AcceleratorLengthMetre = static_cast<size_t>(ceil(AccLength));
 	double AcceleratorRemains = AccLength - floor(AccLength);
@@ -321,7 +321,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	// I take the sum squared of the 4 aperture components
 	// For 'AssignOneMetreAlign', I shall define also zero apertures at the
 	// locations where some alignment is defined?
-	vector<double> ApertMod;
+	std::vector<double> ApertMod;
 
 	for (size_t i = 0; i < A1.size(); i++)
 	{
@@ -542,7 +542,7 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 	TheSequence->push_back(Metre_tmp);
 	count++;
 	Metre_tmp.empty();
-	cout << TheSequence->size() << endl;
+	std::cout << TheSequence->size() << std::endl;
 
 	// End of the sequence
 	if ( TheSequence->size() < AcceleratorLengthMetre)
@@ -570,18 +570,18 @@ void AssignOneMetreAlign(vector<OneMetreAlign> *TheSequence, vector<string> K, v
 		Metre_tmp.empty();
 	}
 
-	cout << endl << "All aperture information has been read and ";
-	cout << "the sequence has been created!" << endl << endl;
+	std::cout << std::endl << "All aperture information has been read and ";
+	std::cout << "the sequence has been created!" << std::endl << std::endl;
 }
 
-void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string output, double AccLength)
+void PlotSomeMetres(std::vector<OneMetre> TheSequence, double s1, double s2, std::string output, double AccLength)
 {
 	// check that s2 < sequence.size()
 
 	double pos;
 
-	vector<double> position;
-	vector<Aperture> aperture;
+	std::vector<double> position;
+	std::vector<Aperture> aperture;
 
 	if ( s1 > 1.0 )
 	{
@@ -593,9 +593,9 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string o
 		s2 = s2 + 1.0;
 	}
 
-	cout << "Apertures between s1 = " << s1 << " and s2 = " << s2 << " are being saved in the file \"" << output << "\"" << endl;
+	std::cout << "Apertures between s1 = " << s1 << " and s2 = " << s2 << " are being saved in the file \"" << output << "\"" << std::endl;
 
-	ofstream out;
+	std::ofstream out;
 	out.precision(8); // At least this precision, otherwise not enough digits for the longitudinal coordinate s!!
 	out.open(output.c_str());
 
@@ -609,27 +609,27 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, string o
 		// Starts from 1 otherwise point at the extremities of the metre are repeated twice
 		for(size_t j = 1; j < position.size(); j++)
 		{
-			out << setw(12) << pos + position[j]
-			<< setw(12) << aperture[j].GetApert(1)
-			<< setw(12) << aperture[j].GetApert(2)
-			<< setw(12) << aperture[j].GetApert(3)
-			<< setw(12) << aperture[j].GetApert(4)
-			<< endl;
+			out << std::setw(12) << pos + position[j]
+			<< std::setw(12) << aperture[j].GetApert(1)
+			<< std::setw(12) << aperture[j].GetApert(2)
+			<< std::setw(12) << aperture[j].GetApert(3)
+			<< std::setw(12) << aperture[j].GetApert(4)
+			<< std::endl;
 		}
 	}
 	out.close();
 }
 
-void PlotAll(vector<OneMetre> TheSequence, string output)
+void PlotAll(std::vector<OneMetre> TheSequence, std::string output)
 {
 	double pos;
 
-	vector<double> position;
-	vector<Aperture> aperture;
+	std::vector<double> position;
+	std::vector<Aperture> aperture;
 
-	cout << "The aperture definitions of all the sequence " << " are being saved in the file \"" << output << "\"" << endl;
+	std::cout << "The aperture definitions of all the sequence " << " are being saved in the file \"" << output << "\"" << std::endl;
 
-	ofstream out;
+	std::ofstream out;
 	out.precision(8);
 	out.open(output.c_str());
 
@@ -642,29 +642,29 @@ void PlotAll(vector<OneMetre> TheSequence, string output)
 
 		for(size_t j = 0; j < position.size(); j++)
 		{
-			out << setw(12) << pos + position[j]
-				<< setw(12) << aperture[j].GetApert(1)
-				<< setw(12) << aperture[j].GetApert(2)
-				<< setw(12) << aperture[j].GetApert(3)
-				<< setw(12) << aperture[j].GetApert(4)
-				<< endl;
+			out << std::setw(12) << pos + position[j]
+				<< std::setw(12) << aperture[j].GetApert(1)
+				<< std::setw(12) << aperture[j].GetApert(2)
+				<< std::setw(12) << aperture[j].GetApert(3)
+				<< std::setw(12) << aperture[j].GetApert(4)
+				<< std::endl;
 		}
 	}
 	out.close();
 }
 
-void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double Ds, string output, double AccLength)
+void PlotSomeMetres(std::vector<OneMetre> TheSequence, double s1, double s2, double Ds, std::string output, double AccLength)
 {
 	if ( Ds > 1.0 )
 	{
-		cout << "You have chosen a Ds larger than 1 metre!" << endl;
-		cout << "Ds = 0.10 m will be chosen instead" << endl;
+		std::cout << "You have chosen a Ds larger than 1 metre!" << std::endl;
+		std::cout << "Ds = 0.10 m will be chosen instead" << std::endl;
 		Ds = 0.10;
 	}
 
 	double pos;
-	vector<double> position;
-	vector<Aperture> aperture;
+	std::vector<double> position;
+	std::vector<Aperture> aperture;
 
 	if ( s1 > 1.0 )
 	{
@@ -676,9 +676,9 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double D
 		s2 = s2 + 1.0;
 	}
 
-	cout << "Apertures between s1 = " << s1 << " and s2 = " << s2 << " are being saved in the file \"" << output << "\"" << endl;
+	std::cout << "Apertures between s1 = " << s1 << " and s2 = " << s2 << " are being saved in the file \"" << output << "\"" << std::endl;
 
-	ofstream out;
+	std::ofstream out;
 	out.open(output.c_str());
 	out.precision(8);
 	Aperture Atmp;
@@ -690,11 +690,11 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double D
 			pos = double( j ) * Ds + static_cast<double>(i);
 			Atmp.empty();
 			Atmp = TheSequence[i].GetAperture( pos );
-			out << setw(12) << pos;
-			out << setw(12) << Atmp.GetApert(1);
-			out << setw(12) << Atmp.GetApert(2);
-			out << setw(12) << Atmp.GetApert(3);
-			out << setw(12) << Atmp.GetApert(4) << endl;
+			out << std::setw(12) << pos;
+			out << std::setw(12) << Atmp.GetApert(1);
+			out << std::setw(12) << Atmp.GetApert(2);
+			out << std::setw(12) << Atmp.GetApert(3);
+			out << std::setw(12) << Atmp.GetApert(4) << std::endl;
 		}
 	}
 	out.close();
@@ -712,32 +712,32 @@ void PlotSomeMetres(vector<OneMetre> TheSequence, double s1, double s2, double D
 	ofstream out;
 	out.open(output.c_str());
 	for( int k = 0; k < (int) position.size(); k++){
-		out<<setw(12)<<position[k]
-			 <<setw(12)<<aperture[k].GetApert(1)
-			 <<setw(12)<<aperture[k].GetApert(2)
-			 <<setw(12)<<aperture[k].GetApert(3)
-			 <<setw(12)<<aperture[k].GetApert(4)<<endl;
+		out<<std::setw(12)<<position[k]
+			 <<std::setw(12)<<aperture[k].GetApert(1)
+			 <<std::setw(12)<<aperture[k].GetApert(2)
+			 <<std::setw(12)<<aperture[k].GetApert(3)
+			 <<std::setw(12)<<aperture[k].GetApert(4)<<std::endl;
 	}
 	out.close();
 	*/
 }
 
-void PlotAll(vector<OneMetre> TheSequence, double Ds, string output)
+void PlotAll(std::vector<OneMetre> TheSequence, double Ds, std::string output)
 {
 	if ( Ds > 1.0 )
 	{
-		cout << "You have chosen a a Ds smaller than 1 metre!" << endl;
-		cout << "Ds = 0.10 m will be chosen instead" << endl;
+		std::cout << "You have chosen a a Ds smaller than 1 metre!" << std::endl;
+		std::cout << "Ds = 0.10 m will be chosen instead" << std::endl;
 		Ds = 0.10;
 	}
 
 	double pos;
-	vector<double> position;
-	vector<Aperture> aperture;
+	std::vector<double> position;
+	std::vector<Aperture> aperture;
 
-	cout << "The aperture definitions of all the sequence " << " are being saved in the file \"" << output << "\"" << endl;
+	std::cout << "The aperture definitions of all the sequence " << " are being saved in the file \"" << output << "\"" << std::endl;
 
-	ofstream out;
+	std::ofstream out;
 	out.precision(8);
 	out.open(output.c_str());
 
@@ -755,12 +755,12 @@ void PlotAll(vector<OneMetre> TheSequence, double Ds, string output)
 
 		for(size_t k = 0; k < position.size(); k++)
 		{
-			out << setw(12) << position[k]
-				<< setw(12) << aperture[k].GetApert(1)
-				<< setw(12) << aperture[k].GetApert(2)
-				<< setw(12) << aperture[k].GetApert(3)
-				<< setw(12) << aperture[k].GetApert(4)
-				<< endl;
+			out << std::setw(12) << position[k]
+				<< std::setw(12) << aperture[k].GetApert(1)
+				<< std::setw(12) << aperture[k].GetApert(2)
+				<< std::setw(12) << aperture[k].GetApert(3)
+				<< std::setw(12) << aperture[k].GetApert(4)
+				<< std::endl;
 		}
 	}
 

@@ -69,10 +69,10 @@ int main (int argc, char* argv[])
 
 	if (argc < 5)
 	{
-		cout << "Some input is missing!" << endl;
-		cout << "The command line should look like:" << endl;
-		cout << "-> " << argv[0] << " inj tracks2.dat output.txt ApertureFile.txt <-" << endl;
-		exit(0);
+		std::cout << "Some input is missing!" << std::endl;
+		std::cout << "The command line should look like:" << std::endl;
+		std::cout << "-> " << argv[0] << " inj tracks2.dat output.txt ApertureFile.txt <-" << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	/**
@@ -105,8 +105,8 @@ int main (int argc, char* argv[])
 
 	// add flag for survey only (Guillaume runs)
 
-	ifstream in;
-	ofstream out,out_part; // SR, 26-04-2005 
+	std::ifstream in;
+	std::ofstream out,out_part; // SR, 26-04-2005 
 
 	char c_str[256];
 	double s_t, x_t, xp_t, y_t, yp_t, en_t;
@@ -127,18 +127,18 @@ int main (int argc, char* argv[])
 
 	size_t line_number = 0;
 
-	vector<double> Slost, Xlost, XPlost, Ylost, YPlost, ENlost; // SR, 15-04-2005
-	vector<int> Nlost, Tlost,Hlost, LastTurn;
-	vector<double> Slost2, Xlost2, XPlost2, Ylost2, YPlost2,ENlost2;
-	vector<int> Nlost2, Tlost2,Hlost2;
+	std::vector<double> Slost, Xlost, XPlost, Ylost, YPlost, ENlost; // SR, 15-04-2005
+	std::vector<int> Nlost, Tlost,Hlost, LastTurn;
+	std::vector<double> Slost2, Xlost2, XPlost2, Ylost2, YPlost2,ENlost2;
+	std::vector<int> Nlost2, Tlost2,Hlost2;
 
 	// Initialize flags
 	//Maximum value of particle number
 	size_t Np = 30000; //	int Np = 500000;
-	vector<int> Flag, FirstTurn;
+	std::vector<int> Flag, FirstTurn;
 
 	// Need to store in memory old xp, yp, s and Xsur to reconstruct trajectory.
-	vector<double> OldXP, OldYP, OldS, OldXsur;
+	std::vector<double> OldXP, OldYP, OldS, OldXsur;
 
 	for (size_t i = 0; i < Np; i++)
 	{
@@ -154,16 +154,16 @@ int main (int argc, char* argv[])
 	* Initialize input file from command line
 	*/
 	//The beam "energy"
-	string EN = argv[1];
+	std::string EN = argv[1];
 
 	//The input tracks file (tracks2.dat)
-	string File = argv[2];
+	std::string File = argv[2];
 
 	//The aperture file
-	string Twiss = argv[4];
+	std::string Twiss = argv[4];
 
-	string output = "LossPattern_";
-	string output2 = "LossPatternInterpolated_";
+	std::string output = "LossPattern_";
+	std::string output2 = "LossPatternInterpolated_";
 
 	/**
 	* Add the chosen output file name suffix to the output file prefixes.
@@ -189,45 +189,45 @@ int main (int argc, char* argv[])
 		output2 += "x";
 	}
 
-	cout << "Summary of input parameters:" << endl;
-	cout << "Beam energy: " << EN << endl;
-	cout << "Twiss file: " << Twiss << endl;
-	cout << "Input file: " << File << endl;
-	cout << endl;
+	std::cout << "Summary of input parameters:" << std::endl;
+	std::cout << "Beam energy: " << EN << std::endl;
+	std::cout << "Twiss file: " << Twiss << std::endl;
+	std::cout << "Input file: " << File << std::endl;
+	std::cout << std::endl;
 
-	cout << "Output files:" << endl;
-	cout << "Loss patterns with 1m resolution: " << output << endl;
-	cout << "Interpolated loss patterns with 0.10 m resol.: " << output2 << endl;
-	cout << endl;
+	std::cout << "Output files:" << std::endl;
+	std::cout << "Loss patterns with 1m resolution: " << output << std::endl;
+	std::cout << "Interpolated loss patterns with 0.10 m resol.: " << output2 << std::endl;
+	std::cout << std::endl;
 
-	cout << "Run settings:" << endl;
-	cout << "Survey: " << _S_ << endl;
-	cout << "Crossing: " << _X_ << endl;
-	cout << "SaveLost tracks: " << _SaveLost_ << endl;
+	std::cout << "Run settings:" << std::endl;
+	std::cout << "Survey: " << _S_ << std::endl;
+	std::cout << "Crossing: " << _X_ << std::endl;
+	std::cout << "SaveLost tracks: " << _SaveLost_ << std::endl;
 
 	//////////////////////////////
 	// Setup the aperture model //
 	//////////////////////////////
 
 	// Load the Accelerator sequence with apertures
-	vector<OneMetre> Accelerator;
-	vector<string> Keyword, Name, Parent;
-	vector<string> KeywordNoQuotes, NameNoQuotes, ParentNoQuotes;
-	vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
-	vector<ApertureClass_t> ApertureType;
+	std::vector<OneMetre> Accelerator;
+	std::vector<std::string> Keyword, Name, Parent;
+	std::vector<std::string> KeywordNoQuotes, NameNoQuotes, ParentNoQuotes;
+	std::vector<double> Position, Length, Apert1, Apert2, Apert3, Apert4;
+	std::vector<ApertureClass_t> ApertureType;
 
 	// Read twiss file with apertures (no drifts!)
 	double AcceleratorLength = ReadTwissNoDrifts(Twiss, &Keyword, &Name, &Parent, &KeywordNoQuotes, &NameNoQuotes, &ParentNoQuotes, &Position, &Length, &Apert1, &Apert2, &Apert3, &Apert4, &ApertureType);
 
-	size_t OldPrecision = cout.precision(16);
-	cout << "Found accelerator length from MAD headers: " << AcceleratorLength << endl;
-	cout.precision(OldPrecision);
+	size_t OldPrecision = std::cout.precision(16);
+	std::cout << "Found accelerator length from MAD headers: " << AcceleratorLength << std::endl;
+	std::cout.precision(OldPrecision);
 
 	//Splits up the machine aperture into 1m blocks
 	//AssignOneMetre(&Accelerator, Keyword, Name, Parent, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 	AssignOneMetre(&Accelerator, Keyword, Position, Length, Apert1, Apert2, Apert3, Apert4, ApertureType, AcceleratorLength);
 
-	cout << "Length of the read sequence: " << Accelerator.size() << " metres." << endl << endl;
+	std::cout << "Length of the read sequence: " << Accelerator.size() << " metres." << std::endl << std::endl;
 
 	// Clean-up here the variable no longer needed:
 	Keyword.clear();
@@ -247,22 +247,22 @@ int main (int argc, char* argv[])
 
 	// Read Survey data for the orbit position (Survey + Crossing + derivatives)
 	Survey Accelerator_sur;
-	string IN_sur = "SurveyWithCrossing_XP_" + EN + ".dat";
-	cout << "Reading: " << IN_sur << endl << endl;
+	std::string IN_sur = "SurveyWithCrossing_XP_" + EN + ".dat";
+	std::cout << "Reading: " << IN_sur << std::endl << std::endl;
 	Accelerator_sur.LoadAccelerator_Crossing_XP( IN_sur );
 
 	/////////////////////////////////////////////////
 	// Find the positions where particles are lost //
 	/////////////////////////////////////////////////
-	cout << "-> Processing data <-" << endl;
-	cout << "Reading the halo file: \"" << File << "\"" << endl;
-	in.open(File.c_str(), ios::in);
+	std::cout << "-> Processing data <-" << std::endl;
+	std::cout << "Reading the halo file: \"" << File << "\"" << std::endl;
+	in.open(File.c_str(), std::ios::in);
 
 	if (!in)
 	{
-		cout << "Impossible to open the file !" << endl;
-		cout << "Error status: " << in << endl;
-		exit(0);
+		std::cout << "Impossible to open the file !" << std::endl;
+		std::cout << "Error status: " << in << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
 	in.getline(c_str,256); // Skip the first line with the header
@@ -338,8 +338,8 @@ int main (int argc, char* argv[])
 				// Interpolation for a resolution of Dl
 				if ( OldS[n_t] < 0.0 )
 				{
-					cout << "Particle " << n_t << " lost at the first point where it is encountered!";
-					cout << "Old coordinates are used (no backwards tracking)!" << endl;
+					std::cout << "Particle " << n_t << " lost at the first point where it is encountered!";
+					std::cout << "Old coordinates are used (no backwards tracking)!" << std::endl;
 
 					Nlost2.push_back(n_t);
 					Tlost2.push_back(n_tu);// Turn number might change if we cross IP1 - neglect 
@@ -372,13 +372,13 @@ int main (int argc, char* argv[])
 						new_y_t = new_y_t + Accelerator_sur.GetCrossY( new_s_t );
 					}
 
-					//cout<<setw(12)<<new_s_t<<setw(15)<<new_x_t<<setw(15)<<new_y_t<<endl;
-					//cout<<(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t)<<endl;
+					//std::cout<<std::setw(12)<<new_s_t<<std::setw(15)<<new_x_t<<std::setw(15)<<new_y_t<<std::endl;
+					//std::cout<<(Accelerator[(int)new_s_t].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t)<<std::endl;
 
 					// This requires changes for the case with old/new point before/after end of the ring
 					while ( new_s_t < s_t && !(Accelerator[static_cast<size_t>(new_s_t)].GetAperture(new_s_t-floor(new_s_t))).IsLost(new_x_t, new_y_t) )
 					{
-						//cout<<setw(12)<<new_s_t<<setw(12)<<new_x_t<<setw(12)<<new_y_t<<endl;
+						//std::cout<<std::setw(12)<<new_s_t<<std::setw(12)<<new_x_t<<std::setw(12)<<new_y_t<<std::endl;
 						new_s_t = CheckPos( new_s_t + Dl, AcceleratorLength);
 						new_x_t = x_t - (s_t-new_s_t) * OldXP[n_t];
 						new_y_t = y_t - (s_t-new_s_t) * OldYP[n_t];
@@ -421,61 +421,61 @@ int main (int argc, char* argv[])
 	in.close();
 
 	// Write the outputs
-	cout << "Writing outputs ...." << endl;
+	std::cout << "Writing outputs ...." << std::endl;
 	out.open(output.c_str());
 	out.precision(6);
 
-	out << setw(10) << "#N" << setw(10) << "Turn" << setw(10) << "s" << setw(15) << "x" 
-		<< setw(15) << "xp" << setw(15) << "y" << setw(15) << "yp" << setw(15) << "dE"
-		<< setw(5) << "Type" << setw(4) << "LastTurn" << endl;
+	out << std::setw(10) << "#N" << std::setw(10) << "Turn" << std::setw(10) << "s" << std::setw(15) << "x" 
+		<< std::setw(15) << "xp" << std::setw(15) << "y" << std::setw(15) << "yp" << std::setw(15) << "dE"
+		<< std::setw(5) << "Type" << std::setw(4) << "LastTurn" << std::endl;
 
 	for (size_t i = 0; i < Nlost.size(); i++)
 	{
-		out << setw(10) << Nlost[i]
-			<< setw(10) << Tlost[i]
-			<< setw(10) << Slost[i]
-			<< setw(15) << Xlost[i]
-			<< setw(15) << XPlost[i]
-			<< setw(15) << Ylost[i]
-			<< setw(15) << YPlost[i]
-			<< setw(15) << ENlost[i]
-			<< setw(5) << Hlost[i]
-			<< setw(4) << LastTurn[i]
-			<< endl;
+		out << std::setw(10) << Nlost[i]
+			<< std::setw(10) << Tlost[i]
+			<< std::setw(10) << Slost[i]
+			<< std::setw(15) << Xlost[i]
+			<< std::setw(15) << XPlost[i]
+			<< std::setw(15) << Ylost[i]
+			<< std::setw(15) << YPlost[i]
+			<< std::setw(15) << ENlost[i]
+			<< std::setw(5) << Hlost[i]
+			<< std::setw(4) << LastTurn[i]
+			<< std::endl;
 	}
 	out.close();
 
 	out.open(output2.c_str());
 	out.precision(6);
 
-	out << setw(10) << "#N" << setw(10) << "Turn" << setw(10) << "s" << setw(15) << "x" 
-		<< setw(15) << "xp" << setw(15) << "y" << setw(15) << "yp" << setw(15) << "dE"
-		<< setw(5) << "Type" << setw(4) << "LastTurn" << endl;
+	out << std::setw(10) << "#N" << std::setw(10) << "Turn" << std::setw(10) << "s" << std::setw(15) << "x" 
+		<< std::setw(15) << "xp" << std::setw(15) << "y" << std::setw(15) << "yp" << std::setw(15) << "dE"
+		<< std::setw(5) << "Type" << std::setw(4) << "LastTurn" << std::endl;
 
 	for (size_t i = 0; i < Nlost2.size(); i++)
 	{
-		out << setw(10) << Nlost2[i]
-			<< setw(10) << Tlost2[i]
-			<< setw(10) << Slost2[i]
-			<< setw(15) << Xlost2[i]
-			<< setw(15) << XPlost2[i]
-			<< setw(15) << Ylost2[i]
-			<< setw(15) << YPlost2[i]
-			<< setw(15) << ENlost2[i]
-			<< setw(5) << Hlost2[i]
-			<< setw(4) << LastTurn[i]
-			<< endl;
+		out << std::setw(10) << Nlost2[i]
+			<< std::setw(10) << Tlost2[i]
+			<< std::setw(10) << Slost2[i]
+			<< std::setw(15) << Xlost2[i]
+			<< std::setw(15) << XPlost2[i]
+			<< std::setw(15) << Ylost2[i]
+			<< std::setw(15) << YPlost2[i]
+			<< std::setw(15) << ENlost2[i]
+			<< std::setw(5) << Hlost2[i]
+			<< std::setw(4) << LastTurn[i]
+			<< std::endl;
 	}
 	out.close();
 
-	cout << "Total number of read lines: " << line_number << endl;
+	std::cout << "Total number of read lines: " << line_number << std::endl;
 
 	if ( _SaveLost_ )
 	{
 		// Write down the trajectories of lost particles (in one single file)
 		// Create a vector with the lost turn number and the same size as the Flag
-		cout << "Writing the trajectories of lost particles..." << endl;
-		vector<int> LostTurn;
+		std::cout << "Writing the trajectories of lost particles..." << std::endl;
+		std::vector<int> LostTurn;
 
 		for (size_t i = 0; i < Np; i++)
 		{
@@ -487,25 +487,25 @@ int main (int argc, char* argv[])
 				LostTurn[ Nlost[i] ] = Tlost[i];
 		}
 
-		out_part.open("LostParticles.dat", ios::out);
+		out_part.open("LostParticles.dat", std::ios::out);
 
-		in.open(File.c_str(), ios::in);
+		in.open(File.c_str(), std::ios::in);
 		if (!in)
 		{
-			cout << "Impossible to open the file!!" << endl;
-			exit(0);
+			std::cout << "Impossible to open the file!!" << std::endl;
+			exit(EXIT_FAILURE);
 		}
 		in.getline(c_str,256); // Skip the first line with the header
 
 		// Write file header
-		out_part << "%Total number of particles: " << Tlost.size() << endl << "%" << endl;
-		out_part << "%Particle's numbers for the saved trajectories: " << endl;
+		out_part << "%Total number of particles: " << Tlost.size() << std::endl << "%" << std::endl;
+		out_part << "%Particle's numbers for the saved trajectories: " << std::endl;
 
 		for (size_t i = 0; i < Tlost.size(); i++)
 		{
-			out_part << "% " << Nlost[i] << endl;
+			out_part << "% " << Nlost[i] << std::endl;
 		}
-		out_part << "% " << c_str << endl;
+		out_part << "% " << c_str << std::endl;
 
 		while (true)
 		{
@@ -518,15 +518,15 @@ int main (int argc, char* argv[])
 
 			if (Flag[n_t] == 2 && n_tu >= LostTurn[n_t]-1 )
 			{
-				out_part << setw(8) << n_t
-				<< setw(4) << n_tu
-				<< setw(10) << s_t
-				<< setw(15) << x_t / 1000
-				<< setw(15) << xp_t / 1000
-				<< setw(15) << y_t / 1000
-				<< setw(15) << yp_t / 1000
-				<< setw(15) << en_t
-				<< setw(10) << n_h << endl;
+				out_part << std::setw(8) << n_t
+				<< std::setw(4) << n_tu
+				<< std::setw(10) << s_t
+				<< std::setw(15) << x_t / 1000
+				<< std::setw(15) << xp_t / 1000
+				<< std::setw(15) << y_t / 1000
+				<< std::setw(15) << yp_t / 1000
+				<< std::setw(15) << en_t
+				<< std::setw(10) << n_h << std::endl;
 			}
 		}
 
@@ -566,7 +566,7 @@ int main (int argc, char* argv[])
 	ENlost2.clear();
 	Hlost2.clear();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 double CheckPos (double pp, double AcceleratorLength)
